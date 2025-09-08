@@ -59,8 +59,8 @@ O objetivo deste projeto é desenvolver uma plataforma web para a GSW focada no 
 ## 🗓️ Sprints <a name="sprints"></a>
 
 - **Sprint 1**
-  - **Status:** ⛔ Não iniciado
-  - **Documentação:** [Link para a pasta de documentos da Sprint 1](PASTA_DE_DOCUMENTACAO_SPRINT_1/DoD_DoR)
+  - **Status:** ⌛ Em andamento
+  - **Documentação:** [Link para a pasta de documentos da Sprint 1](/docs/sprints/sprint-01/Documento-sprint01.md)
   - **Vídeo de Incremento:** [🎥 Vídeo de Incremento](LINK_DO_VIDEO_DO_YOUTUBE)
 
 - **Sprint 2**
@@ -73,11 +73,62 @@ O objetivo deste projeto é desenvolver uma plataforma web para a GSW focada no 
   - **Documentação:** [Link para a pasta de documentos da Sprint 3](PASTA_DE_DOCUMENTACAO_SPRINT_3/DoD_DoR)
   - **Vídeo de Incremento:** [🎥 Vídeo de Incremento](LINK_DO_VIDEO_DO_YOUTUBE)
 
----
+------
+## 🚀 Como Executar o Projeto
+
+1.  **Clone o repositório e seus submódulos:**
+
+    Para garantir que você baixe tanto o projeto principal quanto os submódulos (os repositórios de `frontend` e `backend`), use o comando `git clone` com a flag `--recurse-submodules`.
+
+    ```bash
+    git clone --recurse-submodules [https://github.com/the-devs-department/GSW-2025.2-3Sem.git]
+    ```
+
+    *Se você já clonou o projeto sem os submódulos, pode rodar o seguinte comando para baixá-los:*
+    ```bash
+    git submodule update --init --recursive
+    ```
+
+2.  **Navegue até o diretório do projeto:**
+
+    ```bash
+    cd GSW-2025.2-3Sem
+    ```
+
+3.  **Instale as dependências:**
+
+    Agora, entre nas pastas dos submódulos para instalar as dependências de cada parte do projeto.
+
+    ```bash
+    # Instale as dependências do frontend
+    cd FRONT-END-GSW/
+    npm install
+    # Volte para a pasta principal
+    cd ../
+    # Instale as dependências do backend
+    cd BACK-END-GSW/
+    npm install
+    ```
+
+4.  **Inicie a aplicação:**
+
+    Inicie o frontend e o backend em terminais separados para que ambos possam rodar ao mesmo tempo.
+
+    ```bash
+    # No primeiro terminal, inicie o frontend:
+    cd FRONT-END-GSW/
+    npm start
+    ```
+
+    ```bash
+    # No segundo terminal, inicie o backend:
+    cd BACK-END-GSW/
+    npm start
+    ```
+
 ## 📄 Documentação e Manuais <a name="documentacao"></a>
 
-- [**Documentação do Projeto**](LINK_PARA_PASTA_DOCUMENTACAO)
-- [**Manual de Instalação**](LINK_PARA_MANUAL_INSTALACAO)
-- [**Manual do Usuário**](LINK_PARA_MANUAL_USUARIO)
+- [**Documentação do Projeto**](/docs)
+- [**Manual do Usuário**]()
 
 ---
