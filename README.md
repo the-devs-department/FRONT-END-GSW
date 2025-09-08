@@ -45,15 +45,15 @@ O objetivo deste projeto é desenvolver uma plataforma web para a GSW focada no 
 
 | Rank | Prioridade | User Story | Estimativa | Sprint |
 |:---:|:---:|:---|:---:|:---:|
-| 1 | Alta | Como usuário, quero criar, editar e excluir atividades para organizar meu trabalho; | | 1 |
-| 2 | Alta | Como usuário, quero anexar arquivos em tarefas ao concluir para garantir a entrega; | | 1 |
-| 3 | Alta | Como usuário, quero atribuir atividades a membros da equipe para distribuir as responsabilidades; | | 1 |
-| 4 | Alta | Como usuário, quero acessar a plataforma com Login próprio para maior autonomia e segurança; | | 1 |
-| 5 | Média | Como usuário, quero visualizar a data e o prazo de conclusão de cada atividade para planejar meu tempo corretamente. | | 2 |
-| 6 | Média | Como usuário, quero visualizar tanto as tarefas gerais da equipe quanto às minhas | | 2 |
-| 7 | Média | Como usuário, quero acessar o sistema de forma responsiva tanto no computador quanto no celular, para maior conforto | | 2 |
-| 8 | Baixa | Como usuário, quero um visual prático e intuitivo | | 3 |
-| 9 | Baixa | Como usuário, quero categorizar atividades por prioridade, tipo, ou data para facilitar a visualização | | 3 |
+| 1 | Alta | Como usuário, quero criar, editar e excluir atividades para organizar meu trabalho; |7 | 1 |
+| 2 | Alta | Como usuário, quero anexar arquivos em tarefas ao concluir para garantir a entrega; |4 | 1 |
+| 3 | Alta | Como usuário, quero atribuir atividades a membros da equipe para distribuir as responsabilidades; |5 | 1 |
+| 4 | Alta | Como usuário, quero acessar a plataforma com Login próprio para maior autonomia e segurança; |9 | 1 |
+| 5 | Média | Como usuário, quero visualizar a data e o prazo de conclusão de cada atividade para planejar meu tempo corretamente. |3 | 2 |
+| 6 | Média | Como usuário, quero visualizar tanto as tarefas gerais da equipe quanto às minhas |5 | 2 |
+| 7 | Média | Como usuário, quero acessar o sistema de forma responsiva tanto no computador quanto no celular, para maior conforto |3 | 2 |
+| 8 | Baixa | Como usuário, quero um visual prático e intuitivo |2 | 3 |
+| 9 | Baixa | Como usuário, quero categorizar atividades por prioridade, tipo, ou data para facilitar a visualização |6 | 3 |
 
 ---
 ## 🗓️ Sprints <a name="sprints"></a>
