@@ -60,7 +60,7 @@ O objetivo deste projeto é desenvolver uma plataforma web para a GSW focada no 
 
 - **Sprint 1**
   - **Status:** ⌛ Em andamento
-  - **Documentação:** [Link para a pasta de documentos da Sprint 1](/docs/sprints/sprint-01/Documento-sprint01.md)
+  - **Documentação:** [Link para a pasta de documentos da Sprint 1](GSW-2025.2-3Sem/docs/sprints/sprint-01/Documento-sprint01.md)
   - **Vídeo de Incremento:** [🎥 Vídeo de Incremento](LINK_DO_VIDEO_DO_YOUTUBE)
 
 - **Sprint 2**
@@ -128,7 +128,7 @@ O objetivo deste projeto é desenvolver uma plataforma web para a GSW focada no 
 
 ## 📄 Documentação e Manuais <a name="documentacao"></a>
 
-- [**Documentação do Projeto**](/docs)
+- [**Documentação do Projeto**](GSW-2025.2-3Sem/docs)
 - [**Manual do Usuário**]()
 
 ---
