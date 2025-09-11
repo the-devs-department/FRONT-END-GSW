@@ -1,15 +1,22 @@
-import Header from "../components/Header/Header";
+import TaskList from "../components/TaskList/TaskList";
 
-export default function Home(){
-  const buttonFunction = () => {
-    console.log("Hello World")
-  }
-  return(
+export default function Home() {
+  return (
     <>
-      <Header btnFunc={buttonFunction}/>
-      <div className="p-2">
-        {/* Seu conteúdo aqui */}
-      </div>
+        <div className="w-full justify-evenly pb-3 flex">
+          <TaskList
+            title="Não Iniciada"
+            taksCount={2}
+          />
+          <TaskList
+            title="Em Andamento"
+            taksCount={10}
+          />
+          <TaskList
+            title="Concluída"
+            taksCount={1}
+          />
+        </div>
     </>
   )
 }
