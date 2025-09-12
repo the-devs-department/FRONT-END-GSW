@@ -1,5 +1,5 @@
 interface HeaderProps {
-  btnFunc: () => void;
+  btnFunc: (tipo: "Nova" | "Atualizar") => void;
 }
 
 export default function Header(props : HeaderProps) {
@@ -19,7 +19,7 @@ export default function Header(props : HeaderProps) {
                 0
               </span>
             </button>
-            <button onClick={props.btnFunc} className="bg-slate-800 p-2 rounded font-bold hover:bg-gray-900">
+            <button onClick={() => props.btnFunc("Nova")} className="bg-slate-800 p-2 rounded font-bold hover:bg-gray-900">
               + Criar nova tarefa
             </button>
           </div>

@@ -4,20 +4,31 @@ import './Modal.css'
 import CalendarIcon from '../../assets/calendar.png'
 
 interface ModalProps {
-    tipoModal: 'Nova' | 'Atualizar';
+    tipoModal: 'Nova' | 'Atualizar' | null;
     condicaoModal: boolean;
     closeModal: () => void;
 }
 
 export default function Modal(props: ModalProps) {
-    const [option, setOption] = useState<string>("Não Iniciada") 
+    const [option, setOption] = useState<string>("Não Iniciada")
 
     const handleOptionChange = (ev: ChangeEvent<HTMLSelectElement>) => {
         setOption(ev.target.value)
     }
 
-    const title = props.tipoModal === 'Nova' ? 'Nova Tarefa' : 'Atualizar Tarefa';
-    const buttonText = props.tipoModal === 'Nova' ? 'Criar Tarefa' : 'Salvar';
+    const title =
+        props.tipoModal === 'Nova'
+            ? 'Nova Tarefa'
+            : props.tipoModal === 'Atualizar'
+                ? 'Atualizar Tarefa'
+                : '';
+
+    const buttonText =
+        props.tipoModal === 'Nova'
+            ? 'Criar Tarefa'
+            : props.tipoModal === 'Atualizar'
+                ? 'Salvar'
+                : '';
 
     return (
         <div id="IdForms" className={props.condicaoModal ? 'modal-opened' : 'modal-closed'}>
@@ -54,8 +65,8 @@ export default function Modal(props: ModalProps) {
                             <div className='form-inputs w-1/2'>
                                 <label>Status *</label>
                                 <select className="rounded-md border-2 border-gray-100 bg-white w-full h-10 p-2"
-                                value={option}
-                                onChange={handleOptionChange}
+                                    value={option}
+                                    onChange={handleOptionChange}
                                 >
                                     <option>Não iniciada</option>
                                     <option>Em andamento</option>
@@ -76,19 +87,19 @@ export default function Modal(props: ModalProps) {
                                 <input
                                     className="rounded-md border-2 border-gray-100 bg-white w-full h-10 p-2"
                                     type="date"
+                                    src={CalendarIcon} alt=""
                                 />
-                                <img src={CalendarIcon} alt="" />
                             </div>
                         </div>
                         <div className='flex gap-6 w-full items-center justify-between'>
                             <label htmlFor="file-upload" className='flex gap-2 items-center justify-center cursor-pointer 
                             border-[3px] border-gray-200 p-2 rounded-full'>
                                 <div className=''>
-                                    <img src={cloudIcon} alt="" className='h-6'/>
+                                    <img src={cloudIcon} alt="" className='h-6' />
                                 </div>
                                 Anexar arquivo
                             </label>
-                            <input type="file" id='file-upload' className='hidden'/>
+                            <input type="file" id='file-upload' className='hidden' />
                             <div className='flex gap-4'>
                                 <label className="switch">
                                     <input type="checkbox" />

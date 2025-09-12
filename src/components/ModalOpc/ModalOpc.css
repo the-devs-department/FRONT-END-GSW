@@ -1,0 +1,17 @@
+.modal-opc-closed{
+  display: none;
+}
+
+.modal-opc-opened {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 25%;
+  left: 55%;
+  z-index: 2;
+  width: 128px;
+  height: 74px;
+  border-radius: .6rem;
+  box-shadow: none !important; /* força remover sombra */
+}

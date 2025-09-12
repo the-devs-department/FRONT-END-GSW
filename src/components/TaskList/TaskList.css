@@ -35,6 +35,11 @@
 }
         
 .tasks {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  align-items: center;
+  justify-content: center;
   height: 95%;
   overflow-y: scroll;
   color: #000;

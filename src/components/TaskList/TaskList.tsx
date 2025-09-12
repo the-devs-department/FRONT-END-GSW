@@ -1,8 +1,11 @@
+import Cards from '../Cards/Cards'
 import './TaskList.css'
 
 interface TaskListProps {
-  title: String,
-  taksCount: number
+  title: string,
+  taksCount: number,
+  openModal: (tipo: 'Atualizar' | 'Nova') => void;
+  
 }
 
 export default function TaskList(props: TaskListProps){
@@ -16,7 +19,15 @@ export default function TaskList(props: TaskListProps){
           </span>
         </div>
         <div className='tasks'> 
-
+          <Cards
+            openModal={props.openModal}
+          />
+          <Cards
+            openModal={props.openModal}
+          />
+          <Cards
+            openModal={props.openModal}
+          />
         </div>
       </div>
     </>
