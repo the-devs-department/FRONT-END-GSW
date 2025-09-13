@@ -10,11 +10,40 @@ interface ModalProps {
 }
 
 export default function Modal(props: ModalProps) {
+
     const [option, setOption] = useState<string>("Não Iniciada")
+    const [file, setFile] = useState<File | null>(null);
+    const [fileError, setFileError] = useState<string>("");
+
+    const allowedTypes = [
+        "application/pdf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "video/mp4",
+        "image/jpeg",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    ];
 
     const handleOptionChange = (ev: ChangeEvent<HTMLSelectElement>) => {
         setOption(ev.target.value)
     }
+
+    const handleFileChange = (ev: ChangeEvent<HTMLInputElement>) => {
+        if (ev.target.files && ev.target.files[0]) {
+            const selectedFile = ev.target.files[0];
+            if (allowedTypes.includes(selectedFile.type)) {
+                setFile(selectedFile);
+                setFileError("");
+            } else {
+                setFile(null);
+                setFileError("Arquivo nao suportado");
+            }
+        }
+    };
+
+    const handleRemoveFile = () => {
+        setFile(null);
+        setFileError("");
+    };
 
     const title =
         props.tipoModal === 'Nova'
@@ -99,8 +128,14 @@ export default function Modal(props: ModalProps) {
                                 </div>
                                 Anexar arquivo
                             </label>
-                            <input type="file" id='file-upload' className='hidden' />
-                            <div className='flex gap-4'>
+                            <input
+                                type="file"
+                                id='file-upload'
+                                className='hidden'
+                                accept=".pdf,.jpg,.png,.xlsx,.mp4,.docx"
+                                onChange={handleFileChange}
+                            />
+                            <div className="flex items-center gap-2">
                                 <label className="switch">
                                     <input type="checkbox" />
                                     <span className="slider round"></span>
@@ -108,7 +143,39 @@ export default function Modal(props: ModalProps) {
                                 <p>Minha Tarefa</p>
                             </div>
                         </div>
-                        <div className="flex justify-end gap-4 w-full mt-4">
+
+                        {fileError && (
+                            <div className="mt-4 p-2 border border-red-200 rounded-md text-red-600 text-sm">
+                                {fileError}
+                            </div>
+                        )}
+                        {file && !fileError && (
+                            <div className="mt-4 p-2 border border-gray-200 rounded-md flex justify-between items-center text-sm">
+                                <span className="text-gray-600 truncate pr-2">
+                                    {file.name}
+                                </span>
+                                <div>
+                                    <a
+                                        href={URL.createObjectURL(file)}
+                                        download={file.name}
+                                        className="text-blue-600 hover:underline mr-3"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        Visualizar
+                                    </a>
+                                    <button
+                                        type="button"
+                                        onClick={handleRemoveFile}
+                                        className="text-red-500 font-bold"
+                                    >
+                                        &times;
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="flex justify-end gap-4 w-full mt-6 mb-4">
                             <button
                                 type="button"
                                 onClick={props.closeModal}
