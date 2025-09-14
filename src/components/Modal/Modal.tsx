@@ -1,7 +1,16 @@
 import { useState, type ChangeEvent } from 'react';
-import cloudIcon from '../../assets/cloud.png'
-import './Modal.css'
+import cloudIcon from '../../assets/cloud.png';
+import './Modal.css';
 import CalendarIcon from '../../assets/calendar.png'
+
+const responsaveis = [
+  { id: '', nome: 'Não atribuído' },
+  { id: 'usr_1a2b3c', nome: 'Otávio' },
+  { id: 'usr_4d5e6f', nome: 'Pedro Henrique Martins' },
+  { id: 'usr_7g8h9i', nome: 'Tiago' },
+  { id: 'usr_j1k2l3', nome: 'Issami' },
+  { id: 'usr_m4n5o6', nome: 'Robert' }
+];
 
 interface ModalProps {
     tipoModal: 'Nova' | 'Atualizar' | null;
@@ -11,7 +20,7 @@ interface ModalProps {
 
 export default function Modal(props: ModalProps) {
 
-    const [option, setOption] = useState<string>("Não Iniciada")
+    const [option, setOption] = useState<string>("Não Iniciada");
     const [file, setFile] = useState<File | null>(null);
     const [fileError, setFileError] = useState<string>("");
 
@@ -24,7 +33,7 @@ export default function Modal(props: ModalProps) {
     ];
 
     const handleOptionChange = (ev: ChangeEvent<HTMLSelectElement>) => {
-        setOption(ev.target.value)
+        setOption(ev.target.value);
     }
 
     const handleFileChange = (ev: ChangeEvent<HTMLInputElement>) => {
@@ -78,7 +87,7 @@ export default function Modal(props: ModalProps) {
                             <label>Descrição *</label>
                             <textarea
                                 className='rounded-md border-2 border-gray-100 bg-white w-full 
-                    min-h-24 max-h-30 p-3 overflow-hidden resize-none'
+                       min-h-24 max-h-30 p-3 overflow-hidden resize-none'
                                 placeholder="Descreva os detalhes da tarefa">
                             </textarea>
                         </div>
@@ -103,28 +112,34 @@ export default function Modal(props: ModalProps) {
                                 </select>
                             </div>
                         </div>
+
                         <div className="flex gap-4 w-full">
                             <div className='form-inputs w-1/2'>
                                 <label>Responsável *</label>
-                                <input
+                                <select
                                     className="rounded-md border-2 border-gray-100 bg-white w-full h-10 p-2"
-                                    type="text" placeholder="Nome do responsável"
-                                />
+                                >
+                                    {responsaveis.map(membro => (
+                                        <option key={membro.id} value={membro.id}>
+                                            {membro.nome}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                             <div className='form-inputs w-1/2'>
                                 <label>Data de Entrega *</label>
                                 <input
                                     className="rounded-md border-2 border-gray-100 bg-white w-full h-10 p-2"
                                     type="date"
-                                    src={CalendarIcon} alt=""
                                 />
                             </div>
                         </div>
+
                         <div className='flex gap-6 w-full items-center justify-between'>
                             <label htmlFor="file-upload" className='flex gap-2 items-center justify-center cursor-pointer 
                             border-[3px] border-gray-200 p-2 rounded-full'>
-                                <div className=''>
-                                    <img src={cloudIcon} alt="" className='h-6' />
+                                <div>
+                                    <img src={cloudIcon} alt="Anexar arquivo" className='h-6' />
                                 </div>
                                 Anexar arquivo
                             </label>
@@ -192,6 +207,5 @@ export default function Modal(props: ModalProps) {
                 </form>
             </div>
         </div>
-    )
+    );
 }
-
