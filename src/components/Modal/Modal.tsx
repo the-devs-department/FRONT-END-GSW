@@ -14,6 +14,19 @@ export default function Modal(props: ModalProps) {
     const [option, setOption] = useState<string>("Não Iniciada")
     const [file, setFile] = useState<File | null>(null);
     const [fileError, setFileError] = useState<string>("");
+    const [membroSelecionado, setMembroSelecionado] = useState<string>("");
+
+    const membrosEquipe = [
+        { id: "0", nome: "Não Atribuido" },
+        { id: "1", nome: "Otávio" },
+        { id: "2", nome: "Pedro Henrique Martins" },
+        { id: "3", nome: "Tiago" },
+        { id: "4", nome: "Issami" }
+    ];
+
+    const handleMembroChange = (ev: ChangeEvent<HTMLSelectElement>) => {
+        setMembroSelecionado(ev.target.value);
+    };
 
     const allowedTypes = [
         "application/pdf",
@@ -105,11 +118,20 @@ export default function Modal(props: ModalProps) {
                         </div>
                         <div className="flex gap-4 w-full">
                             <div className='form-inputs w-1/2'>
-                                <label>Responsável *</label>
-                                <input
+                                <label htmlFor="membro-select">Responsável *</label>
+                                <select
+                                    id="membro-select"
                                     className="rounded-md border-2 border-gray-100 bg-white w-full h-10 p-2"
-                                    type="text" placeholder="Nome do responsável"
-                                />
+                                    value={membroSelecionado}
+                                    onChange={handleMembroChange}
+                                    required
+                                    title="Selecione o membro responsável"
+                                >
+                                    <option value="" disabled>Selecione o membro</option>
+                                    {membrosEquipe.map((membro) => (
+                                        <option key={membro.id} value={membro.id}>{membro.nome}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div className='form-inputs w-1/2'>
                                 <label>Data de Entrega *</label>
@@ -190,6 +212,11 @@ export default function Modal(props: ModalProps) {
                         </div>
                     </div>
                 </form>
+                {membroSelecionado && (
+                    <div className="mt-2 text-sm text-gray-700">
+                        Membro selecionado: <b>{membrosEquipe.find(m => m.id === membroSelecionado)?.nome}</b> 
+                    </div>
+                )}
             </div>
         </div>
     )

@@ -7,7 +7,10 @@ import User from '../../assets/user.png'
 
 interface CardProps {
 openModal: (tipo: 'Atualizar') => void;
-
+responsavel?: {
+  id: string;
+  nome: string;
+};
 }
 
 export default function Cards(props: CardProps) {
@@ -19,13 +22,12 @@ export default function Cards(props: CardProps) {
 
 
   return (
-    <>
-      <div className="relative max-w-md rounded-xl border bg-white p-4 shadow-sm">
-        {/* Header */}
-        <div className="flex justify-between items-start">
-          <span className="inline-block rounded-full bg-orange-100 px-3 py-1 text-sm font-medium text-orange-600">
-            Suporte
-          </span>
+    <div className="relative max-w-md rounded-xl border bg-white p-4 shadow-sm">
+      {/* Header */}
+      <div className="flex justify-between items-start">
+        <span className="inline-block rounded-full bg-orange-100 px-3 py-1 text-sm font-medium text-orange-600">
+          Suporte
+        </span>
 
           {/* Botão 3 bolinhas */}
           <button onClick={modalAction} className="rounded-full p-1 text-gray-500 hover:bg-gray-100">
@@ -60,6 +62,5 @@ export default function Cards(props: CardProps) {
 
         </div>
       </div>
-    </>
-  );
+  )
 }
