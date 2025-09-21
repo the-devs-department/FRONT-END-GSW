@@ -11,10 +11,12 @@ interface ModalProps {
 
 export default function Modal(props: ModalProps) {
 
-    const [option, setOption] = useState<string>("Não Iniciada")
+    const [option, setOption] = useState<string>("Não iniciada")
     const [file, setFile] = useState<File | null>(null);
     const [fileError, setFileError] = useState<string>("");
     const [membroSelecionado, setMembroSelecionado] = useState<string>("");
+
+    const condicao = option !== 'Não iniciada' && props.tipoModal !== 'Nova'
 
     const membrosEquipe = [
         { id: "0", nome: "Não Atribuido" },
@@ -48,7 +50,7 @@ export default function Modal(props: ModalProps) {
                 setFileError("");
             } else {
                 setFile(null);
-                setFileError("Arquivo nao suportado");
+                setFileError("Arquivo não suportado");
             }
         }
     };
@@ -58,19 +60,9 @@ export default function Modal(props: ModalProps) {
         setFileError("");
     };
 
-    const title =
-        props.tipoModal === 'Nova'
-            ? 'Nova Tarefa'
-            : props.tipoModal === 'Atualizar'
-                ? 'Atualizar Tarefa'
-                : '';
+    const title = props.tipoModal === 'Nova' ? 'Nova Tarefa' : props.tipoModal === 'Atualizar' ? 'Atualizar Tarefa' : '';
 
-    const buttonText =
-        props.tipoModal === 'Nova'
-            ? 'Criar Tarefa'
-            : props.tipoModal === 'Atualizar'
-                ? 'Salvar'
-                : '';
+    const buttonText = props.tipoModal === 'Nova' ? 'Criar Tarefa' : props.tipoModal === 'Atualizar' ? 'Atualizar Tarefa' : '';
 
     return (
         <div id="IdForms" className={props.condicaoModal ? 'modal-opened' : 'modal-closed'}>
@@ -142,21 +134,25 @@ export default function Modal(props: ModalProps) {
                                 />
                             </div>
                         </div>
-                        <div className='flex gap-6 w-full items-center justify-between'>
-                            <label htmlFor="file-upload" className='flex gap-2 items-center justify-center cursor-pointer 
+                        <div className={condicao ? 'flex gap-6 w-full items-center justify-between' : 'flex gap-6 w-full items-center justify-end'}>
+                            {condicao && (
+                                <>
+                                    <label htmlFor="file-upload" className='flex gap-2 items-center justify-center cursor-pointer 
                             border-[3px] border-gray-200 p-2 rounded-full'>
-                                <div className=''>
-                                    <img src={cloudIcon} alt="" className='h-6' />
-                                </div>
-                                Anexar arquivo
-                            </label>
-                            <input
-                                type="file"
-                                id='file-upload'
-                                className='hidden'
-                                accept=".pdf,.jpg,.png,.xlsx,.mp4,.docx"
-                                onChange={handleFileChange}
-                            />
+                                        <div className=''>
+                                            <img src={cloudIcon} alt="" className='h-6' />
+                                        </div>
+                                        Anexar arquivo
+                                    </label>
+                                    <input
+                                        type="file"
+                                        id='file-upload'
+                                        className='hidden'
+                                        accept=".pdf,.jpg,.png,.xlsx,.mp4,.docx"
+                                        onChange={handleFileChange}
+                                    />
+                                </>
+                            )}
                             <div className="flex items-center gap-2">
                                 <label className="switch">
                                     <input type="checkbox" />
@@ -196,6 +192,11 @@ export default function Modal(props: ModalProps) {
                                 </div>
                             </div>
                         )}
+                        {membroSelecionado && (
+                            <div className="mt-2 text-sm text-gray-700">
+                                Membro selecionado: <b>{membrosEquipe.find(m => m.id === membroSelecionado)?.nome}</b> 
+                            </div>
+                        )}
 
                         <div className="flex justify-end gap-4 w-full mt-6 mb-4">
                             <button
@@ -212,11 +213,6 @@ export default function Modal(props: ModalProps) {
                         </div>
                     </div>
                 </form>
-                {membroSelecionado && (
-                    <div className="mt-2 text-sm text-gray-700">
-                        Membro selecionado: <b>{membrosEquipe.find(m => m.id === membroSelecionado)?.nome}</b> 
-                    </div>
-                )}
             </div>
         </div>
     )

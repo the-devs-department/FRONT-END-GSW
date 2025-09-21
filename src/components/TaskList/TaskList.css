@@ -1,24 +1,22 @@
-.task-list {
-  border: 1px solid #dcdfe5;
-  padding: .35rem;
-  border-radius: 8px;
+.task-list{
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  background: linear-gradient(to bottom right, #fff, #f1f1f1);
-  width: 24rem;
-  height: 33.5rem;
-  overflow-y: hidden;
-}
-
-.tasks-infos{
-  display: flex;
   align-items: center;
   justify-content: space-between;
+  background: linear-gradient(to bottom right, #fff, #f1f1f1);
+  border: 1px solid #dcdfe5;
+  padding: .35rem;
+  border-radius: .5rem;
+  height: 35.5rem;
+  width: 25rem;
+  gap: .8rem;
 }
 
-.tasks-infos > h2 {
-  font-family: "Inter", sans-serif;
+.tasks-infos {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  height: 5%;
 }
 
 .task-count{
@@ -27,26 +25,29 @@
   justify-content: center;
   height: 2rem;
   width: 2rem;
-  background-color: #edf0f3;
+  background: #edf0f3;
   border: .5px solid #dcdfe5;
   color: #22222a;
   border-radius: 5rem;
   font-size: .8rem;
 }
-        
+
 .tasks {
   display: flex;
   flex-direction: column;
-  gap: .5rem;
   align-items: center;
-  justify-content: center;
+  gap: .3rem;
   height: 95%;
   overflow-y: scroll;
-  color: #000;
-  scrollbar-width: none;
+  overflow-x: hidden;
 }
 
 .tasks::-webkit-scrollbar{
-  width: 0;
-  height: 0;
+  width: 5px;
+  border-radius: .5rem; 
+}
+
+.tasks::-webkit-scrollbar-thumb{
+  background-color: #c4c4c4;
+  border-radius: .5rem;
 }

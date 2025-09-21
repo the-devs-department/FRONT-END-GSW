@@ -28,6 +28,9 @@ export default function TaskList(props: TaskListProps){
           <Cards
             openModal={props.openModal}
           />
+          <Cards
+            openModal={props.openModal}
+          />
         </div>
       </div>
     </>

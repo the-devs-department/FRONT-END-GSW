@@ -7,7 +7,7 @@ export default function Header(props : HeaderProps) {
     <>
       <div className="w-full h-auto flex flex-col">
         <div className="flex items-center justify-between p-2">
-          <div className="flex flex-col items-startjutify-center">
+          <div className="flex flex-col items-start jutify-center">
             <h1 className="text-gray-800 text-4xl font-bold">Todas as tarefas</h1>
             <p className="text-gray-500 text-lg pl-1">Gerencie e acompanhe o progresso de suas atividades</p>
           </div>
