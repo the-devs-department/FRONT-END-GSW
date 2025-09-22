@@ -3,8 +3,17 @@ import checkIcon from '../../assets/check.png'
 import listItems from '../../assets/task-list.png'
 import logoutIcon from '../../assets/logout.png'
 import './Navbar.css'
+import { useNavigate } from 'react-router-dom'
 
 export default function Navbar() {
+  
+  const navigate = useNavigate()
+
+  const logout = () => {
+    localStorage.removeItem('authToken');
+    navigate('/login')
+  }
+
   return(
     <>
       <nav className='side-nav'>
@@ -29,7 +38,7 @@ export default function Navbar() {
                 Todas as tarefas
               </p>
             </li>
-            <li className='delete'>
+            <li className='delete' onClick={logout}>
               <img src={logoutIcon} alt="" className='h-6'/>
               <p>
                 Logout

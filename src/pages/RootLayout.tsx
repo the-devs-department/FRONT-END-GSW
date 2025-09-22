@@ -1,16 +1,26 @@
 import Navbar from "../components/Navbar/Navbar";
 import profileUser from '../assets/profile-user.png';
-import { Outlet, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header/Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../components/Modal/Modal";
 import TaskList from "../components/TaskList/TaskList";
 
 export default function RootLayout() {
+  
   const pageLink = useLocation();
-
+  const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false);
   const [modalType, setModalType] = useState<"Nova" | "Atualizar" | null>(null);
+
+
+  useEffect(() => {
+    const userLoged = localStorage.getItem('authToken');
+    if (!userLoged) {
+      navigate('/login')
+    }
+
+  }, [navigate])
 
   const buttonFunction = (tipo: "Nova" | "Atualizar") => {
     setModalType(tipo);
@@ -21,6 +31,11 @@ export default function RootLayout() {
     setIsOpen(false);
     setModalType(null);
   };
+
+  const logout = () => {
+    localStorage.removeItem('userData');
+    navigate('/login')
+  }
 
   return (
     <>
