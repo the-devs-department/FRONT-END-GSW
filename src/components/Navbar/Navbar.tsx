@@ -4,9 +4,15 @@ import listItems from '../../assets/task-list.png'
 import logoutIcon from '../../assets/logout.png'
 import './Navbar.css'
 import { useNavigate } from 'react-router-dom'
+import { ScreenWidth } from '../../hooks/ScreenWidth'
 
-export default function Navbar() {
-  
+interface NavbarProps {
+  isNavbarOpen: boolean
+  closeNavbar: () => void;
+}
+
+export default function Navbar(props: NavbarProps) {
+  const screenWidth = ScreenWidth()
   const navigate = useNavigate()
 
   const logout = () => {
@@ -14,10 +20,17 @@ export default function Navbar() {
     navigate('/login')
   }
 
+  const mainClass = screenWidth > 1024 ? 'side-nav':`hidden-side-nav ${props.isNavbarOpen && 'open-side-nav'}`
+
   return(
     <>
-      <nav className='side-nav'>
+      <nav className={mainClass}>
         <div className='nav-header'>
+          {screenWidth < 1024 && (
+            <span className='close-navbar-button' onClick={props.closeNavbar}>
+              X
+            </span>
+          )}
           <img src={checkIcon} alt="" className='h-10'/>
           <h1 className=''>TaskManager</h1>
         </div>

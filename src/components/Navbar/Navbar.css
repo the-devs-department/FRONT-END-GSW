@@ -8,6 +8,25 @@
   z-index: 1;
 }
 
+.hidden-side-nav{
+  background-color: #3b4759;
+  position: fixed;
+  width: 0;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  overflow-x: hidden;
+  opacity: 0;
+  transition: opacity .5s, width .3s;
+}
+
+.open-side-nav {
+  width: 16rem;
+  height: 100%;
+  opacity: 1;
+}
+
 .nav-header {
   display: flex;
   gap: .5rem;
@@ -16,6 +35,14 @@
   height: 6rem;
   font-size: 1.8rem;
   font-weight: bolder;
+}
+
+.close-navbar-button {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  font-size: 1rem;
+  cursor: pointer;
 }
 
 .side-nav > hr {
@@ -35,11 +62,14 @@
   flex-direction: column;
   width: 70%;
   gap: .05rem;
+  overflow: hidden;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
 }
 
-.user-name{
-  font-weight: bold;
+.user-name {
   font-size: 1.1rem;
+  font-weight: bold;
 }
 
 .user-email { 
@@ -70,6 +100,10 @@
   font-size: 1.1rem;
   padding: .7rem;
   border-radius: .5rem;
+  text-wrap: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: 1s;
   cursor: pointer;
 }
 
@@ -80,7 +114,7 @@
 
 .delete {
   color: #F13E3E;
-  transition: .5s;
+  transition: 10s;
 
   &:hover{
     background-color: #cf0c0c88;

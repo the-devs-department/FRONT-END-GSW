@@ -87,10 +87,10 @@ export default function Modal(props: ModalProps) {
                                 placeholder="Descreva os detalhes da tarefa">
                             </textarea>
                         </div>
-                        <div className="flex gap-4 w-full">
+                        <div className="flex gap-4 w-full max-[420px]:flex-col">
                             <div className='form-inputs w-1/2'>
                                 <label>Tema *</label>
-                                <select className="rounded-md border-2 border-gray-100 bg-white w-full h-10 p-2">
+                                <select className="rounded-md border-2 border-gray-100 bg-white w-full h-10">
                                     <option>Desenvolvimento</option>
                                     <option>Design</option>
                                     <option>Teste</option>
@@ -98,7 +98,7 @@ export default function Modal(props: ModalProps) {
                             </div>
                             <div className='form-inputs w-1/2'>
                                 <label>Status *</label>
-                                <select className="rounded-md border-2 border-gray-100 bg-white w-full h-10 p-2"
+                                <select className="rounded-md border-2 border-gray-100 bg-white w-full h-10"
                                     value={option}
                                     onChange={handleOptionChange}
                                 >
@@ -108,12 +108,12 @@ export default function Modal(props: ModalProps) {
                                 </select>
                             </div>
                         </div>
-                        <div className="flex gap-4 w-full">
-                            <div className='form-inputs w-1/2'>
+                        <div className="flex gap-4 w-full max-[420px]:flex-col">
+                            <div className='form-inputs'>
                                 <label htmlFor="membro-select">Responsável *</label>
                                 <select
                                     id="membro-select"
-                                    className="rounded-md border-2 border-gray-100 bg-white w-full h-10 p-2"
+                                    className="rounded-md border-2 border-gray-100 bg-white w-full h-10"
                                     value={membroSelecionado}
                                     onChange={handleMembroChange}
                                     required
@@ -125,20 +125,20 @@ export default function Modal(props: ModalProps) {
                                     ))}
                                 </select>
                             </div>
-                            <div className='form-inputs w-1/2'>
+                            <div className='form-inputs'>
                                 <label>Data de Entrega *</label>
                                 <input
-                                    className="rounded-md border-2 border-gray-100 bg-white w-full h-10 p-2"
+                                    className="rounded-md border-2 border-gray-100 bg-white w-full h-10 p-1"
                                     type="date"
                                     src={CalendarIcon} alt=""
                                 />
                             </div>
                         </div>
-                        <div className={condicao ? 'flex gap-6 w-full items-center justify-between' : 'flex gap-6 w-full items-center justify-end'}>
+                        <div className={condicao ? 'flex gap-6 w-full items-center justify-between max-[420px]:flex-col' : 'flex gap-6 w-full items-center justify-end'}>
                             {condicao && (
                                 <>
                                     <label htmlFor="file-upload" className='flex gap-2 items-center justify-center cursor-pointer 
-                            border-[3px] border-gray-200 p-2 rounded-full'>
+                            border-[3px] border-gray-200 p-2 rounded-full max-[420px]:place-self-start'>
                                         <div className=''>
                                             <img src={cloudIcon} alt="" className='h-6' />
                                         </div>
@@ -153,7 +153,7 @@ export default function Modal(props: ModalProps) {
                                     />
                                 </>
                             )}
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2 max-[420px]:place-self-end">
                                 <label className="switch">
                                     <input type="checkbox" />
                                     <span className="slider round"></span>
@@ -161,7 +161,6 @@ export default function Modal(props: ModalProps) {
                                 <p>Minha Tarefa</p>
                             </div>
                         </div>
-
                         {fileError && (
                             <div className="mt-4 p-2 border border-red-200 rounded-md text-red-600 text-sm">
                                 {fileError}
@@ -192,6 +191,7 @@ export default function Modal(props: ModalProps) {
                                 </div>
                             </div>
                         )}
+
                         {membroSelecionado && (
                             <div className="mt-2 text-sm text-gray-700">
                                 Membro selecionado: <b>{membrosEquipe.find(m => m.id === membroSelecionado)?.nome}</b> 

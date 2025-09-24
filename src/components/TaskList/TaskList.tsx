@@ -1,11 +1,21 @@
 import Cards from '../Cards/Cards'
 import './TaskList.css'
 
+interface Task {
+  id: string,
+  title: string,
+  description: string,
+  tema: string,
+  dataEntrega: string,
+  responsavel: string,
+  file: File | null
+}
+
+
 interface TaskListProps {
   title: string,
   taksCount: number,
-  openModal: (tipo: 'Atualizar' | 'Nova') => void;
-  
+  task: Task
 }
 
 export default function TaskList(props: TaskListProps){
@@ -19,18 +29,11 @@ export default function TaskList(props: TaskListProps){
           </span>
         </div>
         <div className='tasks'> 
-          <Cards
-            openModal={props.openModal}
-          />
-          <Cards
-            openModal={props.openModal}
-          />
-          <Cards
-            openModal={props.openModal}
-          />
-          <Cards
-            openModal={props.openModal}
-          />
+          <Cards task={props.task}/>
+          <Cards task={props.task}/>
+          <Cards task={props.task}/>
+          <Cards task={props.task}/>
+          <Cards task={props.task}/>
         </div>
       </div>
     </>

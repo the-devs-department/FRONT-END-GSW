@@ -8,10 +8,9 @@
   align-items: center;
   position: absolute;
   top: 25%;
-  left: 55%;
-  z-index: 2;
+  right: 50px;
+  z-index: 1;
   width: 128px;
   height: 74px;
   border-radius: .6rem;
-  box-shadow: none !important; /* força remover sombra */
 }
