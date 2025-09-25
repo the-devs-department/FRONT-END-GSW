@@ -9,8 +9,9 @@
 }
 
 .form-header > p {
-  color: #7B899D;
+  color: #7b9d83;
   font-size: 1.2rem;
+  text-align: center;
 }
 
 .form-project-title {
@@ -37,4 +38,20 @@
 
 .checked-box > img {
   height: 2.7rem;
+}
+
+@media screen and (max-width: 620px) {
+  .form-header {
+    padding: .5rem;
+  }
+
+  .form-project-title {
+    font-size: 1.8rem;
+  }
+
+  .form-header > p {
+    font-size: 1rem;
+    padding: 0 .5rem;
+  
+  }
 }

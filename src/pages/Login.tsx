@@ -93,7 +93,7 @@ export default function Login() {
           />
           <form 
             onSubmit={loginHandler}
-            className='w-[35rem] h-auto flex flex-col items-center justify-center pb-8 pt-8 p-4 border-2 rounded-md gap-6'>
+            className='w-[35rem] h-auto flex flex-col items-center justify-center pb-8 pt-8 p-4 border-2 rounded-md gap-6 max-sm:w-[95%]'>
             <div className='w-full h-auto flex flex-col gap-2 items-center justify-center'>
               <h1 className='text-3xl text-[#22222A] font-bold'>Entrar</h1>
               <p className='text-[#7B899D]'>Digite seu email e senha para acessar sua conta</p>

@@ -98,13 +98,13 @@ export default function Cadastro() {
         FeedbackMainText={feedback.mainMessage}
         FeedbackSecondText={feedback.secondMessage}
       />
-      <div className="w-full h-dvh flex flex-col items-center justify-center gap-4">
+      <div className="w-full min-h-dvh flex flex-col items-center justify-center gap-4 max-sm:gap-2">
         <FormHeader
           description="Crie sua conta para começar a gerenciar suas tarefas"
         />
         <form
           onSubmit={createUser}
-          className='w-[35rem] h-auto flex flex-col items-center justify-center pb-8 pt-8 p-4 border-2 rounded-md gap-4'
+          className='w-[35rem] h-auto flex flex-col items-center justify-center pb-8 pt-8 p-4 border-2 rounded-md gap-4 max-sm:w-[95%] max-sm:pb-4 max-sm:pt-4 max-sm:gap-2'
         >
           <div className='w-full h-auto flex flex-col gap-2 items-center justify-center'>
             <h1 className='text-3xl text-[#22222A] font-bold'>Cadastrar-se</h1>
