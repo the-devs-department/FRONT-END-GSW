@@ -1,9 +1,24 @@
 import { useDeleteModal } from '../../context/DeleteModalContext';
+import TarefaService from '../../Service/TarefaService';
 import './ModalDelete.css'
 
 
 export default function ModalDelete() {
-  const {isDeleteModalOpen, closeDeleteModal} = useDeleteModal()
+  const {isDeleteModalOpen, closeDeleteModal,taskIdToDelete} = useDeleteModal()
+
+  const deleteTask = async () => {
+    if (!taskIdToDelete) {
+      console.error("Não há nenhum id de tarefa para deletar!")
+      return
+    } else {
+      try{
+       await TarefaService.deleteTarefa(taskIdToDelete)
+       closeDeleteModal()
+      } catch(err){
+        console.log(err);
+      }
+    }
+  }
 
   return (
     <div className={isDeleteModalOpen ? 'modal-delete-opened' : 'modal-delete-closed'}>
@@ -22,7 +37,9 @@ export default function ModalDelete() {
             className="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
             Cancelar
           </button>
-          <button className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700">
+          <button 
+          onClick={deleteTask}
+          className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700">
             Excluir
           </button>
         </div>

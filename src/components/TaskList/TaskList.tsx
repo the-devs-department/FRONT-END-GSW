@@ -1,21 +1,12 @@
 import Cards from '../Cards/Cards'
 import './TaskList.css'
-
-interface Task {
-  id: string,
-  title: string,
-  description: string,
-  tema: string,
-  dataEntrega: string,
-  responsavel: string,
-  file: File | null
-}
-
+import type Tarefa from '../../Interface/TarefaInterface'; 
 
 interface TaskListProps {
   title: string,
   taksCount: number,
-  task: Task
+  tarefa: Tarefa[];
+
 }
 
 export default function TaskList(props: TaskListProps){
@@ -29,11 +20,12 @@ export default function TaskList(props: TaskListProps){
           </span>
         </div>
         <div className='tasks'> 
-          <Cards task={props.task}/>
-          <Cards task={props.task}/>
-          <Cards task={props.task}/>
-          <Cards task={props.task}/>
-          <Cards task={props.task}/>
+          {props.tarefa && props.tarefa.map((tarefa) => (
+          <Cards
+          key={tarefa.id}
+          task={tarefa}
+          />
+        ))}
         </div>
       </div>
     </>

@@ -9,7 +9,9 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ScreenWidth } from "../hooks/ScreenWidth";
 import { TaskModalProvider, useTaskModal } from "../context/TaskModalContext";
-import { DeleteModalProvider, useDeleteModal } from "../context/DeleteModalContext";
+import { DeleteModalProvider } from "../context/DeleteModalContext";
+import tarefaService from "../Service/TarefaService";
+import type Tarefa from "../Interface/TarefaInterface";
 
 const AppHeader = () => {
   const {openTaskModal}  = useTaskModal()
@@ -17,28 +19,42 @@ const AppHeader = () => {
 }
 
 const TaskModal = () => {
-  const {isTaskModalOpen, modalType, closeTaskModal} = useTaskModal();
-  return <Modal condicaoModal={isTaskModalOpen} tipoModal={modalType} closeModal={closeTaskModal}/>
+  const {isTaskModalOpen, modalType, closeTaskModal, taskToUpdate} = useTaskModal();
+  return <Modal condicaoModal={isTaskModalOpen} tipoModal={modalType} closeModal={closeTaskModal} tarefaSelecionada={taskToUpdate}/>
 }
-
-const tasksNaoIniciadas = [{ id: "1", title: "Suporte cliente premium", description: "Implementar chat em tempo real", tema: "Desenvolvimento",  dataEntrega: "30/10/2024", responsavel: "Pedro Henrique Martins", file: null }];
-const tasksEmAndamento = [{ id: "2", title: "Refatorar login", description: "Mudar a lógica de autenticação para Firebase", tema: "Desenvolvimento",  dataEntrega: "01/11/2024", responsavel: "Issami", file: null }];
-const tasksConcluidas = [{ id: "3", title: "Corrigir bug", description: "Erro de digitação no campo de email", tema: "Desenvolvimento",  dataEntrega: "25/10/2024", responsavel: "Otávio", file: null }];
 
 
 export default function RootLayout() {
-  const pageLink = useLocation();
-  const navigate = useNavigate()
   const [openNavbar, setOpenNavbar] = useState(false)
-
-
+  const [loading, setLoading] = useState(false)
+  const [tarefas, setTarefas] = useState<Tarefa[]>([])
+  const pageLink = useLocation();
+  const navigate = useNavigate();
+  
   useEffect(() => {
-    const userLoged = localStorage.getItem('authToken');
+    const userLoged = localStorage.getItem('authToken')
     if (!userLoged) {
       navigate('/login')
+    } else {
+      const carregarTarefas = async () => {
+        try {
+          setLoading(true);
+          const data = await tarefaService.fetchTarefas();
+          console.log(data)
+          setTarefas(data)
+        } catch (err) {
+          console.error("Erro ao buscar tarefas: ", err);
+        } finally {
+          setLoading(false)
+        }
+      }
+      carregarTarefas()
     }
-
   }, [navigate])
+
+  const tarefasNI = tarefas.filter(tarefa => tarefa.status === 'nao_iniciada')
+  const tarefasEA = tarefas.filter(tarefa => tarefa.status === 'em_andamento')
+  const tarefasC = tarefas.filter(tarefa => tarefa.status === 'concluida')
 
   const screenWidth = ScreenWidth()
 
@@ -48,6 +64,14 @@ export default function RootLayout() {
 
   const closeNavbarAction = () => {
     setOpenNavbar(false)
+  }
+
+  if (loading) {
+    return (
+      <div className="h-dvh w-full flex items-center justify-center">
+        <p className="text-black text-2xl font-bold">Carregando dados...</p>
+      </div>
+    )
   }
 
   return (
@@ -76,19 +100,19 @@ export default function RootLayout() {
           {pageLink.pathname === '/home' ? (
             <div className="w-full justify-evenly pb-3 flex max-[1024px]:flex-col max-[1024px]:gap-4 max-[1024px]:p-4">
                 <TaskList
-                  task={tasksNaoIniciadas}
+                  tarefa={tarefasNI}
                   title="Não Iniciada"
-                  taksCount={2}
+                  taksCount={tarefasNI.length}
                 />
                 <TaskList
-                  task={tasksEmAndamento}
+                  tarefa={tarefasEA}
                   title="Em Andamento"
-                  taksCount={10}
+                  taksCount={tarefasEA.length}
                 />
                 <TaskList
-                  task={tasksConcluidas}
+                  tarefa={tarefasC}
                   title="Concluída"
-                  taksCount={1}
+                  taksCount={tarefasC.length}
                 />
             </div>
           ) : (

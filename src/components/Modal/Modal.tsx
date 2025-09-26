@@ -1,22 +1,29 @@
-import { useState, type ChangeEvent } from 'react';
+import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
 import cloudIcon from '../../assets/cloud.png'
 import './Modal.css'
 import CalendarIcon from '../../assets/calendar.png'
+import type Tarefa from '../../Interface/TarefaInterface';
+import TarefaService from '../../Service/TarefaService';
 
 interface ModalProps {
     tipoModal: 'Nova' | 'Atualizar' | null;
     condicaoModal: boolean;
+    tarefaSelecionada: null |Tarefa;
     closeModal: () => void;
 }
 
+
 export default function Modal(props: ModalProps) {
-
-    const [option, setOption] = useState<string>("Não iniciada")
-    const [file, setFile] = useState<File | null>(null);
-    const [fileError, setFileError] = useState<string>("");
+    const [taskName, setTaskName] = useState("");
+    const [taskDescription, setTaskDescription] = useState("");
+    const [taskTema, setTaskTema] = useState<string>("Desenvolvimento");
+    const [taskFile, setTaskFile] = useState<File | null>(null);
+    const [taskStatus, setTaskStatus] = useState("Não iniciada");
+    const [taskDataEntrega, setTaskDataEntrega] = useState("");
     const [membroSelecionado, setMembroSelecionado] = useState<string>("");
+    const [fileError, setFileError] = useState<string>("");
 
-    const condicao = option !== 'Não iniciada' && props.tipoModal !== 'Nova'
+    const condicao = taskStatus !== 'Não iniciada' && props.tipoModal !== 'Nova'
 
     const membrosEquipe = [
         { id: "0", nome: "Não Atribuido" },
@@ -26,9 +33,56 @@ export default function Modal(props: ModalProps) {
         { id: "4", nome: "Issami" }
     ];
 
-    const handleMembroChange = (ev: ChangeEvent<HTMLSelectElement>) => {
-        setMembroSelecionado(ev.target.value);
+    const montarTarefa = (): Tarefa => {
+    return {
+        id: props.tarefaSelecionada?.id,
+        titulo: taskName,
+        descricao: taskDescription,
+        tema: taskTema,
+        status: statusMap[taskStatus],
+        dataEntrega: taskDataEntrega,
+        responsavel: membrosEquipe.find(m => m.id === membroSelecionado)?.nome,
+        file: taskFile
     };
+    };
+
+
+    const statusMap: Record<string, string> = {
+        'Não Iniciada': 'nao_iniciada',
+        'Em Andamento': 'em_andamento',
+        'Concluída': 'concluida'
+    };
+
+    const resetForm = () => {
+    setTaskName('');
+    setTaskDescription('');
+    setTaskTema('Desenvolvimento');
+    setTaskStatus('Não Iniciada');
+    setTaskDataEntrega('');
+    setMembroSelecionado('');
+    setTaskFile(null);
+    setFileError('');
+    };
+
+    useEffect(() => {
+    if (props.tarefaSelecionada) {
+        setTaskName(props.tarefaSelecionada.titulo ?? "");
+        setTaskDescription(props.tarefaSelecionada.descricao ?? "");
+        setTaskTema(props.tarefaSelecionada.tema ?? "Desenvolvimento");
+        setTaskFile(props.tarefaSelecionada.file ?? null);
+        setTaskStatus(
+        Object.keys(statusMap).find(
+            key => statusMap[key] === props.tarefaSelecionada?.status
+        ) || "Não Iniciada"
+        );
+        setTaskDataEntrega(props.tarefaSelecionada.dataEntrega ?? "");
+        setMembroSelecionado(
+        membrosEquipe.find(m => m.nome === props.tarefaSelecionada?.responsavel)?.id || ""
+        );
+    } else {
+        resetForm();
+    }
+    }, [props.tarefaSelecionada]);
 
     const allowedTypes = [
         "application/pdf",
@@ -38,31 +92,59 @@ export default function Modal(props: ModalProps) {
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ];
 
-    const handleOptionChange = (ev: ChangeEvent<HTMLSelectElement>) => {
-        setOption(ev.target.value)
-    }
-
     const handleFileChange = (ev: ChangeEvent<HTMLInputElement>) => {
         if (ev.target.files && ev.target.files[0]) {
             const selectedFile = ev.target.files[0];
             if (allowedTypes.includes(selectedFile.type)) {
-                setFile(selectedFile);
+                setTaskFile(selectedFile);
                 setFileError("");
             } else {
-                setFile(null);
+                setTaskFile(null);
                 setFileError("Arquivo não suportado");
             }
         }
     };
 
     const handleRemoveFile = () => {
-        setFile(null);
+        setTaskFile(null);
         setFileError("");
+    };
+
+    const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
+        ev.preventDefault();
+
+        const tarefa = montarTarefa()
+
+        try {
+            TarefaService.criarTarefa(tarefa);
+            props.closeModal();
+            resetForm()
+        } catch (err) {
+            console.error(err);
+            alert('Erro ao criar tarefa');
+        }
+    };
+
+    const updateTask = async (ev: FormEvent<HTMLFormElement>) => {
+        ev.preventDefault();
+
+        const tarefa = montarTarefa();
+
+        try {
+            TarefaService.atualizarTarefa(tarefa);
+            props.closeModal();
+            resetForm()
+        } catch (error) {
+            console.error(error);
+            alert('Erro ao atualizar tarefa');
+        }
     };
 
     const title = props.tipoModal === 'Nova' ? 'Nova Tarefa' : props.tipoModal === 'Atualizar' ? 'Atualizar Tarefa' : '';
 
     const buttonText = props.tipoModal === 'Nova' ? 'Criar Tarefa' : props.tipoModal === 'Atualizar' ? 'Atualizar Tarefa' : '';
+
+    const isNovaTarefa = props.tipoModal === 'Nova';
 
     return (
         <div id="IdForms" className={props.condicaoModal ? 'modal-opened' : 'modal-closed'}>
@@ -71,26 +153,36 @@ export default function Modal(props: ModalProps) {
             </div>
             <div className="modal-content">
                 <h2>{title}</h2>
-                <form className="form-task">
+                <form className="form-task" onSubmit={isNovaTarefa? handleSubmit : updateTask}>
                     <div className="form-infos">
                         <div className='form-inputs'>
                             <label>Título *</label>
                             <input
                                 className="rounded-md border-2 border-gray-100 bg-white w-full h-10 p-3"
-                                type="text" placeholder="Digite o título da tarefa" />
+                                type="text" 
+                                placeholder="Digite o título da tarefa"
+                                required
+                                value={taskName}
+                                onChange={(ev) => setTaskName(ev.target.value)}
+                                />
                         </div>
                         <div className='form-inputs'>
                             <label>Descrição *</label>
                             <textarea
                                 className='rounded-md border-2 border-gray-100 bg-white w-full 
-                    min-h-24 max-h-30 p-3 overflow-hidden resize-none'
-                                placeholder="Descreva os detalhes da tarefa">
+                                min-h-24 max-h-30 p-3 overflow-hidden resize-none'
+                                placeholder="Descreva os detalhes da tarefa"
+                                value={taskDescription}
+                                onChange={(ev) => setTaskDescription(ev.target.value)}
+                                >
                             </textarea>
                         </div>
                         <div className="flex gap-4 w-full max-[420px]:flex-col">
                             <div className='form-inputs w-1/2'>
                                 <label>Tema *</label>
-                                <select className="rounded-md border-2 border-gray-100 bg-white w-full h-10">
+                                <select className="rounded-md border-2 border-gray-100 bg-white w-full h-10" value={taskTema}
+                                    onChange={(ev) => setTaskTema(ev.target.value)}
+                                >
                                     <option>Desenvolvimento</option>
                                     <option>Design</option>
                                     <option>Teste</option>
@@ -99,12 +191,12 @@ export default function Modal(props: ModalProps) {
                             <div className='form-inputs w-1/2'>
                                 <label>Status *</label>
                                 <select className="rounded-md border-2 border-gray-100 bg-white w-full h-10"
-                                    value={option}
-                                    onChange={handleOptionChange}
+                                    value={taskStatus}
+                                    onChange={(ev) => setTaskStatus(ev.target.value)}
                                 >
-                                    <option>Não iniciada</option>
-                                    <option>Em andamento</option>
-                                    <option>Concluída</option>
+                                    <option value="Não Iniciada">Não Iniciada</option>
+                                    <option value="Em Andamento">Em andamento</option>
+                                    <option value="Concluída">Concluída</option>
                                 </select>
                             </div>
                         </div>
@@ -115,7 +207,7 @@ export default function Modal(props: ModalProps) {
                                     id="membro-select"
                                     className="rounded-md border-2 border-gray-100 bg-white w-full h-10"
                                     value={membroSelecionado}
-                                    onChange={handleMembroChange}
+                                    onChange={(ev) => setMembroSelecionado(ev.target.value)}
                                     required
                                     title="Selecione o membro responsável"
                                 >
@@ -130,6 +222,8 @@ export default function Modal(props: ModalProps) {
                                 <input
                                     className="rounded-md border-2 border-gray-100 bg-white w-full h-10 p-1"
                                     type="date"
+                                    value={taskDataEntrega}
+                                    onChange={(ev) => setTaskDataEntrega(ev.target.value)}
                                     src={CalendarIcon} alt=""
                                 />
                             </div>
@@ -166,15 +260,15 @@ export default function Modal(props: ModalProps) {
                                 {fileError}
                             </div>
                         )}
-                        {file && !fileError && (
+                        {taskFile && !fileError && (
                             <div className="mt-4 p-2 border border-gray-200 rounded-md flex justify-between items-center text-sm">
                                 <span className="text-gray-600 truncate pr-2">
-                                    {file.name}
+                                    {taskFile.name}
                                 </span>
                                 <div>
                                     <a
-                                        href={URL.createObjectURL(file)}
-                                        download={file.name}
+                                        href={URL.createObjectURL(taskFile)}
+                                        download={taskFile.name}
                                         className="text-blue-600 hover:underline mr-3"
                                         target="_blank"
                                         rel="noopener noreferrer"
@@ -217,4 +311,3 @@ export default function Modal(props: ModalProps) {
         </div>
     )
 }
-

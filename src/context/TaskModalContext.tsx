@@ -1,20 +1,12 @@
 import { createContext, useContext, useState, type ReactNode } from "react"
+import type Tarefa from "../Interface/TarefaInterface"
 
-interface Task {
-  id: string,
-  title: string,
-  description: string,
-  tema: string,
-  dataEntrega: string,
-  responsavel: string,
-  file: File | null
-}
 
 interface TaskModalType {
   isTaskModalOpen: boolean,
   modalType: "Nova" | "Atualizar" | null,
-  taskToUpdate: Task | null
-  openTaskModal: (type: "Nova" | "Atualizar", task?: Task) => void,
+  taskToUpdate: Tarefa | null
+  openTaskModal: (type: "Nova" | "Atualizar", task?: Tarefa) => void,
   closeTaskModal: () => void,
 }
 
@@ -27,9 +19,9 @@ interface TaskModalProviderProps {
 export const TaskModalProvider = (props: TaskModalProviderProps) => {
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false)
   const [modalType, setModalType] = useState<"Nova" | "Atualizar" | null> (null)
-  const [taskToUpdate, setTaskToUpdate] = useState<Task | null> (null)
+  const [taskToUpdate, setTaskToUpdate] = useState<Tarefa | null> (null)
 
-  const openTaskModal = (type: "Nova" | "Atualizar", task?: Task) => {
+  const openTaskModal = (type: "Nova" | "Atualizar", task?: Tarefa) => {
     setModalType(type)
     setIsTaskModalOpen(true)
     if (type === 'Atualizar' && task) {
