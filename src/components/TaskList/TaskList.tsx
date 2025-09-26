@@ -21,10 +21,10 @@ export default function TaskList(props: TaskListProps){
         </div>
         <div className='tasks'> 
           {props.tarefa && props.tarefa.map((tarefa) => (
-          <Cards
-          key={tarefa.id}
-          task={tarefa}
-          />
+            <Cards
+            key={tarefa.id}
+            task={tarefa}
+            />
         ))}
         </div>
       </div>

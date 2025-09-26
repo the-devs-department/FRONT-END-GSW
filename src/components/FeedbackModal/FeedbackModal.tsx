@@ -1,27 +1,26 @@
-import './FeedbackModal.css'
+import './FeedbackModal.css';
+import { useFeedback } from '../../context/FeedbackModalContext'; 
 
-interface FeedbackModalProps {
-  isModalShown: boolean,
-  FeedbackKind: any,
-  FeedbackMainText: String,
-  FeedbackSecondText: String,
-  FeedbackImage: any
-}
+export default function FeedbackModal() {
+  const { feedback, hideFeedback } = useFeedback();
 
-export default function FeedbackModal(props: FeedbackModalProps) {
+  const { isShown, kind, mainText, secondText, image } = feedback;
 
-  const feedbackStyle = props.FeedbackKind === 'Sucesso' ? 'feeback-success' : 'feedback-error'
-  const feebackShown = props.isModalShown ? 'feedback-visible' : 'feedback-modal'
+  const feedbackStyle = kind === 'Sucesso' ? 'feeback-success' : 'feedback-error';
+  const feebackShown = isShown ? 'feedback-visible' : 'feedback-modal';
+
+  if (!isShown) return null;
 
   return (
-    <div className={`${feebackShown} ${feedbackStyle}`}>
-      <div className='feedback-message'>
+    <div className={`${feebackShown} ${feedbackStyle}`} onClick={hideFeedback}>
+      <div className='feedback-message' onClick={(e) => e.stopPropagation()}>
         <div className='feedback-texts'>
-          <h2>{props.FeedbackMainText}</h2>
-          <p>{props.FeedbackSecondText}</p>
+          <h2>{mainText}</h2>
+          <p>{secondText}</p>
         </div>
-        <img src={props.FeedbackImage} alt="" className='feedback-image'/>
+        <img src={image} alt="" className='feedback-image'/>
+        <button onClick={hideFeedback} className="close-button">X</button>
       </div>
     </div>
-  )
+  );
 }

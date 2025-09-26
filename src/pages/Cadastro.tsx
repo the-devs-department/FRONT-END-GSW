@@ -1,9 +1,8 @@
 import { Link, useNavigate } from "react-router-dom"
 import FormHeader from "../components/FormHeader/FormHeader"
-import successIcon from '../assets/Success.png'
-import errorIcon from '../assets/Error.png'
-import FeedbackModal from '../components/FeedbackModal/FeedbackModal'
 import React, { useState } from "react"
+import { useFeedback } from "../context/FeedbackModalContext"
+import FeedbackModal from "../components/FeedbackModal/FeedbackModal"
 
 export default function Cadastro() {
 
@@ -11,9 +10,9 @@ export default function Cadastro() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [feedback, setFeedback] = useState({ shown: false, type: '', mainMessage: '', secondMessage: '', icon: '' })
   const [err, setErr] = useState('')
   const navigation = useNavigate()
+  const { showFeedback } = useFeedback()
 
   const createUser = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault()
@@ -43,22 +42,12 @@ export default function Cadastro() {
 
         const data = await response.json()
         console.log("Usuário cadastrado com sucesso", data)
-        setFeedback({
-          shown: true,
-          type: 'Sucesso',
-          mainMessage: 'Cadastro realizado com sucesso!',
-          secondMessage: 'Redirecionando para o Login',
-          icon: successIcon
-        })
-
+        showFeedback(
+          'Sucesso',
+          'Cadastro realizado com sucesso!',
+          'Em alguns instantes você irá para o login.'
+        )
         setTimeout(() => {
-          setFeedback({
-            shown: false,
-            type: '',
-            mainMessage: '',
-            secondMessage: '',
-            icon: ''
-          })
           navigation('/login')
         }, 5000)
 
@@ -66,23 +55,12 @@ export default function Cadastro() {
       } catch (error: any) {
         console.error('Falha no cadastro', error)
         setErr(error.message || "Ocorreu um erro. Tente novamente")
-        setFeedback({
-          shown: true,
-          type: 'Erro',
-          mainMessage: 'Erro ao realizar cadastro!',
-          secondMessage: err,
-          icon: errorIcon
-        })
-        setTimeout(() => {
-          setFeedback({
-            shown: false,
-            type: '',
-            mainMessage: '',
-            secondMessage: '',
-            icon: ''
-          })
-        }, 5000)
         console.log(err)
+        showFeedback(
+        'Erro',
+        'Erro ao realizar cadastro!',
+        'Verifique os dados inseridos, ou a conta não existe.'
+      )
       }
 
     }
@@ -91,13 +69,7 @@ export default function Cadastro() {
 
   return (
     <>
-      <FeedbackModal
-        isModalShown={feedback.shown}
-        FeedbackKind={feedback.type}
-        FeedbackImage={feedback.icon}
-        FeedbackMainText={feedback.mainMessage}
-        FeedbackSecondText={feedback.secondMessage}
-      />
+    <FeedbackModal/>
       <div className="w-full min-h-dvh flex flex-col items-center justify-center gap-4 max-sm:gap-2">
         <FormHeader
           description="Crie sua conta para começar a gerenciar suas tarefas"

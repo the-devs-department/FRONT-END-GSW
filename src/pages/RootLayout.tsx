@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 import { ScreenWidth } from "../hooks/ScreenWidth";
 import { TaskModalProvider, useTaskModal } from "../context/TaskModalContext";
 import { DeleteModalProvider } from "../context/DeleteModalContext";
+import { FeedbackProvider } from "../context/FeedbackModalContext";
+import FeedbackModal from "../components/FeedbackModal/FeedbackModal";
 import tarefaService from "../Service/TarefaService";
 import type Tarefa from "../Interface/TarefaInterface";
 
@@ -20,9 +22,13 @@ const AppHeader = () => {
 
 const TaskModal = () => {
   const {isTaskModalOpen, modalType, closeTaskModal, taskToUpdate} = useTaskModal();
-  return <Modal condicaoModal={isTaskModalOpen} tipoModal={modalType} closeModal={closeTaskModal} tarefaSelecionada={taskToUpdate}/>
+  return <Modal 
+    condicaoModal={isTaskModalOpen} 
+    tipoModal={modalType} 
+    closeModal={closeTaskModal} 
+    tarefaSelecionada={taskToUpdate}
+    />
 }
-
 
 export default function RootLayout() {
   const [openNavbar, setOpenNavbar] = useState(false)
@@ -123,6 +129,7 @@ export default function RootLayout() {
         </DeleteModalProvider>
         </div>
       </TaskModalProvider>
+      <FeedbackModal/>
     </>
   );
 }

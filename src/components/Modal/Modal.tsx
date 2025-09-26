@@ -1,9 +1,11 @@
+
 import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
 import cloudIcon from '../../assets/cloud.png'
 import './Modal.css'
 import CalendarIcon from '../../assets/calendar.png'
 import type Tarefa from '../../Interface/TarefaInterface';
 import TarefaService from '../../Service/TarefaService';
+import { useFeedback } from '../../context/FeedbackModalContext';
 
 interface Usuario {
     id: string;
@@ -28,18 +30,16 @@ export default function Modal(props: ModalProps) {
     const [fileError, setFileError] = useState<string>("");
 
     const [membrosEquipe, setMembrosEquipe] = useState<Usuario[]>([]);
-
     const condicao = taskStatus !== 'Não Iniciada' && props.tipoModal !== 'Nova';
+    const {showFeedback} = useFeedback()
 
-    // Buscar membros da equipe quando o modal abrir
-    useEffect(() => {
+      useEffect(() => {
         if (props.condicaoModal) {
             const token = localStorage.getItem('authToken');
             if (!token) {
                 console.error("Token de autenticação não encontrado.");
                 return;
             }
-
             fetch('http://localhost:8080/usuarios', {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -132,37 +132,33 @@ export default function Modal(props: ModalProps) {
 
     const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
-
         const tarefa = montarTarefa();
+        let successMainText: string;
+        let successSecondaryText: string
 
         try {
-            await TarefaService.criarTarefa(tarefa);
+            if(props.tipoModal === 'Nova') {
+                await TarefaService.criarTarefa(tarefa);
+                successMainText = "Tarefa criada com sucesso!"
+                successSecondaryText = "Atualizando lista de tarefas"
+            } else {
+                await TarefaService.atualizarTarefa(tarefa);
+                successMainText = "Tarefa atualizada com sucesso!"
+                successSecondaryText = "Atualizando lista de tarefas"
+            }
             props.closeModal();
             resetForm();
+            showFeedback('Sucesso', successMainText, successSecondaryText)
         } catch (err) {
             console.error(err);
-            alert('Erro ao criar tarefa');
-        }
-    };
-
-    const updateTask = async (ev: FormEvent<HTMLFormElement>) => {
-        ev.preventDefault();
-
-        const tarefa = montarTarefa();
-
-        try {
-            await TarefaService.atualizarTarefa(tarefa);
-            props.closeModal();
-            resetForm();
-        } catch (error) {
-            console.error(error);
-            alert('Erro ao atualizar tarefa');
+            let errorMainText = "Erro ao criar/modificar tarefa!"
+            let errorSecondaryText = 'Houve um problema ao criar/modificacr tarefa...'
+            showFeedback('Erro', errorMainText, errorSecondaryText)
         }
     };
 
     const title = props.tipoModal === 'Nova' ? 'Nova Tarefa' : props.tipoModal === 'Atualizar' ? 'Atualizar Tarefa' : '';
     const buttonText = props.tipoModal === 'Nova' ? 'Criar Tarefa' : props.tipoModal === 'Atualizar' ? 'Atualizar Tarefa' : '';
-    const isNovaTarefa = props.tipoModal === 'Nova';
 
     return (
         <div id="IdForms" className={props.condicaoModal ? 'modal-opened' : 'modal-closed'}>
@@ -171,7 +167,7 @@ export default function Modal(props: ModalProps) {
             </div>
             <div className="modal-content">
                 <h2>{title}</h2>
-                <form className="form-task" onSubmit={isNovaTarefa ? handleSubmit : updateTask}>
+                <form className="form-task" onSubmit={handleSubmit}>
                     <div className="form-infos">
                         <div className='form-inputs'>
                             <label>Título *</label>
@@ -191,6 +187,7 @@ export default function Modal(props: ModalProps) {
                                 min-h-24 max-h-30 p-3 overflow-hidden resize-none'
                                 placeholder="Descreva os detalhes da tarefa"
                                 value={taskDescription}
+                                required
                                 onChange={(ev) => setTaskDescription(ev.target.value)}
                             >
                             </textarea>
@@ -257,7 +254,6 @@ export default function Modal(props: ModalProps) {
                             </div>
                         </div>
 
-                        {/* Upload condicional */}
                         <div className={condicao ? 'flex gap-6 w-full items-center justify-between max-[420px]:flex-col' : 'flex gap-6 w-full items-center justify-end'}>
                             {condicao && (
                                 <>

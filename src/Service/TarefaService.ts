@@ -1,6 +1,6 @@
 import type Tarefa from "../Interface/TarefaInterface";
 
-const token = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIyN2UyYmRjMi1iNDE5LTQ1MDgtOTliMC1jMjBlZGUwYjA3MWMiLCJzdWIiOiI2OGM5N2MyOWJmN2FjZjZlMTY0MzVhMzYiLCJpYXQiOjE3NTg4ODMyMTEsImV4cCI6MTc1ODkxOTIxMSwiZW1haWwiOiJ0ZXN0QGV4YW1wbGUuY29tIiwicm9sZXMiOltdfQ.JbUZp9N_a642bU_8hW2eGoIMZYleMEi5P6ce39eRK9k";
+const token = "seu token"
 
 const deleteTarefa = async (id: string) => {
     const response = await fetch(`http://localhost:8080/tarefas/excluir/${id}`, {

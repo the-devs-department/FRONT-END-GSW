@@ -1,7 +1,6 @@
 .task-list{
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: space-between;
   background: linear-gradient(to bottom right, #fff, #f1f1f1);
   border: 1px solid #dcdfe5;
