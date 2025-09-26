@@ -5,47 +5,55 @@ import CalendarIcon from '../../assets/calendar.png'
 import type Tarefa from '../../Interface/TarefaInterface';
 import TarefaService from '../../Service/TarefaService';
 
+interface Usuario {
+    id: string;
+    nome: string;
+}
+
 interface ModalProps {
     tipoModal: 'Nova' | 'Atualizar' | null;
     condicaoModal: boolean;
-    tarefaSelecionada: null |Tarefa;
+    tarefaSelecionada: null | Tarefa;
     closeModal: () => void;
 }
-
 
 export default function Modal(props: ModalProps) {
     const [taskName, setTaskName] = useState("");
     const [taskDescription, setTaskDescription] = useState("");
     const [taskTema, setTaskTema] = useState<string>("Desenvolvimento");
     const [taskFile, setTaskFile] = useState<File | null>(null);
-    const [taskStatus, setTaskStatus] = useState("Não iniciada");
+    const [taskStatus, setTaskStatus] = useState("Não Iniciada");
     const [taskDataEntrega, setTaskDataEntrega] = useState("");
     const [membroSelecionado, setMembroSelecionado] = useState<string>("");
     const [fileError, setFileError] = useState<string>("");
 
-    const condicao = taskStatus !== 'Não iniciada' && props.tipoModal !== 'Nova'
+    const [membrosEquipe, setMembrosEquipe] = useState<Usuario[]>([]);
 
-    const membrosEquipe = [
-        { id: "0", nome: "Não Atribuido" },
-        { id: "1", nome: "Otávio" },
-        { id: "2", nome: "Pedro Henrique Martins" },
-        { id: "3", nome: "Tiago" },
-        { id: "4", nome: "Issami" }
-    ];
+    const condicao = taskStatus !== 'Não Iniciada' && props.tipoModal !== 'Nova';
 
-    const montarTarefa = (): Tarefa => {
-    return {
-        id: props.tarefaSelecionada?.id,
-        titulo: taskName,
-        descricao: taskDescription,
-        tema: taskTema,
-        status: statusMap[taskStatus],
-        dataEntrega: taskDataEntrega,
-        responsavel: membrosEquipe.find(m => m.id === membroSelecionado)?.nome,
-        file: taskFile
-    };
-    };
+    // Buscar membros da equipe quando o modal abrir
+    useEffect(() => {
+        if (props.condicaoModal) {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                console.error("Token de autenticação não encontrado.");
+                return;
+            }
 
+            fetch('http://localhost:8080/usuarios', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    setMembrosEquipe(data);
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar membros da equipe:', error);
+                });
+        }
+    }, [props.condicaoModal]);
 
     const statusMap: Record<string, string> = {
         'Não Iniciada': 'nao_iniciada',
@@ -53,36 +61,48 @@ export default function Modal(props: ModalProps) {
         'Concluída': 'concluida'
     };
 
+    const montarTarefa = (): Tarefa => {
+        return {
+            id: props.tarefaSelecionada?.id,
+            titulo: taskName,
+            descricao: taskDescription,
+            tema: taskTema,
+            status: statusMap[taskStatus],
+            dataEntrega: taskDataEntrega,
+            responsavel: membroSelecionado,
+            file: taskFile
+        };
+    };
+
     const resetForm = () => {
-    setTaskName('');
-    setTaskDescription('');
-    setTaskTema('Desenvolvimento');
-    setTaskStatus('Não Iniciada');
-    setTaskDataEntrega('');
-    setMembroSelecionado('');
-    setTaskFile(null);
-    setFileError('');
+        setTaskName('');
+        setTaskDescription('');
+        setTaskTema('Desenvolvimento');
+        setTaskStatus('Não Iniciada');
+        setTaskDataEntrega('');
+        setMembroSelecionado('');
+        setTaskFile(null);
+        setFileError('');
     };
 
     useEffect(() => {
-    if (props.tarefaSelecionada) {
-        setTaskName(props.tarefaSelecionada.titulo ?? "");
-        setTaskDescription(props.tarefaSelecionada.descricao ?? "");
-        setTaskTema(props.tarefaSelecionada.tema ?? "Desenvolvimento");
-        setTaskFile(props.tarefaSelecionada.file ?? null);
-        setTaskStatus(
-        Object.keys(statusMap).find(
-            key => statusMap[key] === props.tarefaSelecionada?.status
-        ) || "Não Iniciada"
-        );
-        setTaskDataEntrega(props.tarefaSelecionada.dataEntrega ?? "");
-        setMembroSelecionado(
-        membrosEquipe.find(m => m.nome === props.tarefaSelecionada?.responsavel)?.id || ""
-        );
-    } else {
-        resetForm();
-    }
-    }, [props.tarefaSelecionada]);
+        if (props.tarefaSelecionada) {
+            setTaskName(props.tarefaSelecionada.titulo ?? "");
+            setTaskDescription(props.tarefaSelecionada.descricao ?? "");
+            setTaskTema(props.tarefaSelecionada.tema ?? "Desenvolvimento");
+            setTaskFile(props.tarefaSelecionada.file ?? null);
+            setTaskStatus(
+                Object.keys(statusMap).find(
+                    key => statusMap[key] === props.tarefaSelecionada?.status
+                ) || "Não Iniciada"
+            );
+            setTaskDataEntrega(props.tarefaSelecionada.dataEntrega ?? "");
+            setMembroSelecionado(props.tarefaSelecionada?.responsavel || "");
+
+        } else {
+            resetForm();
+        }
+    }, [props.tarefaSelecionada, membrosEquipe]);
 
     const allowedTypes = [
         "application/pdf",
@@ -113,12 +133,12 @@ export default function Modal(props: ModalProps) {
     const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
 
-        const tarefa = montarTarefa()
+        const tarefa = montarTarefa();
 
         try {
-            TarefaService.criarTarefa(tarefa);
+            await TarefaService.criarTarefa(tarefa);
             props.closeModal();
-            resetForm()
+            resetForm();
         } catch (err) {
             console.error(err);
             alert('Erro ao criar tarefa');
@@ -131,9 +151,9 @@ export default function Modal(props: ModalProps) {
         const tarefa = montarTarefa();
 
         try {
-            TarefaService.atualizarTarefa(tarefa);
+            await TarefaService.atualizarTarefa(tarefa);
             props.closeModal();
-            resetForm()
+            resetForm();
         } catch (error) {
             console.error(error);
             alert('Erro ao atualizar tarefa');
@@ -141,9 +161,7 @@ export default function Modal(props: ModalProps) {
     };
 
     const title = props.tipoModal === 'Nova' ? 'Nova Tarefa' : props.tipoModal === 'Atualizar' ? 'Atualizar Tarefa' : '';
-
     const buttonText = props.tipoModal === 'Nova' ? 'Criar Tarefa' : props.tipoModal === 'Atualizar' ? 'Atualizar Tarefa' : '';
-
     const isNovaTarefa = props.tipoModal === 'Nova';
 
     return (
@@ -153,18 +171,18 @@ export default function Modal(props: ModalProps) {
             </div>
             <div className="modal-content">
                 <h2>{title}</h2>
-                <form className="form-task" onSubmit={isNovaTarefa? handleSubmit : updateTask}>
+                <form className="form-task" onSubmit={isNovaTarefa ? handleSubmit : updateTask}>
                     <div className="form-infos">
                         <div className='form-inputs'>
                             <label>Título *</label>
                             <input
                                 className="rounded-md border-2 border-gray-100 bg-white w-full h-10 p-3"
-                                type="text" 
+                                type="text"
                                 placeholder="Digite o título da tarefa"
                                 required
                                 value={taskName}
                                 onChange={(ev) => setTaskName(ev.target.value)}
-                                />
+                            />
                         </div>
                         <div className='form-inputs'>
                             <label>Descrição *</label>
@@ -174,13 +192,14 @@ export default function Modal(props: ModalProps) {
                                 placeholder="Descreva os detalhes da tarefa"
                                 value={taskDescription}
                                 onChange={(ev) => setTaskDescription(ev.target.value)}
-                                >
+                            >
                             </textarea>
                         </div>
                         <div className="flex gap-4 w-full max-[420px]:flex-col">
                             <div className='form-inputs w-1/2'>
                                 <label>Tema *</label>
-                                <select className="rounded-md border-2 border-gray-100 bg-white w-full h-10" value={taskTema}
+                                <select className="rounded-md border-2 border-gray-100 bg-white w-full h-10"
+                                    value={taskTema}
                                     onChange={(ev) => setTaskTema(ev.target.value)}
                                 >
                                     <option>Desenvolvimento</option>
@@ -211,11 +230,20 @@ export default function Modal(props: ModalProps) {
                                     required
                                     title="Selecione o membro responsável"
                                 >
-                                    <option value="" disabled>Selecione o membro</option>
-                                    {membrosEquipe.map((membro) => (
-                                        <option key={membro.id} value={membro.id}>{membro.nome}</option>
+                                    <option value="" disabled>
+                                        Selecione o membro
+                                    </option>
+                                    {membrosEquipe.map((membro, index) => (
+                                        <option key={membro.id ?? index} value={membro.nome}>
+                                            {membro.nome}
+                                        </option>
                                     ))}
                                 </select>
+                                {membroSelecionado && (
+                                    <div className="mt-2 text-sm text-gray-700">
+                                        Membro selecionado: <b>{membroSelecionado}</b>
+                                    </div>
+                                )}
                             </div>
                             <div className='form-inputs'>
                                 <label>Data de Entrega *</label>
@@ -228,12 +256,14 @@ export default function Modal(props: ModalProps) {
                                 />
                             </div>
                         </div>
+
+                        {/* Upload condicional */}
                         <div className={condicao ? 'flex gap-6 w-full items-center justify-between max-[420px]:flex-col' : 'flex gap-6 w-full items-center justify-end'}>
                             {condicao && (
                                 <>
                                     <label htmlFor="file-upload" className='flex gap-2 items-center justify-center cursor-pointer 
-                            border-[3px] border-gray-200 p-2 rounded-full max-[420px]:place-self-start'>
-                                        <div className=''>
+                                    border-[3px] border-gray-200 p-2 rounded-full max-[420px]:place-self-start'>
+                                        <div>
                                             <img src={cloudIcon} alt="" className='h-6' />
                                         </div>
                                         Anexar arquivo
@@ -255,6 +285,7 @@ export default function Modal(props: ModalProps) {
                                 <p>Minha Tarefa</p>
                             </div>
                         </div>
+
                         {fileError && (
                             <div className="mt-4 p-2 border border-red-200 rounded-md text-red-600 text-sm">
                                 {fileError}
@@ -283,12 +314,6 @@ export default function Modal(props: ModalProps) {
                                         &times;
                                     </button>
                                 </div>
-                            </div>
-                        )}
-
-                        {membroSelecionado && (
-                            <div className="mt-2 text-sm text-gray-700">
-                                Membro selecionado: <b>{membrosEquipe.find(m => m.id === membroSelecionado)?.nome}</b> 
                             </div>
                         )}
 
