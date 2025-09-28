@@ -16,6 +16,7 @@
   -webkit-animation-duration: 0.4s;
   animation-name: slideIn;
   animation-duration: .3s;
+  z-index: 5;
 }
 
 .feedback-visible::before {

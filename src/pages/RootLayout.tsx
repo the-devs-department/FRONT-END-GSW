@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import Navbar from "../components/Navbar/Navbar";
@@ -29,9 +29,15 @@ const AppHeader = ({ setFiltro, filtroAtual, minhasTarefasCount }: any) => {
   />;
 }
 
-const TaskModal = () => {
+const TaskModal = ({ reloadTasks }: { reloadTasks: () => void }) => {
   const { isTaskModalOpen, modalType, closeTaskModal, taskToUpdate } = useTaskModal();
-  return <Modal condicaoModal={isTaskModalOpen} tipoModal={modalType} closeModal={closeTaskModal} tarefaSelecionada={taskToUpdate} />;
+  return <Modal 
+    condicaoModal={isTaskModalOpen} 
+    tipoModal={modalType} 
+    closeModal={closeTaskModal} 
+    tarefaSelecionada={taskToUpdate}
+    onTaskSuccess={reloadTasks}
+  />;
 }
 
 export default function RootLayout() {
@@ -44,33 +50,35 @@ export default function RootLayout() {
   const navigate = useNavigate();
   const screenWidth = ScreenWidth();
 
+  const carregarTarefas = useCallback(async () => {
+    const token = localStorage.getItem('authToken');
+    if (!token) return; 
+    try {
+      setLoading(true);
+      const decodedToken: DecodedToken = jwtDecode(token);
+      const identificadorUsuario = decodedToken.sub;
+
+      const data = filtro === 'minhas'
+        ? await tarefaService.fetchTarefasPorResponsavel(identificadorUsuario)
+        : await tarefaService.fetchTarefas();
+      
+      setTarefas(data);
+    } catch (err) {
+      console.error("Erro ao carregar tarefas:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [filtro]); 
+
+  // 2. Use a função no useEffect
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (!token) {
       navigate('/login');
       return;
     }
-
-    const carregarTarefas = async () => {
-      try {
-        setLoading(true);
-        const decodedToken: DecodedToken = jwtDecode(token);
-        const identificadorUsuario = decodedToken.sub;
-
-        const data = filtro === 'minhas'
-          ? await tarefaService.fetchTarefasPorResponsavel(identificadorUsuario)
-          : await tarefaService.fetchTarefas();
-        
-        setTarefas(data);
-      } catch (err) {
-        console.error("Erro ao carregar tarefas:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     carregarTarefas();
-  }, [filtro, navigate]);
+  }, [filtro, navigate, carregarTarefas]);
 
   const { tarefasNI, tarefasEA, tarefasC } = useMemo(() => {
     const ni = tarefas.filter(tarefa => tarefa.status === 'nao_iniciada');
@@ -128,8 +136,8 @@ export default function RootLayout() {
               <Outlet />
             )}
 
-            <ModalDelete/>
-            <TaskModal/>
+            <ModalDelete onTaskDeleted={carregarTarefas} /> 
+            <TaskModal reloadTasks={carregarTarefas} />
           </DeleteModalProvider>
         </div>
       </TaskModalProvider>

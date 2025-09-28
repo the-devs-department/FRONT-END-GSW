@@ -16,6 +16,7 @@ interface ModalProps {
     tipoModal: 'Nova' | 'Atualizar' | null;
     condicaoModal: boolean;
     tarefaSelecionada: null | Tarefa;
+    onTaskSuccess: () => void;
     closeModal: () => void;
 }
 
@@ -31,9 +32,9 @@ export default function Modal(props: ModalProps) {
 
     const [membrosEquipe, setMembrosEquipe] = useState<Usuario[]>([]);
     const condicao = taskStatus !== 'Não Iniciada' && props.tipoModal !== 'Nova';
-    const {showFeedback} = useFeedback()
+    const { showFeedback } = useFeedback()
 
-      useEffect(() => {
+    useEffect(() => {
         if (props.condicaoModal) {
             const token = localStorage.getItem('authToken');
             if (!token) {
@@ -130,14 +131,37 @@ export default function Modal(props: ModalProps) {
         setFileError("");
     };
 
+
+    const getTodayDateWithoutTime = (): Date => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return today;
+    };
+
+    const isDeliveryDateInPast = (deliveryDateString: string): boolean => {
+        if (!deliveryDateString) return false;
+
+        const deliveryDate = new Date(deliveryDateString);
+        const today = getTodayDateWithoutTime();
+
+        return deliveryDate.getTime() < today.getTime();
+    };
+
     const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
+        if (isDeliveryDateInPast(taskDataEntrega)) {
+            let errorMainText = "Data de entrega inválida!";
+            let errorSecondaryText = 'A data de entrega não pode ser anterior à data de hoje.';
+
+            showFeedback('Erro', errorMainText, errorSecondaryText);
+            return; // Interrompe o envio do formulário
+        }
         const tarefa = montarTarefa();
         let successMainText: string;
         let successSecondaryText: string
 
         try {
-            if(props.tipoModal === 'Nova') {
+            if (props.tipoModal === 'Nova') {
                 await TarefaService.criarTarefa(tarefa);
                 successMainText = "Tarefa criada com sucesso!"
                 successSecondaryText = "Atualizando lista de tarefas"
@@ -149,10 +173,13 @@ export default function Modal(props: ModalProps) {
             props.closeModal();
             resetForm();
             showFeedback('Sucesso', successMainText, successSecondaryText)
+            setTimeout(() => {
+                props.onTaskSuccess();
+            }, 5000);
         } catch (err) {
             console.error(err);
             let errorMainText = "Erro ao criar/modificar tarefa!"
-            let errorSecondaryText = 'Houve um problema ao criar/modificacr tarefa...'
+            let errorSecondaryText = 'Houve um problema ao criar/modificar tarefa...'
             showFeedback('Erro', errorMainText, errorSecondaryText)
         }
     };
