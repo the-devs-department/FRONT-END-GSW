@@ -1,3 +1,5 @@
+import type Anexo from './AnexoInterface';
+
 export default interface Tarefa {
     id?: string;
     titulo: string;
@@ -9,4 +11,5 @@ export default interface Tarefa {
     dataCriacao?: string
     dataEntrega: string
     ativo?: boolean
+    anexos?: Anexo[]
 } 

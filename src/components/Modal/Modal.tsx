@@ -4,7 +4,9 @@ import cloudIcon from '../../assets/cloud.png'
 import './Modal.css'
 import CalendarIcon from '../../assets/calendar.png'
 import type Tarefa from '../../Interface/TarefaInterface';
+import type Anexo from '../../Interface/AnexoInterface';
 import TarefaService from '../../Service/TarefaService';
+import AnexoService from '../../Service/AnexoService';
 import { useFeedback } from '../../context/FeedbackModalContext';
 
 interface Usuario {
@@ -29,6 +31,8 @@ export default function Modal(props: ModalProps) {
     const [taskDataEntrega, setTaskDataEntrega] = useState("");
     const [membroSelecionado, setMembroSelecionado] = useState<string>("");
     const [fileError, setFileError] = useState<string>("");
+    const [anexos, setAnexos] = useState<Anexo[]>([]);
+    const [uploadingFile, setUploadingFile] = useState<boolean>(false);
 
     const [membrosEquipe, setMembrosEquipe] = useState<Usuario[]>([]);
     const condicao = taskStatus !== 'Não Iniciada' && props.tipoModal !== 'Nova';
@@ -55,6 +59,21 @@ export default function Modal(props: ModalProps) {
                 });
         }
     }, [props.condicaoModal]);
+
+    useEffect(() => {
+        if (props.tarefaSelecionada?.id && props.tipoModal === 'Atualizar') {
+            AnexoService.listarAnexosDaTarefa(props.tarefaSelecionada.id)
+                .then(anexosList => {
+                    console.log('Anexos recebidos:', anexosList);
+                    setAnexos(anexosList);
+                })
+                .catch(error => {
+                    console.error('Erro ao carregar anexos:', error);
+                });
+        } else {
+            setAnexos([]);
+        }
+    }, [props.tarefaSelecionada]);
 
     const statusMap: Record<string, string> = {
         'Não Iniciada': 'nao_iniciada',
@@ -84,6 +103,7 @@ export default function Modal(props: ModalProps) {
         setMembroSelecionado('');
         setTaskFile(null);
         setFileError('');
+        setAnexos([]);
     };
 
     useEffect(() => {
@@ -117,18 +137,78 @@ export default function Modal(props: ModalProps) {
         if (ev.target.files && ev.target.files[0]) {
             const selectedFile = ev.target.files[0];
             if (allowedTypes.includes(selectedFile.type)) {
-                setTaskFile(selectedFile);
+                if (props.tarefaSelecionada?.id && props.tipoModal === 'Atualizar') {
+                    handleUploadAnexo(selectedFile);
+                } else {
+                    setTaskFile(selectedFile);
+                }
                 setFileError("");
             } else {
                 setTaskFile(null);
                 setFileError("Arquivo não suportado");
             }
         }
+        ev.target.value = '';
     };
 
     const handleRemoveFile = () => {
         setTaskFile(null);
         setFileError("");
+    };
+
+    const handleUploadAnexo = async (file: File) => {
+        if (!props.tarefaSelecionada?.id) {
+            setFileError("Não é possível adicionar anexo sem uma tarefa salva");
+            return;
+        }
+
+        setUploadingFile(true);
+        setFileError("");
+
+        try {
+            const novoAnexo = await AnexoService.adicionarAnexoComUpload(props.tarefaSelecionada.id, file);
+            console.log('Novo anexo criado:', novoAnexo);
+            setAnexos(prev => [...prev, novoAnexo]);
+            showFeedback('Sucesso', 'Anexo adicionado!', 'O arquivo foi anexado à tarefa com sucesso.');
+        } catch (error) {
+            console.error('Erro ao fazer upload do anexo:', error);
+            setFileError("Erro ao fazer upload do arquivo");
+            showFeedback('Erro', 'Erro ao adicionar anexo!', 'Houve um problema ao anexar o arquivo.');
+        } finally {
+            setUploadingFile(false);
+        }
+    };
+
+    const handleRemoveAnexo = async (anexoId: string) => {
+        if (!props.tarefaSelecionada?.id) return;
+
+        try {
+            await AnexoService.removerAnexo(props.tarefaSelecionada.id, anexoId);
+            setAnexos(prev => prev.filter(anexo => anexo.id !== anexoId));
+            showFeedback('Sucesso', 'Anexo removido!', 'O arquivo foi removido da tarefa.');
+        } catch (error) {
+            console.error('Erro ao remover anexo:', error);
+            showFeedback('Erro', 'Erro ao remover anexo!', 'Houve um problema ao remover o arquivo.');
+        }
+    };
+
+    const handleDownloadAnexo = async (anexo: Anexo) => {
+        if (!props.tarefaSelecionada?.id) return;
+
+        try {
+            const blob = await AnexoService.baixarArquivoAnexo(props.tarefaSelecionada.id, anexo.id);
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = anexo.nome;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error('Erro ao baixar anexo:', error);
+            showFeedback('Erro', 'Erro ao baixar anexo!', 'Houve um problema ao baixar o arquivo.');
+        }
     };
 
 
@@ -162,7 +242,17 @@ export default function Modal(props: ModalProps) {
 
         try {
             if (props.tipoModal === 'Nova') {
-                await TarefaService.criarTarefa(tarefa);
+                const novaTarefa = await TarefaService.criarTarefa(tarefa);
+                
+                if (taskFile && novaTarefa.id) {
+                    try {
+                        await AnexoService.adicionarAnexoComUpload(novaTarefa.id, taskFile);
+                    } catch (anexoError) {
+                        console.error('Erro ao fazer upload do anexo:', anexoError);
+                        showFeedback('Erro', 'Tarefa criada, mas erro no anexo', 'A tarefa foi criada mas houve problema ao anexar o arquivo.');
+                    }
+                }
+                
                 successMainText = "Tarefa criada com sucesso!"
                 successSecondaryText = "Atualizando lista de tarefas"
             } else {
@@ -284,12 +374,12 @@ export default function Modal(props: ModalProps) {
                         <div className={condicao ? 'flex gap-6 w-full items-center justify-between max-[420px]:flex-col' : 'flex gap-6 w-full items-center justify-end'}>
                             {condicao && (
                                 <>
-                                    <label htmlFor="file-upload" className='flex gap-2 items-center justify-center cursor-pointer 
-                                    border-[3px] border-gray-200 p-2 rounded-full max-[420px]:place-self-start'>
+                                    <label htmlFor="file-upload" className={`flex gap-2 items-center justify-center cursor-pointer 
+                                    border-[3px] border-gray-200 p-2 rounded-full max-[420px]:place-self-start ${uploadingFile ? 'opacity-50 cursor-not-allowed' : ''}`}>
                                         <div>
                                             <img src={cloudIcon} alt="" className='h-6' />
                                         </div>
-                                        Anexar arquivo
+                                        {props.tipoModal === 'Atualizar' ? 'Adicionar anexo' : 'Anexar arquivo'}
                                     </label>
                                     <input
                                         type="file"
@@ -297,6 +387,7 @@ export default function Modal(props: ModalProps) {
                                         className='hidden'
                                         accept=".pdf,.jpg,.png,.xlsx,.mp4,.docx"
                                         onChange={handleFileChange}
+                                        disabled={uploadingFile}
                                     />
                                 </>
                             )}
@@ -337,6 +428,54 @@ export default function Modal(props: ModalProps) {
                                         &times;
                                     </button>
                                 </div>
+                            </div>
+                        )}
+
+                        {props.tipoModal === 'Atualizar' && anexos.length > 0 && (
+                            <div className="mt-4">
+                                <h4 className="text-sm font-medium text-gray-700 mb-2">Anexos da Tarefa:</h4>
+                                <div className="space-y-2">
+                                    {anexos.map((anexo) => (
+                                        <div key={anexo.id} className="p-2 border border-gray-200 rounded-md flex justify-between items-center text-sm">
+                                            <div className="flex flex-col">
+                                                <span className="text-gray-600 truncate pr-2">
+                                                    {anexo.nome}
+                                                </span>
+                                                <span className="text-xs text-gray-400">
+                                                    {(anexo.tamanho / 1024 / 1024).toFixed(2)} MB - {
+                                                        typeof anexo.dataUpload === 'string' 
+                                                            ? new Date(anexo.dataUpload).toLocaleDateString()
+                                                            : (anexo.dataUpload as any)?.data 
+                                                                ? new Date((anexo.dataUpload as any).data).toLocaleDateString()
+                                                                : 'Data não disponível'
+                                                    }
+                                                </span>
+                                            </div>
+                                            <div className="flex gap-2">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleDownloadAnexo(anexo)}
+                                                    className="text-blue-600 hover:underline"
+                                                >
+                                                    Baixar
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleRemoveAnexo(anexo.id)}
+                                                    className="text-red-500 font-bold"
+                                                >
+                                                    &times;
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {uploadingFile && (
+                            <div className="mt-4 p-2 border border-blue-200 rounded-md text-blue-600 text-sm">
+                                Fazendo upload do arquivo...
                             </div>
                         )}
 
