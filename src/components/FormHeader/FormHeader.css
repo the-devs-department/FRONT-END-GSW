@@ -1,0 +1,57 @@
+.form-header {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-header > p {
+  color: #7b9d83;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.form-project-title {
+  color: #22222A;
+  display: flex;
+  font-size: 2.5rem;
+  width: fit-content;
+  height: auto;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  font-weight: bolder;
+}
+
+.checked-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  height: 4.5rem;
+  width: 4.5rem;
+  background: linear-gradient(to bottom right, #243042, #47566B, #5c6c83);
+}
+
+.checked-box > img {
+  height: 2.7rem;
+}
+
+@media screen and (max-width: 620px) {
+  .form-header {
+    padding: .5rem;
+  }
+
+  .form-project-title {
+    font-size: 1.8rem;
+  }
+
+  .form-header > p {
+    font-size: 1rem;
+    padding: 0 .5rem;
+  
+  }
+}
