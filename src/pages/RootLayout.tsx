@@ -123,8 +123,9 @@ export default function RootLayout() {
               </div>
             )}
             
-            {/* PASSO 3: PASSAR A NOVA PROP PARA O APPHEADER */}
-            <AppHeader setFiltro={setFiltro} filtroAtual={filtro} minhasTarefasCount={minhasTarefasCount} />
+            {pageLink.pathname === '/home' && (
+              <AppHeader setFiltro={setFiltro} filtroAtual={filtro} minhasTarefasCount={minhasTarefasCount} />
+            )}
             
             {pageLink.pathname === '/home' ? (
               <div className="w-full justify-evenly pb-3 flex max-[1024px]:flex-col max-[1024px]:gap-4 max-[1024px]:p-4">

@@ -2,8 +2,9 @@ import profileUser from '../../assets/profile-user.png'
 import checkIcon from '../../assets/check.png'
 import listItems from '../../assets/task-list.png'
 import logoutIcon from '../../assets/logout.png'
+import openFolder from '../../assets/openFolder.png'
 import './Navbar.css'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ScreenWidth } from '../../hooks/ScreenWidth'
 
 interface NavbarProps {
@@ -19,7 +20,6 @@ export default function Navbar({ isNavbarOpen, closeNavbar, setFiltro, filtroAtu
 
   const logout = () => {
     localStorage.removeItem('authToken');
-    navigate('/login');
   }
 
   const mainClass = screenWidth > 1024 ? 'side-nav' : `hidden-side-nav ${isNavbarOpen && 'open-side-nav'}`;
@@ -50,18 +50,24 @@ export default function Navbar({ isNavbarOpen, closeNavbar, setFiltro, filtroAtu
         <div className='nav-buttons'>
           <ul>
             {/* PASSO 4: Adicionar o onClick e a classe dinâmica */}
-            <li className={estiloBotaoTodas} onClick={() => setFiltro('todas')}>
+            <Link to='/home' className={estiloBotaoTodas} onClick={() => setFiltro('todas')}>
               <img src={listItems} alt="" className='h-6' />
               <p>
                 Todas as tarefas
               </p>
-            </li>
-            <li className='delete' onClick={logout}>
+            </Link>
+            <Link to= '/home/log-auditoria'>
+              <img src={openFolder} alt="" className='h-6' />
+                <p>
+                  Log de Auditoria
+                </p> 
+            </Link>
+            <Link to='/login' className='delete' onClick={logout}>
               <img src={logoutIcon} alt="" className='h-6' />
               <p>
                 Logout
               </p>
-            </li>
+            </Link>
           </ul>
         </div>
       </nav>
