@@ -49,7 +49,7 @@ const atualizarTarefa = async (tarefa: Tarefa) => {
     return response.json();
 };
 
-    const fetchTarefas = async () => {
+const fetchTarefas = async () => {
     const response = await fetch('http://localhost:8080/tarefas', {
         method: 'GET',
         headers: getAuthHeaders()
