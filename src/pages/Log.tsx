@@ -49,22 +49,31 @@ export default function Log() {
           <table className="min-w-[700px] md:min-w-full mt-6 border-collapse border border-black text-center">
             <thead className="border border-black bg-gray-100">
               <tr className="h-12">
-                <th className="text-[#22222A] text-[16px] md:text-[18px] border border-black px-2 md:px-4 py-2">Data</th>
-                <th className="text-[#22222A] text-[16px] md:text-[18px] border border-black px-2 md:px-4 py-2">Hora</th>
-                <th className="text-[#22222A] text-[16px] md:text-[18px] border border-black px-2 md:px-4 py-2">Categoria</th>
-                <th className="text-[#22222A] text-[16px] md:text-[18px] border border-black px-2 md:px-4 py-2">Usuário</th>
-                <th className="text-[#22222A] text-[16px] md:text-[18px] border border-black px-2 md:px-4 py-2">ID da Tarefa</th>
-                <th className="text-[#22222A] text-[16px] md:text-[18px] border border-black px-2 md:px-4 py-2">Alteração</th>
+                <th className="text-[#22222A] text-[16px] md:text-[18px] border border-black px-2 md:px-4 py-2">
+                  Data
+                </th>
+                <th className="text-[#22222A] text-[16px] md:text-[18px] border border-black px-2 md:px-4 py-2">
+                  Hora
+                </th>
+                <th className="text-[#22222A] text-[16px] md:text-[18px] border border-black px-2 md:px-4 py-2">
+                  Categoria
+                </th>
+                <th className="text-[#22222A] text-[16px] md:text-[18px] border border-black px-2 md:px-4 py-2">
+                  Usuário
+                </th>
+                <th className="text-[#22222A] text-[16px] md:text-[18px] border border-black px-2 md:px-4 py-2">
+                  ID da Tarefa
+                </th>
+                <th className="text-[#22222A] text-[16px] md:text-[18px] border border-black px-2 md:px-4 py-2">
+                  Alteração
+                </th>
               </tr>
             </thead>
 
             <tbody>
               {logs.length === 0 ? (
                 <tr>
-                  <td
-                    colSpan={6}
-                    className="text-gray-500 py-4 border border-black"
-                  >
+                  <td colSpan={6} className="text-gray-500 py-4 border border-black">
                     Nenhum log encontrado.
                   </td>
                 </tr>
@@ -78,12 +87,26 @@ export default function Log() {
                       setShowDetails(true);
                     }}
                   >
-                    <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">{log.dataAlteracao}</td>
-                    <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">{log.horaAlteracao}</td>
-                    <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">{log.modificacao.categoria}</td>
-                    <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">{log.responsavel.nome}</td>
-                    <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">{log.modificacao.tarefaDepois?.id || log.modificacao.tarefaAntes?.id ||"-"}</td>
-                    <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">{log.modificacao.descricao|| "-"}</td>
+                    <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">
+                      {log.dataAlteracao}
+                    </td>
+                    <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">
+                      {log.horaAlteracao}
+                    </td>
+                    <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">
+                      {log.modificacao.categoria}
+                    </td>
+                    <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">
+                      {log.responsavel.nome}
+                    </td>
+                    <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">
+                      {log.modificacao.tarefaDepois?.id ||
+                        log.modificacao.tarefaAntes?.id ||
+                        "-"}
+                    </td>
+                    <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">
+                      {log.modificacao.descricao || "-"}
+                    </td>
                   </tr>
                 ))
               )}
@@ -102,7 +125,7 @@ export default function Log() {
         {/* Cabeçalho */}
         <div className="border-b border-black flex items-center justify-center p-3">
           <h3 className="text-[14px] md:text-[15px] font-bold text-[#22222A] text-center">
-            Log -{logSelecionado?.responsavel.id}
+            Log - {logSelecionado?.responsavel.id}
           </h3>
         </div>
 
@@ -118,58 +141,73 @@ export default function Log() {
                 <p className="font-semibold">Hora:</p>
                 <p>{logSelecionado.horaAlteracao}</p>
               </div>
-
               <div>
                 <p className="font-semibold">Usuário:</p>
-                <p>{}</p>
+                <p>{logSelecionado.responsavel.nome}</p>
               </div>
               <div>
                 <p className="font-semibold">Email:</p>
                 <p>{logSelecionado.responsavel.email}</p>
               </div>
-
               <div>
                 <p className="font-semibold">Categoria:</p>
-                <p></p>
+                <p>{logSelecionado.modificacao.categoria}</p>
               </div>
               <div>
                 <p className="font-semibold">ID da Tarefa:</p>
-                <p></p>
+                <p>
+                  {logSelecionado.modificacao.tarefaDepois?.id ||
+                    logSelecionado.modificacao.tarefaAntes?.id ||
+                    "-"}
+                </p>
               </div>
             </div>
 
             <div className="border border-gray-300 rounded p-3 mt-2">
-              <h2 className="text-[15px] font-bold mb-2 text-center"></h2>
+              <h2 className="text-[15px] font-bold mb-2 text-center">
+                Detalhes da Tarefa
+              </h2>
+
               <div className="mb-3">
-                <p className="font-semibold">Titulo:</p>
-                <p>{}</p>
+                <p className="font-semibold">Título:</p>
+                <p>
+                  {logSelecionado.modificacao.tarefaDepois?.titulo ||
+                    logSelecionado.modificacao.tarefaAntes?.titulo ||
+                    "-"}
+                </p>
               </div>
+
               <div>
                 <p className="font-semibold">Descrição:</p>
                 <p className="whitespace-pre-line text-sm">
                   {logSelecionado.modificacao.descricao}
                 </p>
               </div>
+
               <div className="mt-3 space-y-1">
                 <p>
-                  <strong>Tema:</strong>
+                  <strong>Tema:</strong>{" "}
                   {logSelecionado.modificacao.tarefaDepois?.tema ||
-                  logSelecionado.modificacao.tarefaAntes?.tema || "-"}
+                    logSelecionado.modificacao.tarefaAntes?.tema ||
+                    "-"}
                 </p>
                 <p>
-                  <strong>Status:</strong>
+                  <strong>Status:</strong>{" "}
                   {logSelecionado.modificacao.tarefaDepois?.status ||
-                  logSelecionado.modificacao.tarefaAntes?.status || "-"}
+                    logSelecionado.modificacao.tarefaAntes?.status ||
+                    "-"}
                 </p>
                 <p>
                   <strong>Responsável:</strong>{" "}
                   {logSelecionado.modificacao.tarefaDepois?.responsavel ||
-                  logSelecionado.modificacao.tarefaAntes?.responsavel || "-"}
+                    logSelecionado.modificacao.tarefaAntes?.responsavel ||
+                    "-"}
                 </p>
                 <p>
-                  <strong>Data de Entrega:</strong>
+                  <strong>Data de Entrega:</strong>{" "}
                   {logSelecionado.modificacao.tarefaDepois?.dataEntrega ||
-                  logSelecionado.modificacao.tarefaAntes?.dataEntrega || "-"}
+                    logSelecionado.modificacao.tarefaAntes?.dataEntrega ||
+                    "-"}
                 </p>
               </div>
             </div>

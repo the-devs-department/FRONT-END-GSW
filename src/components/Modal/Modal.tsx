@@ -76,9 +76,9 @@ export default function Modal(props: ModalProps) {
     }, [props.tarefaSelecionada]);
 
     const statusMap: Record<string, string> = {
-        'Não Iniciada': 'nao_iniciada',
-        'Em Andamento': 'em_andamento',
-        'Concluída': 'concluida'
+        'Não Iniciada': 'NAO_INICIADA',
+        'Em Andamento': 'EM_ANDAMENTO',
+        'Concluída': 'CONCLUIDA'
     };
 
     const montarTarefa = (): Tarefa => {

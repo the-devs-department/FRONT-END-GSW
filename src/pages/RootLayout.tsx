@@ -1,6 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 import Navbar from "../components/Navbar/Navbar";
 import Header from "../components/Header/Header";
 import TaskList from "../components/TaskList/TaskList";
@@ -15,30 +14,30 @@ import tarefaService from "../Service/TarefaService";
 import type Tarefa from "../Interface/TarefaInterface";
 import profileUser from '../assets/profile-user.png';
 
-interface DecodedToken {
-  sub: string;
-}
-
 const AppHeader = ({ setFiltro, filtroAtual, minhasTarefasCount }: any) => {
   const { openTaskModal } = useTaskModal();
-  return <Header 
-    btnFunc={() => openTaskModal("Nova")} 
-    setFiltro={setFiltro} 
-    filtroAtual={filtroAtual}
-    minhasTarefasCount={minhasTarefasCount} 
-  />;
-}
+  return (
+    <Header
+      btnFunc={() => openTaskModal("Nova")}
+      setFiltro={setFiltro}
+      filtroAtual={filtroAtual}
+      minhasTarefasCount={minhasTarefasCount}
+    />
+  );
+};
 
 const TaskModal = ({ reloadTasks }: { reloadTasks: () => void }) => {
   const { isTaskModalOpen, modalType, closeTaskModal, taskToUpdate } = useTaskModal();
-  return <Modal 
-    condicaoModal={isTaskModalOpen} 
-    tipoModal={modalType} 
-    closeModal={closeTaskModal} 
-    tarefaSelecionada={taskToUpdate}
-    onTaskSuccess={reloadTasks}
-  />;
-}
+  return (
+    <Modal
+      condicaoModal={isTaskModalOpen}
+      tipoModal={modalType}
+      closeModal={closeTaskModal}
+      tarefaSelecionada={taskToUpdate}
+      onTaskSuccess={reloadTasks}
+    />
+  );
+};
 
 export default function RootLayout() {
   const [openNavbar, setOpenNavbar] = useState(false);
@@ -50,15 +49,16 @@ export default function RootLayout() {
   const navigate = useNavigate();
   const screenWidth = ScreenWidth();
 
+  // 🔧 Carregar tarefas sem jwtDecode
   const carregarTarefas = useCallback(async () => {
     const token = localStorage.getItem('authToken');
+    const identificadorUsuario = localStorage.getItem('identificadorUsuario');
+
     if (!token) return; 
     try {
       setLoading(true);
-      const decodedToken: DecodedToken = jwtDecode(token);
-      const identificadorUsuario = decodedToken.sub;
 
-      const data = filtro === 'minhas'
+      const data = filtro === 'minhas' && identificadorUsuario
         ? await tarefaService.fetchTarefasPorResponsavel(identificadorUsuario)
         : await tarefaService.fetchTarefas();
       
@@ -70,7 +70,7 @@ export default function RootLayout() {
     }
   }, [filtro]); 
 
-  // 2. Use a função no useEffect
+  // Redirecionar se não houver token
   useEffect(() => {
     const token = localStorage.getItem('authToken');
     if (!token) {
@@ -81,29 +81,27 @@ export default function RootLayout() {
   }, [filtro, navigate, carregarTarefas]);
 
   const { tarefasNI, tarefasEA, tarefasC } = useMemo(() => {
-    const ni = tarefas.filter(tarefa => tarefa.status === 'nao_iniciada');
-    const ea = tarefas.filter(tarefa => tarefa.status === 'em_andamento');
-    const c = tarefas.filter(tarefa => tarefa.status === 'concluida');
+    const ni = tarefas.filter(tarefa => tarefa.status === 'NAO_INICIADA');
+    const ea = tarefas.filter(tarefa => tarefa.status === 'EM_ANDAMENTO');
+    const c = tarefas.filter(tarefa => tarefa.status === 'CONCLUIDA');
     return { tarefasNI: ni, tarefasEA: ea, tarefasC: c };
   }, [tarefas]);
 
   const minhasTarefasCount = useMemo(() => {
-    const token = localStorage.getItem('authToken');
-    if (!token) return 0;
-    try {
-        const decodedToken: DecodedToken = jwtDecode(token);
-        const identificadorUsuario = decodedToken.sub;
-        return tarefas.filter(t => t.responsavel === identificadorUsuario).length;
-    } catch (error) {
-        return 0;
-    }
+    const identificadorUsuario = localStorage.getItem('identificadorUsuario');
+    if (!identificadorUsuario) return 0;
+    return tarefas.filter(t => t.responsavel === identificadorUsuario).length;
   }, [tarefas]);
 
   const openNavbarAction = () => setOpenNavbar(true);
   const closeNavbarAction = () => setOpenNavbar(false);
 
   if (loading) {
-    return <div className="h-dvh w-full flex items-center justify-center"><p className="text-black text-2xl font-bold">Carregando dados...</p></div>;
+    return (
+      <div className="h-dvh w-full flex items-center justify-center">
+        <p className="text-black text-2xl font-bold">Carregando dados...</p>
+      </div>
+    );
   }
 
   return (
@@ -114,12 +112,18 @@ export default function RootLayout() {
           <DeleteModalProvider>
             {screenWidth > 1024 ? (
               <div className="flex w-full border-b-[1px] border-gray-200 p-2 items-center justify-end h-16">
-                <div className="flex gap-4 text-black items-center font-bold"><img src={profileUser} alt="" className="h-6" /><p>Otávio Vianna Lima</p></div>
+                <div className="flex gap-4 text-black items-center font-bold">
+                  <img src={profileUser} alt="" className="h-6" />
+                  <p>Otávio Vianna Lima</p>
+                </div>
               </div>
             ) : (
               <div className="flex w-full border-b-[1px] border-gray-200 p-2 items-center justify-between h-16">
                 <NavbarButton openNavbar={openNavbarAction}/>
-                <div className="flex gap-4 text-black items-center font-bold"><img src={profileUser} alt="" className="h-6" /><p>Otávio Vianna Lima</p></div>
+                <div className="flex gap-4 text-black items-center font-bold">
+                  <img src={profileUser} alt="" className="h-6" />
+                  <p>Otávio Vianna Lima</p>
+                </div>
               </div>
             )}
             
