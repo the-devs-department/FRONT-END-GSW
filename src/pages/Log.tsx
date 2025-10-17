@@ -97,15 +97,14 @@ export default function Log() {
                       {log.modificacao.categoria}
                     </td>
                     <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">
-                      {log.responsavel.nome}
+                      {log.responsavel.emailResponsavel}
                     </td>
                     <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">
-                      {log.modificacao.tarefaDepois?.id ||
-                        log.modificacao.tarefaAntes?.id ||
+                      {log.tarefa.id ||
                         "-"}
                     </td>
                     <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">
-                      {log.modificacao.descricao || "-"}
+                      {log.modificacao.modificacao || "-"}
                     </td>
                   </tr>
                 ))
@@ -147,7 +146,7 @@ export default function Log() {
               </div>
               <div>
                 <p className="font-semibold">Email:</p>
-                <p>{logSelecionado.responsavel.email}</p>
+                <p>{logSelecionado.responsavel.emailResponsavel}</p>
               </div>
               <div>
                 <p className="font-semibold">Categoria:</p>
@@ -156,9 +155,7 @@ export default function Log() {
               <div>
                 <p className="font-semibold">ID da Tarefa:</p>
                 <p>
-                  {logSelecionado.modificacao.tarefaDepois?.id ||
-                    logSelecionado.modificacao.tarefaAntes?.id ||
-                    "-"}
+                  {logSelecionado.tarefa.id || "-"}
                 </p>
               </div>
             </div>
@@ -171,43 +168,33 @@ export default function Log() {
               <div className="mb-3">
                 <p className="font-semibold">Título:</p>
                 <p>
-                  {logSelecionado.modificacao.tarefaDepois?.titulo ||
-                    logSelecionado.modificacao.tarefaAntes?.titulo ||
-                    "-"}
+                  {logSelecionado.tarefa.titulo || "-"}
                 </p>
               </div>
 
               <div>
                 <p className="font-semibold">Descrição:</p>
                 <p className="whitespace-pre-line text-sm">
-                  {logSelecionado.modificacao.descricao}
+                  {logSelecionado.modificacao.modificacao}
                 </p>
               </div>
 
               <div className="mt-3 space-y-1">
                 <p>
                   <strong>Tema:</strong>{" "}
-                  {logSelecionado.modificacao.tarefaDepois?.tema ||
-                    logSelecionado.modificacao.tarefaAntes?.tema ||
-                    "-"}
+                  {logSelecionado.tarefa.tema }
                 </p>
                 <p>
                   <strong>Status:</strong>{" "}
-                  {logSelecionado.modificacao.tarefaDepois?.status ||
-                    logSelecionado.modificacao.tarefaAntes?.status ||
-                    "-"}
+                  {logSelecionado.tarefa.status || "-"}
                 </p>
                 <p>
                   <strong>Responsável:</strong>{" "}
-                  {logSelecionado.modificacao.tarefaDepois?.responsavel ||
-                    logSelecionado.modificacao.tarefaAntes?.responsavel ||
-                    "-"}
+                  {logSelecionado.tarefa.responsavel || "-"}
                 </p>
                 <p>
                   <strong>Data de Entrega:</strong>{" "}
-                  {logSelecionado.modificacao.tarefaDepois?.dataEntrega ||
-                    logSelecionado.modificacao.tarefaAntes?.dataEntrega ||
-                    "-"}
+                  {logSelecionado.tarefa.dataEntrega || "-"}
                 </p>
               </div>
             </div>

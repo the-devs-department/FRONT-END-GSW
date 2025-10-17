@@ -1,6 +1,7 @@
 import type Tarefa from "./TarefaInterface";
 
 export default interface AuditoriaResponse {
+  tarefa : Tarefa;
   responsavel: ResponsavelAlteracaoDto;
   modificacao: ModificacaoLogDto;
   dataAlteracao: string;
@@ -9,13 +10,11 @@ export default interface AuditoriaResponse {
 
 export interface ResponsavelAlteracaoDto {
   id: string;
-  email: string;
+  emailResponsavel: string;
   nome?: string; 
 }
 
 export interface ModificacaoLogDto {
   categoria?: string; 
-  descricao: string;  
-  tarefaAntes?: Tarefa; 
-  tarefaDepois?: Tarefa;
+  modificacao: string;
 }
