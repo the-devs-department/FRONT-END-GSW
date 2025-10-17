@@ -27,12 +27,11 @@ const router = createBrowserRouter([
         index: true,
         element: <Home />
       }, {
+        path: "todas-tarefas",
+        element: <NotAllowed />
+      }, {
         path: "log-auditoria",
         element: <Log/>
-      }
-      , {
-        path: "minhas-tarefas",
-        element: <NotAllowed/> // <----- Mudar o elemento renderizado aqui
       }
       ]
   }
