@@ -1,10 +1,11 @@
 import profileUser from '../../assets/profile-user.png'
 import checkIcon from '../../assets/check.png'
 import listItems from '../../assets/task-list.png'
+import myTasks from '../../assets/myTasks.png'
 import logoutIcon from '../../assets/logout.png'
 import openFolder from '../../assets/openFolder.png'
 import './Navbar.css'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { ScreenWidth } from '../../hooks/ScreenWidth'
 
 interface NavbarProps {
@@ -16,21 +17,19 @@ interface NavbarProps {
 
 export default function Navbar({ isNavbarOpen, closeNavbar, setFiltro, filtroAtual }: NavbarProps) {
   const screenWidth = ScreenWidth();
-  const navigate = useNavigate();
-
   const logout = () => {
     localStorage.removeItem('authToken');
   }
 
   const mainClass = screenWidth > 1024 ? 'side-nav' : `hidden-side-nav ${isNavbarOpen && 'open-side-nav'}`;
 
-  const estiloBotaoTodas = filtroAtual === 'todas' ? 'active' : ''; // 'active' é a classe que você já usava
+  const pagelink = useLocation()
 
   return (
     <>
       <nav className={mainClass}>
         <div className='nav-header'>
-          {screenWidth < 1024 && (
+          {screenWidth <= 1024 && (
             <span className='close-navbar-button' onClick={closeNavbar}>
               X
             </span>
@@ -49,14 +48,19 @@ export default function Navbar({ isNavbarOpen, closeNavbar, setFiltro, filtroAtu
         <hr />
         <div className='nav-buttons'>
           <ul>
-            {/* PASSO 4: Adicionar o onClick e a classe dinâmica */}
-            <Link to='/home' className={estiloBotaoTodas} onClick={() => setFiltro('todas')}>
+            <Link to='/home' className={pagelink.pathname === '/home' ? 'active': 'todas'}>
               <img src={listItems} alt="" className='h-6' />
               <p>
                 Todas as tarefas
               </p>
             </Link>
-            <Link to= '/home/log-auditoria'>
+            <Link to='/home/minhas-tarefas' className={pagelink.pathname === '/home/minhas-tarefas' ? 'active': 'todas'}>
+              <img src={myTasks} alt="" className='h-6' />
+              <p>
+                Minhas tarefas
+              </p>
+            </Link>
+            <Link to= '/home/log-auditoria'  className={pagelink.pathname === '/home/log-auditoria' ? 'active': 'todas'}>
               <img src={openFolder} alt="" className='h-6' />
                 <p>
                   Log de Auditoria
