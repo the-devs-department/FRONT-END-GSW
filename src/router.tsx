@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
 import Log from "./pages/Log";
+import NotAllowed from "./pages/NotAllowed";
 
 const router = createBrowserRouter([
   {
@@ -29,7 +30,11 @@ const router = createBrowserRouter([
         path: "log-auditoria",
         element: <Log/>
       }
-    ]
+      , {
+        path: "minhas-tarefas",
+        element: <NotAllowed/> // <----- Mudar o elemento renderizado aqui
+      }
+      ]
   }
 ])
 

@@ -2,10 +2,9 @@ interface HeaderProps {
   btnFunc: (tipo: "Nova" | "Atualizar") => void;
   setFiltro: (filtro: 'todas' | 'minhas') => void;
   filtroAtual: 'todas' | 'minhas';
-  minhasTarefasCount: number;
 }
 
-export default function Header({ btnFunc, setFiltro, filtroAtual, minhasTarefasCount }: HeaderProps) {
+export default function Header({ btnFunc, setFiltro, filtroAtual }: HeaderProps) {
   
   const titulo = filtroAtual === 'todas' ? 'Todas as tarefas' : 'Minhas tarefas';
   
@@ -22,17 +21,8 @@ export default function Header({ btnFunc, setFiltro, filtroAtual, minhasTarefasC
             <p className="text-gray-500 text-lg pl-1 max-[800px]:text-sm">Gerencie e acompanhe o progresso de suas atividades</p>
           </div>
           <div className="flex gap-2 max-[800px]:w-full max-[800px]:justify-end">
-            <button 
-              onClick={() => setFiltro('minhas')}
-              className={`w-fit flex gap-2 border-[1px] rounded-md p-2 text-black max-md:text-sm min-[320px]:gap-1 ${estiloBotaoMinhas}`}
-            >
-              Minhas tarefas
-              <span className="flex items-center justify-center h-auto w-[1.5rem] bg-gray-300 rounded-full">
-                {minhasTarefasCount}
-              </span>
-            </button>
             <button onClick={() => btnFunc("Nova")} className="bg-slate-800 p-2 rounded font-bold hover:bg-gray-900">
-              + Criar nova tarefa
+              + Nova tarefa
             </button>
           </div>
         </div>

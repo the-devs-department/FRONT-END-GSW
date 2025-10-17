@@ -14,14 +14,13 @@ import tarefaService from "../Service/TarefaService";
 import type Tarefa from "../Interface/TarefaInterface";
 import profileUser from '../assets/profile-user.png';
 
-const AppHeader = ({ setFiltro, filtroAtual, minhasTarefasCount }: any) => {
+const AppHeader = ({ setFiltro, filtroAtual }: any) => {
   const { openTaskModal } = useTaskModal();
   return (
     <Header
       btnFunc={() => openTaskModal("Nova")}
       setFiltro={setFiltro}
       filtroAtual={filtroAtual}
-      minhasTarefasCount={minhasTarefasCount}
     />
   );
 };
@@ -49,7 +48,6 @@ export default function RootLayout() {
   const navigate = useNavigate();
   const screenWidth = ScreenWidth();
 
-  // 🔧 Carregar tarefas sem jwtDecode
   const carregarTarefas = useCallback(async () => {
     const token = localStorage.getItem('authToken');
     const identificadorUsuario = localStorage.getItem('identificadorUsuario');
@@ -108,7 +106,7 @@ export default function RootLayout() {
     <>
       <TaskModalProvider>
         <Navbar isNavbarOpen={openNavbar} closeNavbar={closeNavbarAction} setFiltro={setFiltro} filtroAtual={filtro} />
-        <div className="flex flex-col items-center ml-[20%] w-[80%] h-dvh gap-2 max-lg:w-full max-lg:ml-[0%]">
+        <div className="flex flex-col items-center ml-[20%] w-[80%] h-dvh gap-2 max-[1025px]:w-full max-[1025px]:ml-[0%]">
           <DeleteModalProvider>
             {screenWidth > 1024 ? (
               <div className="flex w-full border-b-[1px] border-gray-200 p-2 items-center justify-end h-16">
