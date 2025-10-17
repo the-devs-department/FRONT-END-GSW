@@ -48,13 +48,13 @@ export default function Navbar({ isNavbarOpen, closeNavbar, setFiltro, filtroAtu
         <hr />
         <div className='nav-buttons'>
           <ul>
-            <Link to='/home' className={pagelink.pathname === '/home' ? 'active': 'todas'}>
+            <Link to='/home/todas-tarefas' className={pagelink.pathname === '/home/todas-tarefas' ? 'active': 'todas'}>
               <img src={listItems} alt="" className='h-6' />
               <p>
                 Todas as tarefas
               </p>
             </Link>
-            <Link to='/home/minhas-tarefas' className={pagelink.pathname === '/home/minhas-tarefas' ? 'active': 'todas'}>
+            <Link to='/home' className={pagelink.pathname === '/home' ? 'active': 'minhas'}>
               <img src={myTasks} alt="" className='h-6' />
               <p>
                 Minhas tarefas
