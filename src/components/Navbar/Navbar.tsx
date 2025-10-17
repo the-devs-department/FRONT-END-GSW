@@ -54,7 +54,7 @@ export default function Navbar({ isNavbarOpen, closeNavbar, setFiltro, filtroAtu
                 Todas as tarefas
               </p>
             </Link>
-            <Link to='/home/minhas-tarefas' className={pagelink.pathname === '/home/not-allowed' ? 'active': 'todas'}>
+            <Link to='/home/minhas-tarefas' className={pagelink.pathname === '/home/minhas-tarefas' ? 'active': 'todas'}>
               <img src={myTasks} alt="" className='h-6' />
               <p>
                 Minhas tarefas
