@@ -8,7 +8,26 @@ export default function Log() {
   const [showDetails, setShowDetails] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Buscar todos os logs quando o componente montar
+  const formatarTexto = (valor?: string): string => {
+    if (!valor) return "-";
+    const mapa: Record<string, string> = {
+      CRIACAO: "Criação",
+      EDICAO: "Edição",
+      EXCLUSAO: "Exclusão",
+      NAO_INICIADA: "Não Iniciada",
+      EM_ANDAMENTO: "Em Andamento",
+      CONCLUIDA: "Concluída",
+    };
+    return mapa[valor.toUpperCase()] || valor;
+  };
+
+  const formatarData = (dataISO?: string): string => {
+    if (!dataISO) return "-";
+    const data = new Date(dataISO);
+    if (isNaN(data.getTime())) return dataISO;
+    return data.toLocaleDateString("pt-BR", { timeZone: "UTC" });
+  };
+
   useEffect(() => {
     const fetchLogs = async () => {
       try {
@@ -23,24 +42,19 @@ export default function Log() {
     fetchLogs();
   }, []);
 
-  // Se ainda estiver carregando
   if (loading) {
     return <p className="text-center mt-10 text-gray-500">Carregando logs...</p>;
   }
 
   return (
-    <div className="relative w-full flex flex-col lg:flex-row transition-all duration-500">
+    <div className="relative w-full flex flex-col transition-all duration-500 no-scrollbar">
       {/* Área da tabela */}
-      <div
-        className={`transition-all duration-700 ${
-          showDetails ? "lg:w-[72.5%] w-full" : "w-full"
-        }`}
-      >
+      <div className="w-full">
         <div className="h-20 pl-4">
-          <h2 className="text-[#22222A] text-[28px] md:text-[36px] font-bold">
+          <h2 className="text-gray-800 text-4xl font-bold max-[800px]:text-2xl">
             Auditoria
           </h2>
-          <p className="text-[18px] md:text-[24px] text-[#7B899D]">
+          <p className="text-gray-500 text-lg pl-1 max-[800px]:text-sm">
             Gerencie as alterações dos usuários
           </p>
         </div>
@@ -87,23 +101,22 @@ export default function Log() {
                       setShowDetails(true);
                     }}
                   >
-                    <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">
-                      {log.dataAlteracao}
+                    <td className="text-[15px] text-[#22222A] border border-black px-2 md:px-4 py-2">
+                      {formatarData(log.dataAlteracao)}
                     </td>
-                    <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">
+                    <td className="text-[15px] text-[#22222A] border border-black px-2 md:px-4 py-2">
                       {log.horaAlteracao}
                     </td>
-                    <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">
-                      {log.modificacao.categoria}
+                    <td className="text-[15px] text-[#22222A] border border-black px-2 md:px-4 py-2">
+                      {formatarTexto(log.modificacao.categoria)}
                     </td>
-                    <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">
+                    <td className="text-[15px] text-[#22222A] border border-black px-2 md:px-4 py-2">
                       {log.responsavel.emailResponsavel}
                     </td>
-                    <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">
-                      {log.tarefa.id ||
-                        "-"}
+                    <td className="text-[15px] text-[#22222A] border border-black px-2 md:px-4 py-2">
+                      {log.tarefa.id || "-"}
                     </td>
-                    <td className="text-[#22222A] border border-black px-2 md:px-4 py-2">
+                    <td className="text-[15px] text-[#22222A] border border-black px-2 md:px-4 py-2">
                       {log.modificacao.modificacao || "-"}
                     </td>
                   </tr>
@@ -114,12 +127,14 @@ export default function Log() {
         </div>
       </div>
 
-      {/* Painel lateral */}
+      {/* Painel lateral fixo */}
       <div
-        className={`fixed top-[8rem] lg:top-[11rem] right-0 
-          w-full sm:w-[70%] md:w-[50%] lg:w-[22%] bg-white border-l border border-black shadow-md
-          transition-all duration-700 ease-in-out z-50 overflow-y-auto max-h-[80vh] pb-10 no-scrollbar
-          ${showDetails ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}`}
+        className={`fixed top-[10.65rem] right-0 
+        w-full sm:w-[70%] md:w-[50%] lg:w-[28%] 
+        bg-white border-l border border-black shadow-lg
+        transition-all duration-700 ease-in-out z-[9999] overflow-y-auto
+        h-[80.5vh] pb-6 no-scrollbar
+        ${showDetails ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"}`}
       >
         {/* Cabeçalho */}
         <div className="border-b border-black flex items-center justify-center p-3">
@@ -129,34 +144,27 @@ export default function Log() {
         </div>
 
         {logSelecionado && (
-          /* Conteúdo */
-          <div className="p-4 space-y-3 text-sm md:text-base text-[#22222A]">
+          <div className="p-3 space-y-3 text-sm md:text-base text-[#22222A]">
             <div className="grid grid-cols-2 gap-x-2 gap-y-2 border-b pb-2 border-gray-300">
               <div>
                 <p className="font-semibold">Data:</p>
-                <p>{logSelecionado.dataAlteracao}</p>
+                <p className="text-[15px]">{formatarData(logSelecionado.dataAlteracao)}</p>
               </div>
               <div>
                 <p className="font-semibold">Hora:</p>
-                <p>{logSelecionado.horaAlteracao}</p>
-              </div>
-              <div>
-                <p className="font-semibold">Usuário:</p>
-                <p>{logSelecionado.responsavel.nome}</p>
+                <p className="text-[15px]">{logSelecionado.horaAlteracao}</p>
               </div>
               <div>
                 <p className="font-semibold">Email:</p>
-                <p>{logSelecionado.responsavel.emailResponsavel}</p>
+                <p className="text-[15px]">{logSelecionado.responsavel.emailResponsavel}</p>
               </div>
               <div>
                 <p className="font-semibold">Categoria:</p>
-                <p>{logSelecionado.modificacao.categoria}</p>
+                <p className="text-[15px]">{formatarTexto(logSelecionado.modificacao.categoria)}</p>
               </div>
               <div>
                 <p className="font-semibold">ID da Tarefa:</p>
-                <p>
-                  {logSelecionado.tarefa.id || "-"}
-                </p>
+                <p className="text-[15px]">{logSelecionado.tarefa.id || "-"}</p>
               </div>
             </div>
 
@@ -165,28 +173,24 @@ export default function Log() {
                 Detalhes da Tarefa
               </h2>
 
-              <div className="mb-3">
+              <div className="mb-[5px]">
                 <p className="font-semibold">Título:</p>
-                <p>
-                  {logSelecionado.tarefa.titulo || "-"}
-                </p>
+                <p>{logSelecionado.tarefa.titulo || "-"}</p>
               </div>
 
               <div>
                 <p className="font-semibold">Descrição:</p>
-                <p className="whitespace-pre-line text-sm">
+                <p className="text-sm text-[15px]">
                   {logSelecionado.modificacao.modificacao}
                 </p>
               </div>
 
-              <div className="mt-3 space-y-1">
+              <div className="mt-[5px] space-y-1">
                 <p>
-                  <strong>Tema:</strong>{" "}
-                  {logSelecionado.tarefa.tema }
+                  <strong>Tema:</strong> {logSelecionado.tarefa.tema}
                 </p>
                 <p>
-                  <strong>Status:</strong>{" "}
-                  {logSelecionado.tarefa.status || "-"}
+                  <strong>Status:</strong> {formatarTexto(logSelecionado.tarefa.status)}
                 </p>
                 <p>
                   <strong>Responsável:</strong>{" "}
@@ -194,14 +198,14 @@ export default function Log() {
                 </p>
                 <p>
                   <strong>Data de Entrega:</strong>{" "}
-                  {logSelecionado.tarefa.dataEntrega || "-"}
+                  {formatarData(logSelecionado.tarefa.dataEntrega)}
                 </p>
               </div>
             </div>
 
             <button
               onClick={() => setShowDetails(false)}
-              className="mt-4 bg-[#344256] px-4 py-2 rounded text-white w-full md:w-auto"
+              className="mt-3 bg-[#344256] px-4 py-2 rounded text-white w-full md:w-auto"
             >
               Fechar
             </button>
