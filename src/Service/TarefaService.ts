@@ -1,15 +1,5 @@
 import type Tarefa from "../Interface/TarefaInterface";
-
-const getAuthHeaders = () => {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-        throw new Error("Token de autenticação não encontrado.");
-    }
-    return {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-    };
-};
+import { getAuthHeaders } from "./UserService";
 
 const safeResponseHandler = async (response: Response) => {
     if (!response.ok) {
