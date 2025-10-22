@@ -13,9 +13,10 @@ interface NavbarProps {
   closeNavbar: () => void;
   setFiltro: (filtro: 'todas' | 'minhas') => void;
   filtroAtual: 'todas' | 'minhas';
+  userInfos: [nome: String | null, email: String | null]
 }
 
-export default function Navbar({ isNavbarOpen, closeNavbar, setFiltro, filtroAtual }: NavbarProps) {
+export default function Navbar({ isNavbarOpen, closeNavbar, setFiltro, filtroAtual, userInfos }: NavbarProps) {
   const screenWidth = ScreenWidth();
   const logout = () => {
     localStorage.removeItem('authToken');
@@ -41,8 +42,8 @@ export default function Navbar({ isNavbarOpen, closeNavbar, setFiltro, filtroAtu
         <div className='nav-user-infos'>
           <img src={profileUser} alt="" className='h-10' />
           <div className='user-infos'>
-            <p className='user-name'>Otávio Vianna Lima</p>
-            <p className='user-email'>dev@gmail.com</p>
+            <p className='user-name'>{userInfos[0]}</p>
+            <p className='user-email'>{userInfos[1]}</p>
           </div>
         </div>
         <hr />

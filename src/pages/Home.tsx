@@ -19,6 +19,7 @@ export default function Home() {
     setTarefas(tarefasDoUsuario);
     setLoading(false);
   }, []);
+  
 
   const tarefasNaoIniciadas = tarefas.filter(t => t.status === "NAO_INICIADA");
   const tarefasEmAndamento = tarefas.filter(t => t.status === "EM_ANDAMENTO");

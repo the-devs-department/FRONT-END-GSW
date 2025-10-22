@@ -3,7 +3,6 @@ import FormHeader from '../components/FormHeader/FormHeader'
 import { useState } from 'react'
 import FeedbackModal from '../components/FeedbackModal/FeedbackModal'
 import { useFeedback } from '../context/FeedbackModalContext'
-import { getUserInfos } from '../Service/UserService'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -45,9 +44,6 @@ export default function Login() {
         'Login realizado com sucesso!',
         'Em alguns instantes você será redirecionado.'
       )
-
-      const userBasicInfos = getUserInfos(userId)
-      console.log(userBasicInfos)
 
       setTimeout(() => {
         navigation('/home')

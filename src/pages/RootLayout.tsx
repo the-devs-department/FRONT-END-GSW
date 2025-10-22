@@ -11,6 +11,7 @@ import { ScreenWidth } from "../hooks/ScreenWidth";
 import { TaskModalProvider, useTaskModal } from "../context/TaskModalContext";
 import { DeleteModalProvider } from "../context/DeleteModalContext";
 import tarefaService from "../Service/TarefaService";
+import UserService from "../Service/UserService";
 import type Tarefa from "../Interface/TarefaInterface";
 import profileUser from '../assets/profile-user.png';
 
@@ -43,6 +44,9 @@ export default function RootLayout() {
   const [loading, setLoading] = useState(true);
   const [tarefas, setTarefas] = useState<Tarefa[]>([]);
   const [filtro, setFiltro] = useState<'todas' | 'minhas'>('todas');
+  const [userName, setUserName] = useState<null | String>(null);
+  const [userEmail, setUserEmail] = useState<null | String>(null);
+  const [userRoles, setUserRoles] = useState<null | String[]>(null)
 
   const pageLink = useLocation();
   const navigate = useNavigate();
@@ -52,6 +56,7 @@ export default function RootLayout() {
     const userInfos = localStorage.getItem('authData')
     const userInfosParsed = userInfos ? JSON.parse(userInfos) : null
     const token = userInfosParsed.token
+    const id = userInfosParsed.userId
     const identificadorUsuario = localStorage.getItem('identificadorUsuario');
 
     if (!token) return;
@@ -61,7 +66,10 @@ export default function RootLayout() {
       const data = filtro === 'minhas' && identificadorUsuario
         ? await tarefaService.fetchTarefasPorResponsavel(identificadorUsuario)
         : await tarefaService.fetchTarefas();
-
+      const userdata = await UserService.getUserInfos(id)
+      setUserName(userdata.nome)
+      setUserEmail(userdata.email)
+      localStorage.setItem("userRoles", JSON.stringify(userdata.roles));
       setTarefas(data);
     } catch (err) {
       console.error("Erro ao carregar tarefas:", err);
@@ -99,14 +107,14 @@ export default function RootLayout() {
   return (
     <>
       <TaskModalProvider>
-        <Navbar isNavbarOpen={openNavbar} closeNavbar={closeNavbarAction} setFiltro={setFiltro} filtroAtual={filtro} />
+        <Navbar isNavbarOpen={openNavbar} closeNavbar={closeNavbarAction} setFiltro={setFiltro} filtroAtual={filtro} userInfos={[userName, userEmail]}/>
         <div className="flex flex-col items-center ml-[20%] w-[80%] h-dvh gap-2 max-[1025px]:w-full max-[1025px]:ml-[0%]">
           <DeleteModalProvider>
             {screenWidth > 1024 ? (
               <div className="flex h-auto p-4 w-full border-b-[1px] border-gray-200 items-center justify-end h-16">
                 <div className="flex gap-4 text-black items-center font-bold">
                   <img src={profileUser} alt="" className="h-6" />
-                  <p>Otávio Vianna Lima</p>
+                  <p>userdata.nome</p>
                 </div>
               </div>
             ) : (
@@ -114,7 +122,7 @@ export default function RootLayout() {
                 <NavbarButton openNavbar={openNavbarAction} />
                 <div className="flex gap-4 text-black items-center font-bold">
                   <img src={profileUser} alt="" className="h-6" />
-                  <p>Otávio Vianna Lima</p>
+                  <p>{userName}</p>
                 </div>
               </div>
             )}

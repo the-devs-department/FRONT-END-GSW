@@ -1,19 +1,109 @@
+import NotAllowed from "../components/NotAllowed/NotAllowed";
 import TaskList from "../components/TaskList/TaskList";
+import Header from "../components/Header/Header";
+import type Tarefa from "../Interface/TarefaInterface";
+import { useTaskModal } from "../context/TaskModalContext";
+import { useCallback, useEffect, useState } from "react";
+import TarefaService from "../Service/TarefaService";
+import { useNavigate } from "react-router-dom";
 
 export default function TodasTarefas() {
+  const [tarefas, setTarefas] = useState<Tarefa[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filtro, setFiltro] = useState<"todas" | "minhas">("todas");
+  const [userRoles, setUserRoles] = useState<null | String[]>(null)
+  const { openTaskModal } = useTaskModal();
+  const navigate = useNavigate();
+  const carregarTarefas = useCallback(async () => {
+  const userInfos = localStorage.getItem('authData')
+  const userInfosParsed = userInfos ? JSON.parse(userInfos) : null
+  const token = userInfosParsed.token
+  const identificadorUsuario = localStorage.getItem('identificadorUsuario');
+  const userRolesLS = localStorage.getItem("userRoles");
+  const userRolesParsed = userRolesLS ? JSON.parse(userRolesLS) : null
+  setUserRoles(userRolesParsed)
+
+    if (!token) return;
+    try {
+      setLoading(true);
+
+      const data = filtro === 'minhas' && identificadorUsuario
+        ? await TarefaService.fetchTarefasPorResponsavel(identificadorUsuario)
+        : await TarefaService.fetchTarefas();
+      setTarefas(data);
+    } catch (err) {
+      console.error("Erro ao carregar tarefas:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [filtro]);
+  useEffect(() => {
+    const userInfos = localStorage.getItem('authData')
+    const userInfosParsed = userInfos ? JSON.parse(userInfos) : null
+    const token = userInfosParsed.token
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+    carregarTarefas();
+  }, [filtro, navigate, carregarTarefas]);
+
+
+  useEffect(() => {
+    setLoading(true);
+
+    // TODO: aqui depois você vai buscar as tarefas da API
+    const tarefasDoUsuario: Tarefa[] = [];
+
+    setTarefas(tarefasDoUsuario);
+    setLoading(false);
+  }, []);
+
+  const tarefasNaoIniciadas = tarefas.filter(
+    (t) => t.status === "NAO_INICIADA"
+  );
+  const tarefasEmAndamento = tarefas.filter((t) => t.status === "EM_ANDAMENTO");
+  const tarefasConcluidas = tarefas.filter((t) => t.status === "CONCLUIDA");
+
+  if (loading) {
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <p className="text-gray-700 text-xl">Carregando tarefas...</p>
+      </div>
+    );
+  }
+
   return (
     <>
-        <div className="w-full justify-evenly pb-3 flex">
-          <TaskList
-          title="Não Iniciada"
-          taksCount={2} tarefa={[]}          />
-          <TaskList
-          title="Em Andamento"
-          taksCount={10} tarefa={[]}          />
-          <TaskList
-          title="Concluída"
-          taksCount={1} tarefa={[]}          />
-        </div>
+      {userRoles?.includes("ROLE_ADMIN") ? (
+        <>
+          <Header
+            btnFunc={openTaskModal}
+            setFiltro={setFiltro}
+            filtroAtual={filtro}
+          />
+
+          <div className="w-full justify-evenly pb-3 flex">
+            <TaskList
+              title="Não Iniciada"
+              taksCount={tarefasNaoIniciadas.length}
+              tarefa={tarefasNaoIniciadas}
+            />
+            <TaskList
+              title="Em Andamento"
+              taksCount={tarefasEmAndamento.length}
+              tarefa={tarefasEmAndamento}
+            />
+            <TaskList
+              title="Concluída"
+              taksCount={tarefasConcluidas.length}
+              tarefa={tarefasConcluidas}
+            />
+          </div>
+        </>
+      ): (
+        <NotAllowed />
+      )}
     </>
-  )
+  );
 }
