@@ -23,5 +23,10 @@ const getUserInfos = async (id: string) => {
   return response.json();
 }
 
+const UserService = {
+  getUserInfos,
+  getAuthHeaders
+}
 
-export {getAuthHeaders, getUserInfos}
+
+export default UserService

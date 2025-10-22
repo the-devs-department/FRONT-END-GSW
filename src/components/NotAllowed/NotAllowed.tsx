@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import WarningIcon from '../assets/Warning.png'
+import WarningIcon from '../../assets/Warning.png'
 
 export default function NotAllowed() {
   return (
