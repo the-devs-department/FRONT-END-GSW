@@ -15,13 +15,11 @@ import UserService from "../Service/UserService";
 import type Tarefa from "../Interface/TarefaInterface";
 import profileUser from '../assets/profile-user.png';
 
-const AppHeader = ({ setFiltro, filtroAtual }: any) => {
+const AppHeader = () => {
   const { openTaskModal } = useTaskModal();
   return (
     <Header
       btnFunc={() => openTaskModal("Nova")}
-      setFiltro={setFiltro}
-      filtroAtual={filtroAtual}
     />
   );
 };
@@ -46,12 +44,11 @@ export default function RootLayout() {
   const [filtro, setFiltro] = useState<'todas' | 'minhas'>('todas');
   const [userName, setUserName] = useState<null | String>(null);
   const [userEmail, setUserEmail] = useState<null | String>(null);
-  const [userRoles, setUserRoles] = useState<null | String[]>(null)
 
   const pageLink = useLocation();
   const navigate = useNavigate();
   const screenWidth = ScreenWidth();
-
+  const rotasHeader = ["/home", "/home/todas-tarefas"]
   const carregarTarefas = useCallback(async () => {
     const userInfos = localStorage.getItem('authData')
     const userInfosParsed = userInfos ? JSON.parse(userInfos) : null
@@ -132,8 +129,8 @@ export default function RootLayout() {
               </div>
             ): (
               <>
-                {pageLink.pathname === '/home' && (
-                  <AppHeader setFiltro={setFiltro} filtroAtual={filtro} minhasTarefasCount={minhasTarefasCount} />
+                {rotasHeader.includes(pageLink.pathname) && (
+                  <AppHeader/>
                 )}
     
                 {pageLink.pathname === '/home' ? (

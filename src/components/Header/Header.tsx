@@ -2,11 +2,9 @@ import { useLocation } from 'react-router-dom';
 
 interface HeaderProps {
   btnFunc: (tipo: "Nova" | "Atualizar") => void;
-  setFiltro: (filtro: 'todas' | 'minhas') => void;
-  filtroAtual: 'todas' | 'minhas';
 }
 
-export default function Header({ btnFunc, setFiltro, filtroAtual }: HeaderProps) {
+export default function Header({ btnFunc }: HeaderProps) {
   const location = useLocation();
   
   const titulo = location.pathname === '/home/todas-tarefas' ? 'Todas as tarefas' : 'Minhas tarefas';
