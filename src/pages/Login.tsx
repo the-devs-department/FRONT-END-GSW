@@ -103,6 +103,11 @@ export default function Login() {
                 Cadastre-se
               </Link>
             </div>
+            <div className='flex w-full items-center justify-center gap-2'>
+              <Link to={'/recuperacao-senha'} className='text-[#344256] font-bold'>
+                Esqueci minha senha
+              </Link>
+            </div>
           </form>
         </div>
     </>

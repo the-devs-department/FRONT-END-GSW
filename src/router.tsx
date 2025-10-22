@@ -4,8 +4,9 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
 import Log from "./pages/Log";
-import NotAllowed from "./components/NotAllowed/NotAllowed";
 import TodasTarefas from "./pages/TodasTarefas";
+import SolicitarEmailRecuperacao from "./pages/recuperacao-senha/SolicitarEmailRecuperacaoPage";
+import ResetarSenhaPage from "./pages/recuperacao-senha/ResetarSenha";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,15 @@ const router = createBrowserRouter([
     path: '/cadastro',
     element: <Cadastro />
   },
+  {
+    path: 'recuperacao-senha',
+    element: <SolicitarEmailRecuperacao />
+  },
+  {
+    path: 'auth/resetar-senha/:token',
+    element: <ResetarSenhaPage />
+  }
+  ,
   {
     path: '/home',
     element: <RootLayout />,
