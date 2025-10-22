@@ -3,7 +3,10 @@ import type AuditoriaResponse from "../Interface/AuditoriaInsterface";
 const API_BASE_URL = "http://localhost:8080";
 
 const getAuthHeaders = () => {
-  const token = localStorage.getItem("authToken");
+  const authData = localStorage.getItem("authData");
+  const parsed = authData ? JSON.parse(authData) : null;
+  const token = parsed?.token;
+
   if (!token) {
     throw new Error("Token de autenticação não encontrado.");
   }

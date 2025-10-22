@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import auditoriaService from "../Service/AuditoriaService";
 import type AuditoriaResponse from "../Interface/AuditoriaInsterface";
 import NotAllowed from "../components/NotAllowed/NotAllowed";
 import UserService from "../Service/UserService";
+import { useNavigate } from "react-router-dom";
 
 
 export default function Log() {
@@ -10,10 +11,8 @@ export default function Log() {
   const [logSelecionado, setLogSelecionado] = useState<AuditoriaResponse | null>(null);
   const [showDetails, setShowDetails] = useState(false);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   const [userRoles, setUserRoles] = useState<null | String[]>(null)
-  const userInfos = localStorage.getItem('authData')
-  const userInfosParsed = userInfos ? JSON.parse(userInfos) : null
-  const id = userInfosParsed.userId
 
   const formatarTexto = (valor?: string): string => {
     if (!valor) return "-";
@@ -35,26 +34,37 @@ export default function Log() {
     return data.toLocaleDateString("pt-BR", { timeZone: "UTC" });
   };
 
-  UserService.getUserInfos(id).then((userdata) => {
-    setUserRoles(userdata.roles)
-  })
-  useEffect(() => {
-    const fetchLogs = async () => {
-      try {
-        const response = await auditoriaService.fetchTodosLogs();
-        setLogs(response);
-      } catch (error) {
-        console.error("Erro ao carregar logs:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchLogs();
-  }, []);
-
-  if (loading) {
-    return <p className="text-center mt-10 text-gray-500">Carregando logs...</p>;
+  const fetchLogs = useCallback(async () =>{
+  const userInfos = localStorage.getItem('authData')
+  const userInfosParsed = userInfos ? JSON.parse(userInfos) : null
+  const token = userInfosParsed.token
+  const userRolesLS = localStorage.getItem("userRoles");
+  const userRolesParsed = userRolesLS ? JSON.parse(userRolesLS) : null
+  setUserRoles(userRolesParsed)
+  if(!token) return;
+  try{
+    setLoading(true);
+    const data = await auditoriaService.fetchTodosLogs();
+    setLogs(data);
+  } catch (err){
+    console.error("Erro ao carregar log:", err);
+  } finally {
+    setLoading(false);
   }
+  },[] );
+
+  useEffect(() => {
+    const userInfos = localStorage.getItem('authData')
+    const userInfosParsed = userInfos ? JSON.parse(userInfos) : null
+    const token = userInfosParsed.token
+    if (!token){
+      navigate('/login');
+      return;
+    }
+    fetchLogs();
+  }, [navigate, fetchLogs])
+
+  
 
   return (
     <>
@@ -100,7 +110,7 @@ export default function Log() {
                   {logs.length === 0 ? (
                     <tr>
                       <td colSpan={6} className="text-gray-500 py-4 border border-black">
-                        Nenhum log encontrado.
+                        Carregando logs...
                       </td>
                     </tr>
                   ) : (
