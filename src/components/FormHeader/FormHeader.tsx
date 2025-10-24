@@ -2,7 +2,7 @@ import checkedIcon from '../../assets/check.png'
 import './FormHeader.css'
 
 interface FormHeaderProps {
-  description: String
+  description?: String
 }
 
 export default function FormHeader(props: FormHeaderProps) {
