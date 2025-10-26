@@ -47,7 +47,7 @@ export const FeedbackProvider: React.FC<FeedbackProviderProps> = ({ children }) 
 
     setTimeout(() => {
       setFeedback((prev) => ({ ...prev, isShown: false }));
-    }, 5000);
+    }, 2500);
   };
 
   const hideFeedback = () => {

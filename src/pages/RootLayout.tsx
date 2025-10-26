@@ -1,8 +1,7 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
+import React, { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import Header from "../components/Header/Header";
-import TaskList from "../components/TaskList/TaskList";
 import Modal from "../components/Modal/Modal";
 import NavbarButton from "../components/NavbarButton/NavbarButton";
 import ModalDelete from "../components/ModalDelete/ModalDelete";
@@ -10,11 +9,13 @@ import FeedbackModal from "../components/FeedbackModal/FeedbackModal";
 import { ScreenWidth } from "../hooks/ScreenWidth";
 import { TaskModalProvider, useTaskModal } from "../context/TaskModalContext";
 import { DeleteModalProvider } from "../context/DeleteModalContext";
-import tarefaService from "../Service/TarefaService";
-import UserService from "../Service/UserService";
 import type Tarefa from "../Interface/TarefaInterface";
 import profileUser from '../assets/profile-user.png';
+import UserService from "../Service/UserService";
 
+export type RootLayoutContext = {
+    setCallbackRecarregarTarefas: (callback: (() => void) | null) => void; 
+}
 const AppHeader = () => {
   const { openTaskModal } = useTaskModal();
   return (
@@ -48,56 +49,43 @@ export default function RootLayout() {
   const pageLink = useLocation();
   const navigate = useNavigate();
   const screenWidth = ScreenWidth();
-  const rotasHeader = ["/home", "/home/todas-tarefas"]
-  const carregarTarefas = useCallback(async () => {
-    const userInfos = localStorage.getItem('authData')
-    const userInfosParsed = userInfos ? JSON.parse(userInfos) : null
-    const token = userInfosParsed.token
-    const id = userInfosParsed.userId
-    const identificadorUsuario = localStorage.getItem('identificadorUsuario');
+  const rotasHeader = ["/home", "/home/todas-tarefas", '/home/log-auditoria']
 
-    if (!token) return;
-    try {
-      setLoading(true);
+  const callbackRecarregarTarefas = useRef<(() => void) | null>(null)
 
-      const data = filtro === 'minhas' && identificadorUsuario
-        ? await tarefaService.fetchTarefasPorResponsavel(identificadorUsuario)
-        : await tarefaService.fetchTarefas();
-      const userdata = await UserService.getUserInfos(id)
-      setUserName(userdata.nome)
-      setUserEmail(userdata.email)
-      localStorage.setItem("userRoles", JSON.stringify(userdata.roles));
-      setTarefas(data);
-    } catch (err) {
-      console.error("Erro ao carregar tarefas:", err);
-    } finally {
-      setLoading(false);
+  const setCallbackRecarregarTarefas = useCallback((callback: (() => void) | null) => {
+    callbackRecarregarTarefas.current = callback
+  }, [])
+
+  const loadTaskByRoute = useCallback(() => {
+    if (callbackRecarregarTarefas.current){
+      callbackRecarregarTarefas.current()
     }
-  }, [filtro]);
+  }, [])
+
+  const outletContextValue: RootLayoutContext = useMemo(() => {
+        return {
+            setCallbackRecarregarTarefas 
+        }
+    }, [setCallbackRecarregarTarefas])
+
+  const getUserRoles = async (id: string) => {
+    const userInfos = await UserService.getUserInfos(id)
+    console.log(userInfos)
+    setUserName(userInfos.nome)
+    setUserEmail(userInfos.email)
+    localStorage.setItem("userRoles", JSON.stringify(userInfos.roles))
+  }
 
   useEffect(() => {
-    const userInfos = localStorage.getItem('authData')
-    const userInfosParsed = userInfos ? JSON.parse(userInfos) : null
-    const token = userInfosParsed.token
-    if (!token) {
-      navigate('/login');
-      return;
+    const data = UserService.getUserTokenAndId()
+    const token = data.token
+    if(!token) {
+      navigate('/login')
+      return
     }
-    carregarTarefas();
-  }, [filtro, navigate, carregarTarefas]);
-
-  const { tarefasNI, tarefasEA, tarefasC } = useMemo(() => {
-    const ni = tarefas.filter(tarefa => tarefa.status === 'NAO_INICIADA');
-    const ea = tarefas.filter(tarefa => tarefa.status === 'EM_ANDAMENTO');
-    const c = tarefas.filter(tarefa => tarefa.status === 'CONCLUIDA');
-    return { tarefasNI: ni, tarefasEA: ea, tarefasC: c };
-  }, [tarefas]);
-
-  const minhasTarefasCount = useMemo(() => {
-    const identificadorUsuario = localStorage.getItem('identificadorUsuario');
-    if (!identificadorUsuario) return 0;
-    return tarefas.filter(t => t.responsavel === identificadorUsuario).length;
-  }, [tarefas]);
+    getUserRoles(data.id)
+  }, [navigate])
 
   const openNavbarAction = () => setOpenNavbar(true);
   const closeNavbarAction = () => setOpenNavbar(false);
@@ -111,7 +99,7 @@ export default function RootLayout() {
               <div className="flex h-auto p-4 w-full border-b-[1px] border-gray-200 items-center justify-end h-16">
                 <div className="flex gap-4 text-black items-center font-bold">
                   <img src={profileUser} alt="" className="h-6" />
-                  <p>userdata.nome</p>
+                  <p>{userName}</p>
                 </div>
               </div>
             ) : (
@@ -123,30 +111,14 @@ export default function RootLayout() {
                 </div>
               </div>
             )}
-            {loading ? (
-              <div className="h-full w-full flex items-center justify-center">
-                <p className="text-black text-2xl font-bold">Carregando dados...</p>
-              </div>
-            ): (
               <>
                 {rotasHeader.includes(pageLink.pathname) && (
                   <AppHeader/>
                 )}
-    
-                {pageLink.pathname === '/home' ? (
-                  <div className="w-full justify-evenly pb-3 flex max-[1024px]:flex-col max-[1024px]:gap-4 max-[1024px]:p-4">
-                    <TaskList tarefa={tarefasNI} title="Não Iniciada" taksCount={tarefasNI.length} />
-                    <TaskList tarefa={tarefasEA} title="Em Andamento" taksCount={tarefasEA.length} />
-                    <TaskList tarefa={tarefasC} title="Concluída" taksCount={tarefasC.length} />
-                  </div>
-                ) : (
-                  <Outlet />
-                )}
+                  <Outlet context={outletContextValue}/>
               </>
-            )}
-
-            <ModalDelete onTaskDeleted={carregarTarefas} />
-            <TaskModal reloadTasks={carregarTarefas} />
+            <ModalDelete onTaskDeleted={loadTaskByRoute} />
+            <TaskModal reloadTasks={loadTaskByRoute} />
           </DeleteModalProvider>
         </div>
       </TaskModalProvider>

@@ -1,63 +1,85 @@
 import TaskList from "../components/TaskList/TaskList";
-import Header from "../components/Header/Header";
 import type Tarefa from "../Interface/TarefaInterface";
-import { useTaskModal } from "../context/TaskModalContext";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState} from "react";
+import TarefaService from "../Service/TarefaService";
+import { useNavigate, useOutletContext } from "react-router-dom";
+import type { RootLayoutContext } from "./RootLayout";
+
+type HomeContext = RootLayoutContext
 
 export default function Home() {
-  const [tarefas, setTarefas] = useState<Tarefa[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filtro, setFiltro] = useState<'todas' | 'minhas'>('minhas');
-  const { openTaskModal } = useTaskModal();
+    const [tarefas, setTarefas] = useState<Tarefa[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [userRoles, setUserRoles] = useState<null | String[]>(null)
 
-  useEffect(() => {
-    setLoading(true);
+    const {setCallbackRecarregarTarefas} = useOutletContext<HomeContext>();
+    const navigate = useNavigate();
     
-    // TODO: Implementar busca de tarefas da API do usuario especifico
-    const tarefasDoUsuario: Tarefa[] = [];
+    const carregarTarefas = useCallback(async () => {
+        const userInfos = localStorage.getItem('authData');
+        const userInfosParsed = userInfos ? JSON.parse(userInfos) : null;
+        const id = userInfosParsed?.userId; 
+        const token = userInfosParsed?.token;
+        const userRolesLS = localStorage.getItem("userRoles");
+        const userRolesParsed = userRolesLS ? JSON.parse(userRolesLS) : null;
+        setUserRoles(userRolesParsed);
+        if (!token || !id) {
+            navigate('/login');
+            return;
+        }
+        try {
+            setLoading(true);
+            const data = await TarefaService.fetchTarefasPorResponsavel(id);
+            setTarefas(data);
+        } catch (err) {
+            console.error("Erro ao carregar tarefas:", err);
+        } finally {
+            setLoading(false);
+        }
+    }, [navigate]); 
+
+    useEffect(() => {
+        carregarTarefas();
+    }, [carregarTarefas]); 
     
-    setTarefas(tarefasDoUsuario);
-    setLoading(false);
-  }, []);
-  
+    useEffect(() => {
+        setCallbackRecarregarTarefas(carregarTarefas);
+        
+        return () => {
+            setCallbackRecarregarTarefas(null);
+        };
+    }, [setCallbackRecarregarTarefas, carregarTarefas]); 
+    const tarefasNaoIniciadas = tarefas.filter((t) => t.status === "NAO_INICIADA");
+    const tarefasEmAndamento = tarefas.filter((t) => t.status === "EM_ANDAMENTO");
+    const tarefasConcluidas = tarefas.filter((t) => t.status === "CONCLUIDA");
 
-  const tarefasNaoIniciadas = tarefas.filter(t => t.status === "NAO_INICIADA");
-  const tarefasEmAndamento = tarefas.filter(t => t.status === "EM_ANDAMENTO");
-  const tarefasConcluidas = tarefas.filter(t => t.status === "CONCLUIDA");
+    if (loading) {
+        return (
+            <div className="w-full h-full flex items-center justify-center">
+                <p className="text-gray-700 text-xl">Carregando tarefas...</p>
+            </div>
+        );
+    }
 
-  if (loading) {
     return (
-      <div className="w-full h-full flex items-center justify-center">
-        <p className="text-gray-700 text-xl">Carregando tarefas...</p>
-      </div>
+        <>
+            <div className="w-full justify-evenly pb-3 flex">
+                <TaskList
+                    title="Não Iniciada"
+                    taksCount={tarefasNaoIniciadas.length}
+                    tarefa={tarefasNaoIniciadas}
+                />
+                <TaskList
+                    title="Em Andamento"
+                    taksCount={tarefasEmAndamento.length}
+                    tarefa={tarefasEmAndamento}
+                />
+                <TaskList
+                    title="Concluída"
+                    taksCount={tarefasConcluidas.length}
+                    tarefa={tarefasConcluidas}
+                />
+            </div>
+        </>
     );
-  }
-
-  return (
-    <>
-      <Header 
-        btnFunc={openTaskModal}
-        setFiltro={setFiltro}
-        filtroAtual={filtro}
-      />
-      
-      <div className="w-full justify-evenly pb-3 flex">
-        <TaskList
-          title="Não Iniciada"
-          taksCount={tarefasNaoIniciadas.length}
-          tarefa={tarefasNaoIniciadas}
-        />
-        <TaskList
-          title="Em Andamento"
-          taksCount={tarefasEmAndamento.length}
-          tarefa={tarefasEmAndamento}
-        />
-        <TaskList
-          title="Concluída"
-          taksCount={tarefasConcluidas.length}
-          tarefa={tarefasConcluidas}
-        />
-      </div>
-    </>
-  );
 }

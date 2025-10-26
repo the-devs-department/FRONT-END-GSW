@@ -1,5 +1,20 @@
-import type Tarefa from "../Interface/TarefaInterface";
+import type Anexo from "../Interface/AnexoInterface";
+import type UsuarioResponsavel from "../Interface/TarefaInterface";
 import UserService from "./UserService";
+
+interface Tarefa {
+  id?: string;
+  titulo: string;
+  descricao: string;
+  tema: string;
+  status?: string;
+  file: File | null;
+  responsavel: UsuarioResponsavel | undefined;
+  dataCriacao?: string;
+  dataEntrega: string;
+  ativo?: boolean;
+  anexo?: Anexo[];
+}
 
 const safeResponseHandler = async (response: Response) => {
     if (!response.ok) {
@@ -56,12 +71,22 @@ const fetchTarefas = async () => {
     return safeResponseHandler(response);
 };
 
+const verifyDate = (dueDate: string) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (!dueDate) return false;
+    const deliveryDate = new Date(dueDate);
+    return deliveryDate.getTime() < today.getTime();
+}
+
 const TarefaService = {
     criarTarefa,
     atualizarTarefa,
     fetchTarefas,
     deleteTarefa,
     fetchTarefasPorResponsavel,
+    verifyDate
 };
 
 export default TarefaService;

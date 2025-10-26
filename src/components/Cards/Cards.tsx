@@ -38,10 +38,10 @@ export default function Cards(props: CardProps) {
           <img src={Points} alt="" className='h-6 w-6' />
         </button>
       </div>
-      <h2 className="mt-3 text-lg font-semibold text-gray-900">
+      <h2 className="mt-3 text-lg font-semibold text-gray-900 whitespace-nowrap overflow-hidden text-ellipsis">
         {props.task.titulo}
       </h2>
-      <p className="mt-1 text-sm text-gray-500">
+      <p className="mt-1 text-sm text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis">
         {props.task.descricao}
       </p>
       <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
@@ -50,7 +50,7 @@ export default function Cards(props: CardProps) {
           <span>{dataEntregaFormatada}</span>
         </div>
         <div className="flex items-center gap-1">
-          <span>{props.task.responsavel}</span>
+          <span>{props.task.responsavel?.nome}</span>
           <img src={User} alt="" className="h-5 w-5" />
         </div>
       </div>

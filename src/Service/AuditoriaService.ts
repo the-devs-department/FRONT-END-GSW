@@ -1,21 +1,9 @@
 import type AuditoriaResponse from "../Interface/AuditoriaInsterface";
+import UserService from "./UserService";
 
 const API_BASE_URL = "http://localhost:8080";
 
-const getAuthHeaders = () => {
-  const authData = localStorage.getItem("authData");
-  const parsed = authData ? JSON.parse(authData) : null;
-  const token = parsed?.token;
 
-  if (!token) {
-    throw new Error("Token de autenticação não encontrado.");
-  }
-
-  return {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
-  };
-};
 
 const fetchLogsPorTarefaId = async (
   tarefaId: string
@@ -23,7 +11,7 @@ const fetchLogsPorTarefaId = async (
   try {
     const response = await fetch(`${API_BASE_URL}/logs/${tarefaId}`, {
       method: "GET",
-      headers: getAuthHeaders(),
+      headers: UserService.getAuthHeaders(),
     });
 
     if (!response.ok) {
@@ -43,7 +31,7 @@ const fetchTodosLogs = async (): Promise<AuditoriaResponse[]> => {
   try {
     const response = await fetch(`${API_BASE_URL}/logs`, {
       method: "GET",
-      headers: getAuthHeaders(),
+      headers: UserService.getAuthHeaders(),
     });
 
     if (!response.ok) {

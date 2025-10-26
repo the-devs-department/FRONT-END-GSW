@@ -4,7 +4,7 @@ import { useFeedback } from '../../context/FeedbackModalContext';
 export default function FeedbackModal() {
   const { feedback, hideFeedback } = useFeedback();
 
-  const { isShown, kind, mainText, secondText, image } = feedback;
+  const { isShown, kind, mainText, secondText } = feedback;
 
   const feedbackStyle = kind === 'Sucesso' ? 'feeback-success' : 'feedback-error';
   const feebackShown = isShown ? 'feedback-visible' : 'feedback-modal';
@@ -18,8 +18,6 @@ export default function FeedbackModal() {
           <h2>{mainText}</h2>
           <p>{secondText}</p>
         </div>
-        <img src={image} alt="" className='feedback-image'/>
-        <button onClick={hideFeedback} className="close-button">X</button>
       </div>
     </div>
   );
