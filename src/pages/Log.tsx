@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import auditoriaService from "../Service/AuditoriaService";
 import type AuditoriaResponse from "../Interface/AuditoriaInsterface";
 import NotAllowed from "../components/NotAllowed/NotAllowed";
-import UserService from "../Service/UserService";
 import { useNavigate } from "react-router-dom";
 
 
@@ -64,7 +63,13 @@ export default function Log() {
     fetchLogs();
   }, [navigate, fetchLogs])
 
-  
+  if (loading) {
+    return(
+      <div className="w-full h-full flex items-center justify-center">
+        <p className="text-gray-700 text-xl">Carregando tarefas...</p>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -72,15 +77,6 @@ export default function Log() {
         <div className="relative w-full flex flex-col transition-all duration-500 no-scrollbar">
           {/* Área da tabela */}
           <div className="w-full">
-            <div className="h-20 pl-4">
-              <h2 className="text-gray-800 text-4xl font-bold max-[800px]:text-2xl">
-                Auditoria
-              </h2>
-              <p className="text-gray-500 text-lg pl-1 max-[800px]:text-sm">
-                Gerencie as alterações dos usuários
-              </p>
-            </div>
-
             <div className="w-full relative overflow-x-auto">
               <table className="min-w-[700px] md:min-w-full mt-6 border-collapse border border-black text-center">
                 <thead className="border border-black bg-gray-100">
@@ -216,7 +212,7 @@ export default function Log() {
                     </p>
                     <p>
                       <strong>Responsável:</strong>{" "}
-                      {logSelecionado.tarefa.responsavel || "-"}
+                      {logSelecionado.tarefa.responsavel?.nome || "-"}
                     </p>
                     <p>
                       <strong>Data de Entrega:</strong>{" "}

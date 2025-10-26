@@ -52,7 +52,7 @@ export default function ResetarSenhaPage() {
 
   useEffect(() => {
     if (valid === false) {
-      const t = setTimeout(() => navigate("/login"), 3000);
+      const t = setTimeout(() => navigate("/login"), 2500);
       return () => clearTimeout(t);
     }
   }, [valid, navigate]);
@@ -101,7 +101,7 @@ export default function ResetarSenhaPage() {
 
       if (response.ok) {
         setMensagem("Senha alterada com sucesso!");
-        setTimeout(() => navigate("/login"), 2000);
+        setTimeout(() => navigate("/login"), 2500);
       } else {
         setMensagem("Erro ao redefinir senha. Link inválido ou expirado");
       }

@@ -3,7 +3,9 @@ import type { AnexoDto } from '../Interface/dto/AnexoDtoInterface';
 
 class AnexoService {
     private getAuthToken(): string {
-        const token = localStorage.getItem('authToken');
+        const userInfos = localStorage.getItem('authData')
+        const userInfosParsed = userInfos ? JSON.parse(userInfos) : null
+        const token = userInfosParsed.token
         if (!token) {
             throw new Error('Token de autenticação não encontrado');
         }

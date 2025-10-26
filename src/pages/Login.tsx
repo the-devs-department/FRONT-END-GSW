@@ -42,12 +42,12 @@ export default function Login() {
       showFeedback(
         'Sucesso',
         'Login realizado com sucesso!',
-        'Em alguns instantes você será redirecionado.'
+        'Aguarde, você está sendo redirecionado.'
       )
 
       setTimeout(() => {
         navigation('/home')
-      }, 5000)
+      }, 2500)
 
     } catch (error) {
       showFeedback(
