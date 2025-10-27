@@ -132,10 +132,10 @@ export default function Log() {
                           {log.responsavel.emailResponsavel}
                         </td>
                         <td className="text-[15px] text-[#22222A] border border-black px-2 md:px-4 py-2">
-                          {log.tarefa.id || "-"}
+                          {log.tarefa?.id || "-"} 
                         </td>
                         <td className="text-[15px] text-[#22222A] border border-black px-2 md:px-4 py-2">
-                          {log.modificacao.modificacao || "-"}
+                          {log.modificacao.modificacao}
                         </td>
                       </tr>
                     ))
@@ -157,7 +157,7 @@ export default function Log() {
             {/* Cabeçalho */}
             <div className="border-b border-black flex items-center justify-center p-3">
               <h3 className="text-[14px] md:text-[15px] font-bold text-[#22222A] text-center">
-                Log - {logSelecionado?.responsavel.id}
+                Log - {}
               </h3>
             </div>
 
@@ -182,7 +182,7 @@ export default function Log() {
                   </div>
                   <div>
                     <p className="font-semibold">ID da Tarefa:</p>
-                    <p className="text-[15px]">{logSelecionado.tarefa.id || "-"}</p>
+                    <p className="text-[15px]">{logSelecionado.tarefa?.id||"-"}</p>
                   </div>
                 </div>
 
@@ -193,30 +193,29 @@ export default function Log() {
 
                   <div className="mb-[5px]">
                     <p className="font-semibold">Título:</p>
-                    <p>{logSelecionado.tarefa.titulo || "-"}</p>
+                    <p>{logSelecionado.tarefa?.titulo}</p>
                   </div>
 
                   <div>
                     <p className="font-semibold">Descrição:</p>
                     <p className="text-sm text-[15px]">
-                      {logSelecionado.modificacao.modificacao}
+                      {logSelecionado.tarefa?.descricao}
                     </p>
                   </div>
 
                   <div className="mt-[5px] space-y-1">
                     <p>
-                      <strong>Tema:</strong> {logSelecionado.tarefa.tema}
-                    </p>
+                      <strong>Tema:</strong> {logSelecionado.tarefa?.tema} </p>
                     <p>
-                      <strong>Status:</strong> {formatarTexto(logSelecionado.tarefa.status)}
+                      <strong>Status:</strong> {formatarTexto(logSelecionado.tarefa?.status)}
                     </p>
                     <p>
                       <strong>Responsável:</strong>{" "}
-                      {logSelecionado.tarefa.responsavel?.nome || "-"}
+                      {logSelecionado.responsavel.emailResponsavel}
                     </p>
                     <p>
                       <strong>Data de Entrega:</strong>{" "}
-                      {formatarData(logSelecionado.tarefa.dataEntrega)}
+                      {formatarData(logSelecionado.tarefa?.dataEntrega)}
                     </p>
                   </div>
                 </div>

@@ -6,7 +6,7 @@ export default interface UsuarioResponsavel {
     email: string
 }
 
-interface Tarefa {
+export default interface Tarefa {
   id?: string;
   titulo: string;
   descricao: string;
