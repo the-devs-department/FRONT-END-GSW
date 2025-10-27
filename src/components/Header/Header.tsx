@@ -1,4 +1,5 @@
 import { useLocation } from 'react-router-dom';
+import { NotificationBell } from '../NotificationBell/NotificationBell'; 
 
 interface HeaderProps {
   btnFunc: (tipo: "Nova" | "Atualizar") => void;
@@ -24,12 +25,16 @@ export default function Header({ btnFunc }: HeaderProps) {
             <h1 className="text-gray-800 text-4xl font-bold max-[800px]:text-2xl">{titulo}</h1>
             <p className="text-gray-500 text-lg pl-1 max-[800px]:text-sm">Gerencie e acompanhe o progresso de suas atividades</p>
           </div>
+          
           <div className="flex gap-2 max-[800px]:w-full max-[800px]:justify-end">
-          {buttonAppearsAt.includes(location.pathname) && (
-            <button onClick={() => btnFunc("Nova")} className="bg-slate-800 text-white p-2 px-4 rounded font-bold hover:bg-gray-900 transition-colors">
-              + Nova tarefa
-            </button>
-          )}
+            {buttonAppearsAt.includes(location.pathname) && (
+              <button onClick={() => btnFunc("Nova")} className="bg-slate-800 text-white p-2 px-4 rounded font-bold hover:bg-gray-900 transition-colors">
+                + Nova tarefa
+              </button>
+            )}
+
+            <NotificationBell />
+
           </div>
         </div>
       </div>
