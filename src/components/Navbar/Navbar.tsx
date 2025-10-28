@@ -1,9 +1,11 @@
 import profileUser from '../../assets/profile-user.png'
 import checkIcon from '../../assets/check.png'
 import listItems from '../../assets/task-list.png'
+import myTasks from '../../assets/myTasks.png'
 import logoutIcon from '../../assets/logout.png'
+import openFolder from '../../assets/openFolder.png'
 import './Navbar.css'
-import { useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { ScreenWidth } from '../../hooks/ScreenWidth'
 
 interface NavbarProps {
@@ -11,26 +13,24 @@ interface NavbarProps {
   closeNavbar: () => void;
   setFiltro: (filtro: 'todas' | 'minhas') => void;
   filtroAtual: 'todas' | 'minhas';
+  userInfos: [nome: String | null, email: String | null]
 }
 
-export default function Navbar({ isNavbarOpen, closeNavbar, setFiltro, filtroAtual }: NavbarProps) {
+export default function Navbar({ isNavbarOpen, closeNavbar, setFiltro, filtroAtual, userInfos }: NavbarProps) {
   const screenWidth = ScreenWidth();
-  const navigate = useNavigate();
-
   const logout = () => {
     localStorage.removeItem('authToken');
-    navigate('/login');
   }
 
   const mainClass = screenWidth > 1024 ? 'side-nav' : `hidden-side-nav ${isNavbarOpen && 'open-side-nav'}`;
 
-  const estiloBotaoTodas = filtroAtual === 'todas' ? 'active' : ''; // 'active' é a classe que você já usava
+  const pagelink = useLocation()
 
   return (
     <>
       <nav className={mainClass}>
         <div className='nav-header'>
-          {screenWidth < 1024 && (
+          {screenWidth <= 1024 && (
             <span className='close-navbar-button' onClick={closeNavbar}>
               X
             </span>
@@ -42,26 +42,37 @@ export default function Navbar({ isNavbarOpen, closeNavbar, setFiltro, filtroAtu
         <div className='nav-user-infos'>
           <img src={profileUser} alt="" className='h-10' />
           <div className='user-infos'>
-            <p className='user-name'>Otávio Vianna Lima</p>
-            <p className='user-email'>dev@gmail.com</p>
+            <p className='user-name'>{userInfos[0]}</p>
+            <p className='user-email'>{userInfos[1]}</p>
           </div>
         </div>
         <hr />
         <div className='nav-buttons'>
           <ul>
-            {/* PASSO 4: Adicionar o onClick e a classe dinâmica */}
-            <li className={estiloBotaoTodas} onClick={() => setFiltro('todas')}>
+            <Link to='/home/todas-tarefas' className={pagelink.pathname === '/home/todas-tarefas' ? 'active': 'todas'}>
               <img src={listItems} alt="" className='h-6' />
               <p>
                 Todas as tarefas
               </p>
-            </li>
-            <li className='delete' onClick={logout}>
+            </Link>
+            <Link to='/home' className={pagelink.pathname === '/home' ? 'active': 'minhas'}>
+              <img src={myTasks} alt="" className='h-6' />
+              <p>
+                Minhas tarefas
+              </p>
+            </Link>
+            <Link to= '/home/log-auditoria'  className={pagelink.pathname === '/home/log-auditoria' ? 'active': 'todas'}>
+              <img src={openFolder} alt="" className='h-6' />
+                <p>
+                  Log de Auditoria
+                </p> 
+            </Link>
+            <Link to='/login' className='delete' onClick={logout}>
               <img src={logoutIcon} alt="" className='h-6' />
               <p>
                 Logout
               </p>
-            </li>
+            </Link>
           </ul>
         </div>
       </nav>

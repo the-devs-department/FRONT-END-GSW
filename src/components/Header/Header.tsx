@@ -1,17 +1,21 @@
+import { useLocation } from 'react-router-dom';
+import { NotificationBell } from '../NotificationBell/NotificationBell'; 
+
 interface HeaderProps {
   btnFunc: (tipo: "Nova" | "Atualizar") => void;
-  setFiltro: (filtro: 'todas' | 'minhas') => void;
-  filtroAtual: 'todas' | 'minhas';
-  minhasTarefasCount: number;
 }
 
-export default function Header({ btnFunc, setFiltro, filtroAtual, minhasTarefasCount }: HeaderProps) {
-  
-  const titulo = filtroAtual === 'todas' ? 'Todas as tarefas' : 'Minhas tarefas';
-  
-  const estiloBotaoMinhas = filtroAtual === 'minhas' 
-    ? 'bg-gray-200 border-gray-400 font-bold' 
-    : 'border-gray-300 hover:bg-gray-200';
+export default function Header({ btnFunc }: HeaderProps) {
+  const location = useLocation();
+
+  const headerTitle: Record<string, string> ={
+    '/home/todas-tarefas': 'Todas as tarefas',
+    '/home': 'Minhas tarefas',
+    '/home/log-auditoria': 'Log de auditoria'
+  }
+
+  const titulo = headerTitle[location.pathname as keyof typeof headerTitle]
+  const buttonAppearsAt = ['/home', '/home/todas-tarefas']
 
   return (
     <>
@@ -21,19 +25,16 @@ export default function Header({ btnFunc, setFiltro, filtroAtual, minhasTarefasC
             <h1 className="text-gray-800 text-4xl font-bold max-[800px]:text-2xl">{titulo}</h1>
             <p className="text-gray-500 text-lg pl-1 max-[800px]:text-sm">Gerencie e acompanhe o progresso de suas atividades</p>
           </div>
+          
           <div className="flex gap-2 max-[800px]:w-full max-[800px]:justify-end">
-            <button 
-              onClick={() => setFiltro('minhas')}
-              className={`w-fit flex gap-2 border-[1px] rounded-md p-2 text-black max-md:text-sm min-[320px]:gap-1 ${estiloBotaoMinhas}`}
-            >
-              Minhas tarefas
-              <span className="flex items-center justify-center h-auto w-[1.5rem] bg-gray-300 rounded-full">
-                {minhasTarefasCount}
-              </span>
-            </button>
-            <button onClick={() => btnFunc("Nova")} className="bg-slate-800 p-2 rounded font-bold hover:bg-gray-900">
-              + Criar nova tarefa
-            </button>
+            {buttonAppearsAt.includes(location.pathname) && (
+              <button onClick={() => btnFunc("Nova")} className="bg-slate-800 text-white p-2 px-4 rounded font-bold hover:bg-gray-900 transition-colors">
+                + Nova tarefa
+              </button>
+            )}
+
+            <NotificationBell />
+
           </div>
         </div>
       </div>

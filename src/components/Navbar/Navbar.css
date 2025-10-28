@@ -91,7 +91,7 @@
   width: 95%;
 }
 
-.nav-buttons > ul > li {
+.nav-buttons > ul > a {
   display: flex;
   align-items: center;
   justify-content: start;
@@ -103,7 +103,7 @@
   text-wrap: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  transition: 1s;
+  transition: background-color .5s;
   cursor: pointer;
 }
 

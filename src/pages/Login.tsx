@@ -32,17 +32,22 @@ export default function Login() {
 
       const data = await response.json()
       const token = data.token
-      localStorage.setItem("authToken", token)
+      const userId = data.idUsuario
+      const authData = {
+        token: token,
+        userId: userId
+      }
+      localStorage.setItem("authData", JSON.stringify(authData))
 
       showFeedback(
         'Sucesso',
         'Login realizado com sucesso!',
-        'Em alguns instantes você será redirecionado.'
+        'Aguarde, você está sendo redirecionado.'
       )
 
       setTimeout(() => {
         navigation('/home')
-      }, 5000)
+      }, 2500)
 
     } catch (error) {
       showFeedback(
@@ -96,6 +101,11 @@ export default function Login() {
               <p className='text-[#7B899D]'>Não tem uma conta?</p>
               <Link to={'/cadastro'} className='text-[#344256] font-bold'>
                 Cadastre-se
+              </Link>
+            </div>
+            <div className='flex w-full items-center justify-center gap-2'>
+              <Link to={'/recuperacao-senha'} className='text-[#344256] font-bold'>
+                Esqueci minha senha
               </Link>
             </div>
           </form>
