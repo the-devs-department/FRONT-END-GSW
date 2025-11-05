@@ -14,7 +14,6 @@ interface Tarefa {
   descricao: string;
   tema: string;
   status?: string;
-  file: File | null;
   responsavel: UsuarioResponsavel | undefined;
   dataCriacao?: string;
   dataEntrega: string;
@@ -94,7 +93,7 @@ export default function Modal(props: ModalProps) {
       setTaskTitle(props.tarefaSelecionada.titulo ?? "");
       setTaskDesc(props.tarefaSelecionada.descricao ?? "");
       setTaskTheme(props.tarefaSelecionada.tema ?? "Desenvolvimento");
-      setTaskFile(props.tarefaSelecionada.file ?? null);
+      setTaskFile(null);
       setTaskStatus(
         Object.keys(formatedTaskStatus).find(
           key => formatedTaskStatus[key] === props.tarefaSelecionada?.status
@@ -241,8 +240,7 @@ export default function Modal(props: ModalProps) {
       tema: taskTheme,
       status: formatedTaskStatus[taskStatus],
       dataEntrega: taskDueDate,
-      responsavel: membroResponsavel,
-      file: taskFile
+      responsavel: membroResponsavel
     }
   }
 
@@ -270,6 +268,7 @@ export default function Modal(props: ModalProps) {
         }  
     }
     const tarefa = buildTask(memberToSend)
+    console.log('Tarefa a ser enviada:', JSON.stringify(tarefa, null, 2))
     let successMainText: string;
     let successSecondaryText: string
 

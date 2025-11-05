@@ -8,7 +8,6 @@ interface Tarefa {
   descricao: string;
   tema: string;
   status?: string;
-  file: File | null;
   responsavel: UsuarioResponsavel | undefined;
   dataCriacao?: string;
   dataEntrega: string;
