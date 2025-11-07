@@ -1,5 +1,6 @@
 .side-nav{
-  background-color: #3b4759;
+  /* background-color: #3b4759; */
+  background: linear-gradient(to bottom right, #0d1118, #243042, #243042, #47566B);
   position: fixed;
   width: 20%;
   height: 100%;
@@ -9,7 +10,7 @@
 }
 
 .hidden-side-nav{
-  background-color: #3b4759;
+  background: linear-gradient(to bottom right, #0d1118, #243042, #243042, #47566B);
   position: fixed;
   width: 0;
   height: 100%;

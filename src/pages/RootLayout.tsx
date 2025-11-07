@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useCallback, useRef } from "react";
+import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import Header from "../components/Header/Header";
@@ -9,18 +9,22 @@ import FeedbackModal from "../components/FeedbackModal/FeedbackModal";
 import { ScreenWidth } from "../hooks/ScreenWidth";
 import { TaskModalProvider, useTaskModal } from "../context/TaskModalContext";
 import { DeleteModalProvider } from "../context/DeleteModalContext";
-import type Tarefa from "../Interface/TarefaInterface";
 import profileUser from '../assets/profile-user.png';
 import UserService from "../Service/UserService";
+import { TeamModalProvider, useTeamModal } from "../context/TeamModalContext";
+import TeamModal from "../components/TeamModal/TeamModal";
 
 export type RootLayoutContext = {
     setCallbackRecarregarTarefas: (callback: (() => void) | null) => void; 
 }
+
 const AppHeader = () => {
   const { openTaskModal } = useTaskModal();
+  const { openTeamModal } = useTeamModal();
   return (
     <Header
       btnFunc={() => openTaskModal("Nova")}
+      teamFunc={() => openTeamModal("New Team")}
     />
   );
 };
@@ -38,18 +42,27 @@ const TaskModal = ({ reloadTasks }: { reloadTasks: () => void }) => {
   );
 };
 
+const TeamModalUI = () => {
+  const {isTeamModalOpen, teamModalType, closeTeamModal, teamToUpdate} = useTeamModal();
+  return(
+    <TeamModal 
+      condicaoTeamModal={isTeamModalOpen}
+      typeModal={teamModalType}
+      closeTeamModal={closeTeamModal}
+      teamToUpdade={teamToUpdate}
+    />
+  )
+}
+
 export default function RootLayout() {
   const [openNavbar, setOpenNavbar] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [tarefas, setTarefas] = useState<Tarefa[]>([]);
   const [filtro, setFiltro] = useState<'todas' | 'minhas'>('todas');
   const [userName, setUserName] = useState<null | String>(null);
   const [userEmail, setUserEmail] = useState<null | String>(null);
-
   const pageLink = useLocation();
   const navigate = useNavigate();
   const screenWidth = ScreenWidth();
-  const rotasHeader = ["/home", "/home/todas-tarefas", "/home/calendario", '/home/log-auditoria']
+  const rotasHeader = ["/home", "/home/todas-tarefas", '/home/log-auditoria', '/home/equipes', '/home/calendario']
 
   const callbackRecarregarTarefas = useRef<(() => void) | null>(null)
 
@@ -91,6 +104,7 @@ export default function RootLayout() {
   const closeNavbarAction = () => setOpenNavbar(false);
   return (
     <>
+    <TeamModalProvider>
       <TaskModalProvider>
         <Navbar isNavbarOpen={openNavbar} closeNavbar={closeNavbarAction} setFiltro={setFiltro} filtroAtual={filtro} userInfos={[userName, userEmail]}/>
         <div className="flex flex-col items-center ml-[20%] w-[80%] h-dvh gap-2 max-[1025px]:w-full max-[1025px]:ml-[0%]">
@@ -119,10 +133,12 @@ export default function RootLayout() {
               </>
             <ModalDelete onTaskDeleted={loadTaskByRoute} />
             <TaskModal reloadTasks={loadTaskByRoute} />
+            <TeamModalUI/>
           </DeleteModalProvider>
         </div>
       </TaskModalProvider>
-      <FeedbackModal />
+    </TeamModalProvider>
+    <FeedbackModal />
     </>
   );
 }

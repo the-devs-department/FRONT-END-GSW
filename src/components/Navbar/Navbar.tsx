@@ -5,9 +5,10 @@ import myTasks from '../../assets/myTasks.png'
 import calendarIcon from '../../assets/calendar.png'
 import logoutIcon from '../../assets/logout.png'
 import openFolder from '../../assets/openFolder.png'
-import './Navbar.css'
+import teamIcon from '../../assets/team.png'
 import { Link, useLocation } from 'react-router-dom'
 import { ScreenWidth } from '../../hooks/ScreenWidth'
+import './Navbar.css'
 
 interface NavbarProps {
   isNavbarOpen: boolean;
@@ -17,7 +18,7 @@ interface NavbarProps {
   userInfos: [nome: String | null, email: String | null]
 }
 
-export default function Navbar({ isNavbarOpen, closeNavbar, setFiltro, filtroAtual, userInfos }: NavbarProps) {
+export default function Navbar({ isNavbarOpen, closeNavbar, userInfos }: NavbarProps) {
   const screenWidth = ScreenWidth();
   const logout = () => {
     localStorage.removeItem('authToken');
@@ -61,6 +62,12 @@ export default function Navbar({ isNavbarOpen, closeNavbar, setFiltro, filtroAtu
               <p>
                 Minhas tarefas
               </p>
+            </Link>
+            <Link to= '/home/equipes'  className={pagelink.pathname === '/home/equipes' ? 'active': 'todas'}>
+              <img src={teamIcon} alt="" className='h-6' />
+                <p>
+                  Equipes
+                </p> 
             </Link>
             <Link to='/home/calendario' className={pagelink.pathname === '/home/calendario' ? 'active': 'calendario'}>
               <img src={calendarIcon} alt="" className='h-6' />
