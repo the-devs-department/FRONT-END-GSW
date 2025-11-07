@@ -2,6 +2,7 @@ import profileUser from '../../assets/profile-user.png'
 import checkIcon from '../../assets/check.png'
 import listItems from '../../assets/task-list.png'
 import myTasks from '../../assets/myTasks.png'
+import calendarIcon from '../../assets/calendar.png'
 import logoutIcon from '../../assets/logout.png'
 import openFolder from '../../assets/openFolder.png'
 import './Navbar.css'
@@ -59,6 +60,12 @@ export default function Navbar({ isNavbarOpen, closeNavbar, setFiltro, filtroAtu
               <img src={myTasks} alt="" className='h-6' />
               <p>
                 Minhas tarefas
+              </p>
+            </Link>
+            <Link to='/home/calendario' className={pagelink.pathname === '/home/calendario' ? 'active': 'calendario'}>
+              <img src={calendarIcon} alt="" className='h-6' />
+              <p>
+                Calendário
               </p>
             </Link>
             <Link to= '/home/log-auditoria'  className={pagelink.pathname === '/home/log-auditoria' ? 'active': 'todas'}>

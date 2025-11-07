@@ -49,7 +49,7 @@ export default function RootLayout() {
   const pageLink = useLocation();
   const navigate = useNavigate();
   const screenWidth = ScreenWidth();
-  const rotasHeader = ["/home", "/home/todas-tarefas", '/home/log-auditoria']
+  const rotasHeader = ["/home", "/home/todas-tarefas", "/home/calendario", '/home/log-auditoria']
 
   const callbackRecarregarTarefas = useRef<(() => void) | null>(null)
 

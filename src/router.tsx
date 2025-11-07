@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
 import Log from "./pages/Log";
 import TodasTarefas from "./pages/TodasTarefas";
+import CalendarioPage from "./pages/CalendarioPage";
 import SolicitarEmailRecuperacao from "./pages/recuperacao-senha/SolicitarEmailRecuperacaoPage";
 import ResetarSenhaPage from "./pages/recuperacao-senha/ResetarSenha";
 
@@ -43,6 +44,9 @@ const router = createBrowserRouter([
       }, {
         path: "log-auditoria",
         element: <Log/>
+      }, {
+        path: "calendario",
+        element: <CalendarioPage />
       }
       ]
   }
