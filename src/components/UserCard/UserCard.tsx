@@ -4,12 +4,15 @@ interface UserCardProps {
 
 export default function UserCard(props: UserCardProps) {
   const userInitials = []
+  const doesntCount = ["dos", "de"]
   const listNames = props.username.split(' ');
   for (let i = 0; i < listNames.length; i++) {
-    if (i === 2) {
+    if (userInitials.length == 2) {
       break
     } else {
-      userInitials.push(listNames[i][0].toUpperCase())
+      if (!doesntCount.includes(listNames[i].toLowerCase())) {
+        userInitials.push(listNames[i][0].toUpperCase())
+      }
     }
   }
 
