@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Calendar from '../components/Calendar/Calendar';
 import GoogleCalendarSync from '../components/GoogleCalendarSync/GoogleCalendarSync';
 import type Tarefa from '../Interface/TarefaInterface';
+import taskIcon from '../assets/taskweb.png';
+import userIcon from '../assets/userWhite.png';
 
 // Mock data para fins demonstrativos
 const MOCK_TAREFAS: Tarefa[] = [
@@ -11,7 +13,11 @@ const MOCK_TAREFAS: Tarefa[] = [
     descricao: 'Tarefas relacionadas ao marketing',
     tema: 'Marketing',
     status: 'em_andamento',
-    responsavel: undefined,
+    responsavel: {
+      id: '1',
+      nome: 'Otávio Vianna Lima',
+      email: 'otavio@gmail.com'
+    },
     dataEntrega: '2025-10-02T10:00:00',
     ativo: true
   },
@@ -21,7 +27,11 @@ const MOCK_TAREFAS: Tarefa[] = [
     descricao: 'Atividades de desenvolvimento',
     tema: 'Desenvolvimento',
     status: 'em_andamento',
-    responsavel: undefined,
+    responsavel: {
+      id: '1',
+      nome: 'Otávio Vianna Lima',
+      email: 'otavio@gmail.com'
+    },
     dataEntrega: '2025-10-03T14:00:00',
     ativo: true
   },
@@ -31,7 +41,11 @@ const MOCK_TAREFAS: Tarefa[] = [
     descricao: 'Processar pagamentos',
     tema: 'Pagamento',
     status: 'pendente',
-    responsavel: undefined,
+    responsavel: {
+      id: '1',
+      nome: 'Otávio Vianna Lima',
+      email: 'otavio@gmail.com'
+    },
     dataEntrega: '2025-10-08T09:00:00',
     ativo: true
   },
@@ -41,7 +55,11 @@ const MOCK_TAREFAS: Tarefa[] = [
     descricao: 'Pagamento da equipe de marketing',
     tema: 'Pagamento',
     status: 'pendente',
-    responsavel: undefined,
+    responsavel: {
+      id: '1',
+      nome: 'Otávio Vianna Lima',
+      email: 'otavio@gmail.com'
+    },
     dataEntrega: '2025-10-09T10:00:00',
     ativo: true
   },
@@ -51,7 +69,11 @@ const MOCK_TAREFAS: Tarefa[] = [
     descricao: 'Tarefas de design',
     tema: 'Design',
     status: 'em_andamento',
-    responsavel: undefined,
+    responsavel: {
+      id: '1',
+      nome: 'Otávio Vianna Lima',
+      email: 'otavio@gmail.com'
+    },
     dataEntrega: '2025-10-09T15:00:00',
     ativo: true
   },
@@ -61,7 +83,11 @@ const MOCK_TAREFAS: Tarefa[] = [
     descricao: 'Continuação das tarefas de design',
     tema: 'Design',
     status: 'em_andamento',
-    responsavel: undefined,
+    responsavel: {
+      id: '1',
+      nome: 'Otávio Vianna Lima',
+      email: 'otavio@gmail.com'
+    },
     dataEntrega: '2025-10-11T11:00:00',
     ativo: true
   },
@@ -71,7 +97,11 @@ const MOCK_TAREFAS: Tarefa[] = [
     descricao: 'Continuação do desenvolvimento',
     tema: 'Desenvolvimento',
     status: 'em_andamento',
-    responsavel: undefined,
+    responsavel: {
+      id: '1',
+      nome: 'Otávio Vianna Lima',
+      email: 'otavio@gmail.com'
+    },
     dataEntrega: '2025-10-18T16:00:00',
     ativo: true
   },
@@ -81,7 +111,11 @@ const MOCK_TAREFAS: Tarefa[] = [
     descricao: 'Pagamentos do mês',
     tema: 'Pagamento',
     status: 'pendente',
-    responsavel: undefined,
+    responsavel: {
+      id: '1',
+      nome: 'Otávio Vianna Lima',
+      email: 'otavio@gmail.com'
+    },
     dataEntrega: '2025-10-18T10:00:00',
     ativo: true
   },
@@ -91,7 +125,11 @@ const MOCK_TAREFAS: Tarefa[] = [
     descricao: 'Atendimento ao cliente',
     tema: 'Suporte',
     status: 'pendente',
-    responsavel: undefined,
+    responsavel: {
+      id: '1',
+      nome: 'Otávio Vianna Lima',
+      email: 'otavio@gmail.com'
+    },
     dataEntrega: '2025-10-22T13:00:00',
     ativo: true
   }
@@ -99,7 +137,7 @@ const MOCK_TAREFAS: Tarefa[] = [
 
 const CalendarPage: React.FC = () => {
   const [tarefas, setTarefas] = useState<Tarefa[]>([]);
-  const [selectedTarefa, setSelectedTarefa] = useState<Tarefa | null>(null);
+  const [selectedDateTarefas, setSelectedDateTarefas] = useState<Tarefa[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -110,11 +148,8 @@ const CalendarPage: React.FC = () => {
   const carregarTarefas = async () => {
     try {
       setLoading(true);
-    
       await new Promise(resolve => setTimeout(resolve, 500));
-      const response = MOCK_TAREFAS;
-      
-      setTarefas(response);
+      setTarefas(MOCK_TAREFAS);
     } catch (error) {
       console.error('Erro ao carregar tarefas:', error);
     } finally {
@@ -123,13 +158,17 @@ const CalendarPage: React.FC = () => {
   };
 
   const handleTaskClick = (tarefa: Tarefa) => {
-    setSelectedTarefa(tarefa);
+    const day = new Date(tarefa.dataEntrega).toLocaleDateString('pt-BR');
+    const tarefasDoDia = tarefas.filter(
+      t => new Date(t.dataEntrega).toLocaleDateString('pt-BR') === day
+    );
+    setSelectedDateTarefas(tarefasDoDia);
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setSelectedTarefa(null);
+    setSelectedDateTarefas([]);
   };
 
   if (loading) {
@@ -152,71 +191,71 @@ const CalendarPage: React.FC = () => {
         }
       />
       
-      {isModalOpen && selectedTarefa && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex justify-between items-start mb-4">
-                <h2 className="text-2xl font-bold text-gray-900">{selectedTarefa.titulo}</h2>
-                <button
-                  onClick={handleCloseModal}
-                  className="text-gray-400 hover:text-gray-600 text-2xl"
-                >
-                  ×
-                </button>
+      {isModalOpen && selectedDateTarefas.length > 0 && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          onClick={handleCloseModal}
+        >
+          <div 
+            className="bg-slate-700 rounded-xl shadow-2xl max-w-sm w-full text-white overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-center bg-slate-700 px-4 pt-3">
+              <div>
+                <span className="text-sm font-medium text-[#A4C0E3]">
+                  {new Date(selectedDateTarefas[0].dataEntrega).toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                  })}
+                </span>
               </div>
-              
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-sm font-semibold text-gray-600 mb-1">Descrição</h3>
-                  <p className="text-gray-800">{selectedTarefa.descricao}</p>
+              <button
+                onClick={handleCloseModal}
+                className="text-[#A4C0E3] hover:text-white text-xl"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="flex justify-between items-center px-4 pt-3 pb-1 bg-slate-700">
+              <div className="flex items-center">
+                <img src={taskIcon} alt="Tarefas" className="h-5 w-5" />
+                <span className="ml-2 text-base text-white font-semibold">Tarefas</span>
+              </div>
+              {selectedDateTarefas.find(t => t.responsavel)?.responsavel && (
+                <div className="flex items-center">
+                  <img src={userIcon} alt="Usuario" className="h-5 w-5" />
+                  <span className="ml-2 text-base text-white font-semibold">
+                    {selectedDateTarefas.find(t => t.responsavel)?.responsavel?.nome}
+                  </span>
                 </div>
-                
-                <div>
-                  <h3 className="text-sm font-semibold text-gray-600 mb-1">Tema</h3>
-                  <p className="text-gray-800">{selectedTarefa.tema}</p>
-                </div>
-                
-                <div>
-                  <h3 className="text-sm font-semibold text-gray-600 mb-1">Status</h3>
-                  <p className="text-gray-800 capitalize">{selectedTarefa.status?.replace('_', ' ')}</p>
-                </div>
-                
-                {selectedTarefa.responsavel && (
-                  <div>
-                    <h3 className="text-sm font-semibold text-gray-600 mb-1">Responsável</h3>
-                    <p className="text-gray-800">{selectedTarefa.responsavel.nome}</p>
-                  </div>
-                )}
-                
-                <div>
-                  <h3 className="text-sm font-semibold text-gray-600 mb-1">Data de Entrega</h3>
-                  <p className="text-gray-800">
-                    {new Date(selectedTarefa.dataEntrega).toLocaleDateString('pt-BR', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      year: 'numeric',
+              )}
+            </div>
+              <div className="px-4 pt-3 pb-2">
+                <div className="flex flex-col gap-2 h-64 overflow-y-auto pr-2 border border-white rounded-md p-2">
+                  {selectedDateTarefas.map(tarefa => {
+                    const hora = new Date(tarefa.dataEntrega).toLocaleTimeString('pt-BR', {
                       hour: '2-digit',
                       minute: '2-digit'
-                    })}
-                  </p>
+                    });
+                    return (
+                      <div key={tarefa.id} className="rounded-md px-2 py-2 text-white text-[15px] flex items-center justify-between flex-shrink-0">
+                        <span className="whitespace-nowrap overflow-hidden text-ellipsis">{tarefa.descricao} - {hora}</span>
+                      </div>
+                    );
+                  })}
                 </div>
+                <div className="flex items-center justify-center mt-2">
+                <span className="text-sm text-slate-500 font-light">Clique para ser direcionado à tarefa</span>
               </div>
-              
-              <div className="mt-6 flex justify-end">
-                <button
-                  onClick={handleCloseModal}
-                  className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md text-gray-800 font-medium"
-                >
-                  Fechar
-                </button>
-              </div>
-            </div>
+              </div>    
           </div>
         </div>
+        
       )}
     </div>
   );
-}
+};
 
 export default CalendarPage;

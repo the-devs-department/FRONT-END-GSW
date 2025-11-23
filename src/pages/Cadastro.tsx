@@ -23,7 +23,7 @@ export default function Cadastro() {
     } else {
       setErr('')
       try {
-        const response = await fetch('http://localhost:8080/usuarios/criar', {
+        const response = await fetch('http://localhost:8086/usuarios/criar', {
           method: "POST",
           headers: {
             'Content-type': 'application/json'
