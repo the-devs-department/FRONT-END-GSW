@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import auditoriaService from "../Service/AuditoriaService";
 import type AuditoriaResponse from "../Interface/AuditoriaInsterface";
 import NotAllowed from "../components/NotAllowed/NotAllowed";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 
 export default function Log() {
@@ -12,6 +12,7 @@ export default function Log() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [userRoles, setUserRoles] = useState<null | String[]>(null)
+  const {teamId} = useParams(); 
 
   const formatarTexto = (valor?: string): string => {
     if (!valor) return "-";
@@ -62,6 +63,11 @@ export default function Log() {
     }
     fetchLogs();
   }, [navigate, fetchLogs])
+
+  if (!teamId) {
+    navigate('/home');
+    return;
+  }
 
   if (loading) {
     return(

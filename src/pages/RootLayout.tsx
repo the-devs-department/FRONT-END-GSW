@@ -12,9 +12,11 @@ import { DeleteModalProvider } from "../context/DeleteModalContext";
 import type Tarefa from "../Interface/TarefaInterface";
 import profileUser from '../assets/profile-user.png';
 import UserService from "../Service/UserService";
+import { TeamModalProvider, useTeamModal } from "../context/TeamModalContext";
+import TeamModal from "../components/TeamModal/TeamModal";
 
 export type RootLayoutContext = {
-    setCallbackRecarregarTarefas: (callback: (() => void) | null) => void; 
+  setCallbackRecarregarTarefas: (callback: (() => void) | null) => void;
 }
 const AppHeader = () => {
   const { openTaskModal } = useTaskModal();
@@ -38,6 +40,19 @@ const TaskModal = ({ reloadTasks }: { reloadTasks: () => void }) => {
   );
 };
 
+const TeamModalUI = () => {
+  const { isTeamModalOpen, teamModalType, closeTeamModal, teamToUpdate } = useTeamModal();
+  return (
+    <TeamModal
+      condicaoTeamModal={isTeamModalOpen}
+      typeModal={teamModalType}
+      closeTeamModal={closeTeamModal}
+      teamToUpdade={teamToUpdate}
+      onTaskSuccess={() => {}}
+    />
+  )
+}
+
 export default function RootLayout() {
   const [openNavbar, setOpenNavbar] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -49,7 +64,8 @@ export default function RootLayout() {
   const pageLink = useLocation();
   const navigate = useNavigate();
   const screenWidth = ScreenWidth();
-  const rotasHeader = ["/home", "/home/todas-tarefas", "/home/calendario", '/home/log-auditoria']
+  const [currentTeamId, setCurrentTeamId] = useState<String | null>(null);
+  const rotasHeader = ["/home", "/home/todas-tarefas", '/home/log-auditoria', '/home/equipes', '/home/calendario']
 
   const callbackRecarregarTarefas = useRef<(() => void) | null>(null)
 
@@ -58,16 +74,16 @@ export default function RootLayout() {
   }, [])
 
   const loadTaskByRoute = useCallback(() => {
-    if (callbackRecarregarTarefas.current){
+    if (callbackRecarregarTarefas.current) {
       callbackRecarregarTarefas.current()
     }
   }, [])
 
   const outletContextValue: RootLayoutContext = useMemo(() => {
-        return {
-            setCallbackRecarregarTarefas 
-        }
-    }, [setCallbackRecarregarTarefas])
+    return {
+      setCallbackRecarregarTarefas
+    }
+  }, [setCallbackRecarregarTarefas])
 
   const getUserRoles = async (id: string) => {
     const userInfos = await UserService.getUserInfos(id)
@@ -80,7 +96,7 @@ export default function RootLayout() {
   useEffect(() => {
     const data = UserService.getUserTokenAndId()
     const token = data.token
-    if(!token) {
+    if (!token) {
       navigate('/login')
       return
     }
@@ -91,37 +107,40 @@ export default function RootLayout() {
   const closeNavbarAction = () => setOpenNavbar(false);
   return (
     <>
-      <TaskModalProvider>
-        <Navbar isNavbarOpen={openNavbar} closeNavbar={closeNavbarAction} setFiltro={setFiltro} filtroAtual={filtro} userInfos={[userName, userEmail]}/>
-        <div className="flex flex-col items-center ml-[20%] w-[80%] h-dvh gap-2 max-[1025px]:w-full max-[1025px]:ml-[0%]">
-          <DeleteModalProvider>
-            {screenWidth > 1024 ? (
-              <div className="flex h-auto p-4 w-full border-b-[1px] border-gray-200 items-center justify-end h-16">
-                <div className="flex gap-4 text-black items-center font-bold">
-                  <img src={profileUser} alt="" className="h-6" />
-                  <p>{userName}</p>
+      <TeamModalProvider>
+        <TaskModalProvider>
+          <Navbar isNavbarOpen={openNavbar} closeNavbar={closeNavbarAction} setFiltro={setFiltro} filtroAtual={filtro} userInfos={[userName, userEmail]} />
+          <div className="flex flex-col items-center ml-[20%] w-[80%] h-dvh gap-2 max-[1025px]:w-full max-[1025px]:ml-[0%]">
+            <DeleteModalProvider>
+              {screenWidth > 1024 ? (
+                <div className="flex h-auto p-4 w-full border-b-[1px] border-gray-200 items-center justify-end h-16">
+                  <div className="flex gap-4 text-black items-center font-bold">
+                    <img src={profileUser} alt="" className="h-6" />
+                    <p>{userName}</p>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div className="flex w-full border-b-[1px] border-gray-200 p-2 items-center justify-between h-16">
-                <NavbarButton openNavbar={openNavbarAction} />
-                <div className="flex gap-4 text-black items-center font-bold">
-                  <img src={profileUser} alt="" className="h-6" />
-                  <p>{userName}</p>
+              ) : (
+                <div className="flex w-full border-b-[1px] border-gray-200 p-2 items-center justify-between h-16">
+                  <NavbarButton openNavbar={openNavbarAction} />
+                  <div className="flex gap-4 text-black items-center font-bold">
+                    <img src={profileUser} alt="" className="h-6" />
+                    <p>{userName}</p>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
               <>
                 {rotasHeader.includes(pageLink.pathname) && (
-                  <AppHeader/>
+                  <AppHeader />
                 )}
-                  <Outlet context={outletContextValue}/>
+                <Outlet context={outletContextValue} />
               </>
-            <ModalDelete onTaskDeleted={loadTaskByRoute} />
-            <TaskModal reloadTasks={loadTaskByRoute} />
-          </DeleteModalProvider>
-        </div>
-      </TaskModalProvider>
+              <ModalDelete onTaskDeleted={loadTaskByRoute} />
+              <TaskModal reloadTasks={loadTaskByRoute} />
+              <TeamModalUI />
+            </DeleteModalProvider>
+          </div>
+        </TaskModalProvider>
+      </TeamModalProvider>
       <FeedbackModal />
     </>
   );

@@ -4,26 +4,37 @@ const getUserTokenAndId = () => {
   const token = userInfosParsed.token
   const id = userInfosParsed.userId
 
-  return {token, id}
+  return { token, id }
+}
+
+const baseUrl = "http://localhost:8086/"
+
+const getUserId = () => {
+  const userData = getUserTokenAndId()
+  const userId = userData.id
+  if (!userId) {
+    throw new Error("Token de autenticação não encontrado.");
+  }
+  return userId
 }
 
 const getAuthHeaders = () => {
-    const userData = getUserTokenAndId()
-    const token = userData.token
-    if (!token) {
-        throw new Error("Token de autenticação não encontrado.");
-    }
-    return {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-    };
+  const userData = getUserTokenAndId()
+  const token = userData.token
+  if (!token) {
+    throw new Error("Token de autenticação não encontrado.");
+  }
+  return {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+  };
 }
 
 const getUserInfos = async (id: string) => {
   if (!id) {
     throw new Error("ID de usuário não encontrado!")
   }
-  const response = await fetch(`http://localhost:8080/usuarios/getOnLogin/${id}`,{
+  const response = await fetch(`${baseUrl}usuarios/getOnLogin/${id}`, {
     method: "GET",
     headers: getAuthHeaders()
   })
@@ -32,7 +43,7 @@ const getUserInfos = async (id: string) => {
 }
 
 const getUsers = async () => {
-  const response = await fetch("http://localhost:8080/usuarios", {
+  const response = await fetch(`${baseUrl}usuarios`, {
     method: "GET",
     headers: getAuthHeaders()
   })
@@ -42,7 +53,7 @@ const getUsers = async () => {
 }
 
 const assignedUser = async (email: string) => {
-  const response = await fetch(`http://localhost:8080/usuarios/assignedUser/${email}`, {
+  const response = await fetch(`${baseUrl}usuarios/assignedUser/${email}`, {
     method: "GET",
     headers: getAuthHeaders()
   })
@@ -56,7 +67,8 @@ const UserService = {
   getUserInfos,
   getAuthHeaders,
   getUsers,
-  assignedUser
+  assignedUser,
+  getUserId
 }
 
 export default UserService

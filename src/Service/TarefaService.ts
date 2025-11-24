@@ -15,6 +15,8 @@ interface Tarefa {
   anexo?: Anexo[];
 }
 
+const baseUrl = 'http://localhost:8086/tarefas'
+
 const safeResponseHandler = async (response: Response) => {
     if (!response.ok) {
         throw new Error(`Erro na chamada à API: Status ${response.status}`);
@@ -25,7 +27,7 @@ const safeResponseHandler = async (response: Response) => {
 };
 
 const deleteTarefa = async (id: string) => {
-    const response = await fetch(`http://localhost:8080/tarefas/excluir/${id}`, {
+    const response = await fetch(`${baseUrl}/excluir/${id}`, {
         method: "DELETE",
         headers: UserService.getAuthHeaders()
     });
@@ -33,7 +35,7 @@ const deleteTarefa = async (id: string) => {
 };
 
 const criarTarefa = async (tarefa: Tarefa) => {
-    const response = await fetch('http://localhost:8080/tarefas/criar', {
+    const response = await fetch(`${baseUrl}/criar`, {
         method: 'POST',
         headers: UserService.getAuthHeaders(),
         body: JSON.stringify(tarefa),
@@ -44,7 +46,7 @@ const criarTarefa = async (tarefa: Tarefa) => {
 
 const atualizarTarefa = async (tarefa: Tarefa) => {
     if (!tarefa.id) throw new Error('ID da tarefa é obrigatório para atualização');
-    const response = await fetch(`http://localhost:8080/tarefas/editar/${tarefa.id}`, {
+    const response = await fetch(`${baseUrl}/editar/${tarefa.id}`, {
         method: 'PUT',
         headers: UserService.getAuthHeaders(),
         body: JSON.stringify(tarefa),
@@ -54,7 +56,7 @@ const atualizarTarefa = async (tarefa: Tarefa) => {
 };
 
 const fetchTarefas = async () => {
-    const response = await fetch('http://localhost:8080/tarefas', {
+    const response = await fetch(`${baseUrl}`, {
         method: 'GET',
         headers: UserService.getAuthHeaders()
     });
@@ -62,7 +64,7 @@ const fetchTarefas = async () => {
 };
 
     const fetchTarefasPorResponsavel = async (responsavelId: string) => {
-    const url = `http://localhost:8080/tarefas?responsavel=${encodeURIComponent(responsavelId)}`;
+    const url = `${baseUrl}?responsavel=${encodeURIComponent(responsavelId)}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: UserService.getAuthHeaders()
