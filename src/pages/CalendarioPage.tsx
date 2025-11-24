@@ -1,139 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Calendar from '../components/Calendar/Calendar';
-import GoogleCalendarSync from '../components/GoogleCalendarSync/GoogleCalendarSync';
 import type Tarefa from '../Interface/TarefaInterface';
+import CalendarioService from '../Service/CalendarioService';
 import taskIcon from '../assets/taskweb.png';
 import userIcon from '../assets/userWhite.png';
-
-// Mock data para fins demonstrativos
-const MOCK_TAREFAS: Tarefa[] = [
-  {
-    id: '1',
-    titulo: 'Marketing',
-    descricao: 'Tarefas relacionadas ao marketing',
-    tema: 'Marketing',
-    status: 'em_andamento',
-    responsavel: {
-      id: '1',
-      nome: 'Otávio Vianna Lima',
-      email: 'otavio@gmail.com'
-    },
-    dataEntrega: '2025-10-02T10:00:00',
-    ativo: true
-  },
-  {
-    id: '2',
-    titulo: 'Desenvolvimento',
-    descricao: 'Atividades de desenvolvimento',
-    tema: 'Desenvolvimento',
-    status: 'em_andamento',
-    responsavel: {
-      id: '1',
-      nome: 'Otávio Vianna Lima',
-      email: 'otavio@gmail.com'
-    },
-    dataEntrega: '2025-10-03T14:00:00',
-    ativo: true
-  },
-  {
-    id: '3',
-    titulo: 'Pagamento',
-    descricao: 'Processar pagamentos',
-    tema: 'Pagamento',
-    status: 'pendente',
-    responsavel: {
-      id: '1',
-      nome: 'Otávio Vianna Lima',
-      email: 'otavio@gmail.com'
-    },
-    dataEntrega: '2025-10-08T09:00:00',
-    ativo: true
-  },
-  {
-    id: '4',
-    titulo: 'Pagamento Marketing',
-    descricao: 'Pagamento da equipe de marketing',
-    tema: 'Pagamento',
-    status: 'pendente',
-    responsavel: {
-      id: '1',
-      nome: 'Otávio Vianna Lima',
-      email: 'otavio@gmail.com'
-    },
-    dataEntrega: '2025-10-09T10:00:00',
-    ativo: true
-  },
-  {
-    id: '5',
-    titulo: 'Design',
-    descricao: 'Tarefas de design',
-    tema: 'Design',
-    status: 'em_andamento',
-    responsavel: {
-      id: '1',
-      nome: 'Otávio Vianna Lima',
-      email: 'otavio@gmail.com'
-    },
-    dataEntrega: '2025-10-09T15:00:00',
-    ativo: true
-  },
-  {
-    id: '6',
-    titulo: 'Design',
-    descricao: 'Continuação das tarefas de design',
-    tema: 'Design',
-    status: 'em_andamento',
-    responsavel: {
-      id: '1',
-      nome: 'Otávio Vianna Lima',
-      email: 'otavio@gmail.com'
-    },
-    dataEntrega: '2025-10-11T11:00:00',
-    ativo: true
-  },
-  {
-    id: '7',
-    titulo: 'Desenvolvimento',
-    descricao: 'Continuação do desenvolvimento',
-    tema: 'Desenvolvimento',
-    status: 'em_andamento',
-    responsavel: {
-      id: '1',
-      nome: 'Otávio Vianna Lima',
-      email: 'otavio@gmail.com'
-    },
-    dataEntrega: '2025-10-18T16:00:00',
-    ativo: true
-  },
-  {
-    id: '8',
-    titulo: 'Pagamento',
-    descricao: 'Pagamentos do mês',
-    tema: 'Pagamento',
-    status: 'pendente',
-    responsavel: {
-      id: '1',
-      nome: 'Otávio Vianna Lima',
-      email: 'otavio@gmail.com'
-    },
-    dataEntrega: '2025-10-18T10:00:00',
-    ativo: true
-  },
-  {
-    id: '9',
-    titulo: 'Suporte',
-    descricao: 'Atendimento ao cliente',
-    tema: 'Suporte',
-    status: 'pendente',
-    responsavel: {
-      id: '1',
-      nome: 'Otávio Vianna Lima',
-      email: 'otavio@gmail.com'
-    },
-    dataEntrega: '2025-10-22T13:00:00',
-    ativo: true
-  }
-] as Tarefa[];
 
 const CalendarPage: React.FC = () => {
   const [tarefas, setTarefas] = useState<Tarefa[]>([]);
@@ -148,8 +18,17 @@ const CalendarPage: React.FC = () => {
   const carregarTarefas = async () => {
     try {
       setLoading(true);
-      await new Promise(resolve => setTimeout(resolve, 500));
-      setTarefas(MOCK_TAREFAS);
+      const userInfos = localStorage.getItem('authData');
+      const userInfosParsed = userInfos ? JSON.parse(userInfos) : null;
+      const usuarioId = userInfosParsed?.userId;
+
+      if (!usuarioId) {
+        console.error('UsuarioId não encontrado');
+        return;
+      }
+
+      const data = await CalendarioService.listarPorUsuario(usuarioId);
+      setTarefas(data);
     } catch (error) {
       console.error('Erro ao carregar tarefas:', error);
     } finally {
@@ -157,13 +36,32 @@ const CalendarPage: React.FC = () => {
     }
   };
 
-  const handleTaskClick = (tarefa: Tarefa) => {
+  const handleTaskClick = async (tarefa: Tarefa) => {
     const day = new Date(tarefa.dataEntrega).toLocaleDateString('pt-BR');
-    const tarefasDoDia = tarefas.filter(
-      t => new Date(t.dataEntrega).toLocaleDateString('pt-BR') === day
-    );
-    setSelectedDateTarefas(tarefasDoDia);
-    setIsModalOpen(true);
+    const dia = new Date(tarefa.dataEntrega).toISOString().split('T')[0];
+
+    try {
+      const userInfos = localStorage.getItem('authData');
+      const userInfosParsed = userInfos ? JSON.parse(userInfos) : null;
+      const usuarioId = userInfosParsed?.userId;
+
+      if (!usuarioId) {
+        console.error('UsuarioId não encontrado');
+        return;
+      }
+
+      const tarefasDoDia = await CalendarioService.tarefasDoDia(usuarioId, dia);
+      setSelectedDateTarefas(tarefasDoDia);
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error('Erro ao carregar tarefas do dia:', error);
+
+      const tarefasDoDia = tarefas.filter(
+        t => new Date(t.dataEntrega).toLocaleDateString('pt-BR') === day
+      );
+      setSelectedDateTarefas(tarefasDoDia);
+      setIsModalOpen(true);
+    }
   };
 
   const handleCloseModal = () => {
@@ -184,11 +82,6 @@ const CalendarPage: React.FC = () => {
       <Calendar 
         tarefas={tarefas} 
         onTaskClick={handleTaskClick}
-        syncButton={
-          <GoogleCalendarSync 
-            onClick={() => console.log('Sincronizar com Google Calendar')}
-          />
-        }
       />
       
       {isModalOpen && selectedDateTarefas.length > 0 && (
