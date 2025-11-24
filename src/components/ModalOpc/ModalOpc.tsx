@@ -1,9 +1,9 @@
 import Trash from '../../assets/delete.png'
 import Edit from '../../assets/edit.png'
-import './ModalOpc.css'
 import { useTaskModal } from '../../context/TaskModalContext';
 import { useDeleteModal } from '../../context/DeleteModalContext';
 import type Tarefa from '../../Interface/TarefaInterface';
+import './ModalOpc.css'
 
 interface ModalOpcProps {
   condicaoModal: boolean;
@@ -23,7 +23,7 @@ export default function ModalOpc(props: ModalOpcProps) {
             <span>Editar</span>
           </li>
           <li onClick={() => props.tarefa?.id && openDeleteModal(props.tarefa.id)} className="flex items-center gap-3 px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm text-red-600">
-            <img src={Trash} alt="" className="h-5 w-5" />
+            <img src={Trash} alt="" className="h-5 w-5"/>
             <span>Excluir</span>
           </li>
         </ul>

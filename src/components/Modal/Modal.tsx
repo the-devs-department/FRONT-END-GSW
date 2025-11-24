@@ -305,7 +305,7 @@ export default function Modal(props: ModalProps) {
   const modalTitle = props.tipoModal === 'Nova' ? 'Nova Tarefa' : 'Atualizar Tarefa';
   const modalButtonText = props.tipoModal === 'Nova' ? 'Criar Tarefa' : props.tipoModal === 'Atualizar' ? 'Atualizar Tarefa' : '';
   return (
-    <div id="IdForms" className={props.condicaoModal ? 'modal-opened' : 'modal-closed'}>
+    <div id="taskForms" className={props.condicaoModal ? 'modal-opened' : 'modal-closed'}>
       <div className='modal-header'>
         <span onClick={props.closeModal}>&times;</span>
       </div>

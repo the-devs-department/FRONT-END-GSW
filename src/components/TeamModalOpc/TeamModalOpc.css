@@ -1,0 +1,16 @@
+.team-opc-closed{
+  display: none;
+}
+
+.team-opc-opened {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 25%;
+  right: 50px;
+  z-index: 1;
+  width: 128px;
+  height: 74px;
+  border-radius: .6rem;
+}

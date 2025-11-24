@@ -7,6 +7,7 @@ import openFolder from '../../assets/openFolder.png'
 import teamIcon from '../../assets/team.png'
 import { Link, useLocation, useParams } from 'react-router-dom'
 import { ScreenWidth } from '../../hooks/ScreenWidth'
+import './Navbar.css'
 
 interface NavbarProps {
     isNavbarOpen: boolean;
