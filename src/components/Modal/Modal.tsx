@@ -66,7 +66,6 @@ export default function Modal(props: ModalProps) {
     'Concluída': 'CONCLUIDA'
   }
 
-  // Buscar usuários
   useEffect(() => {
     if (props.condicaoModal) {
       const userTokenAndId = UserService.getUserTokenAndId()
@@ -87,7 +86,6 @@ export default function Modal(props: ModalProps) {
     }
   }, [props.condicaoModal])
 
-  // Montando a tarefa caso seja para atualizar
   useEffect(() => {
     if (props.tarefaSelecionada) {
       setTaskTitle(props.tarefaSelecionada.titulo ?? "");

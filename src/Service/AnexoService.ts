@@ -2,10 +2,12 @@ import type Anexo from '../Interface/AnexoInterface';
 import type { AnexoDto } from '../Interface/dto/AnexoDtoInterface';
 import UserService from './UserService';
 
+const baseUrl = 'http://localhost:8086/'
+
 class AnexoService {
 
     async listarAnexosDaTarefa(tarefaId: string): Promise<Anexo[]> {
-        const response = await fetch(`http://localhost:8080/tarefas/${tarefaId}/anexos`, {
+        const response = await fetch(`${baseUrl}tarefas/${tarefaId}/anexos`, {
             method: 'GET',
             headers: UserService.getAuthHeaders(),
         });
@@ -18,7 +20,7 @@ class AnexoService {
     }
 
     async buscarAnexoPorId(tarefaId: string, anexoId: string): Promise<Anexo> {
-        const response = await fetch(`http://localhost:8080/tarefas/${tarefaId}/anexos/${anexoId}`, {
+        const response = await fetch(`${baseUrl}tarefas/${tarefaId}/anexos/${anexoId}`, {
             method: 'GET',
             headers: UserService.getAuthHeaders(),
         });
@@ -40,7 +42,7 @@ class AnexoService {
             throw new Error("Token de autenticação não encontrado.");
         }
 
-        const response = await fetch(`http://localhost:8080/tarefas/${tarefaId}/anexos/upload`, {
+        const response = await fetch(`${baseUrl}tarefas/${tarefaId}/anexos/upload`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -56,7 +58,7 @@ class AnexoService {
     }
 
     async atualizarAnexo(tarefaId: string, anexoId: string, anexoDto: AnexoDto): Promise<Anexo> {
-        const response = await fetch(`http://localhost:8080/tarefas/${tarefaId}/anexos/${anexoId}`, {
+        const response = await fetch(`${baseUrl}tarefas/${tarefaId}/anexos/${anexoId}`, {
             method: 'PUT',
             headers: UserService.getAuthHeaders(),
             body: JSON.stringify(anexoDto),
@@ -76,7 +78,7 @@ class AnexoService {
             throw new Error("Token de autenticação não encontrado.");
         }
 
-        const response = await fetch(`http://localhost:8080/tarefas/${tarefaId}/anexos/${anexoId}`, {
+        const response = await fetch(`${baseUrl}tarefas/${tarefaId}/anexos/${anexoId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -89,7 +91,7 @@ class AnexoService {
     }
 
     async obterUrlDownload(tarefaId: string, anexoId: string): Promise<string> {
-        const response = await fetch(`http://localhost:8080/tarefas/${tarefaId}/anexos/${anexoId}/download`, {
+        const response = await fetch(`${baseUrl}tarefas/${tarefaId}/anexos/${anexoId}/download`, {
             method: 'GET',
             headers: UserService.getAuthHeaders(),
         });
@@ -108,7 +110,7 @@ class AnexoService {
             throw new Error("Token de autenticação não encontrado.");
         }
 
-        const response = await fetch(`http://localhost:8080/tarefas/${tarefaId}/anexos/${anexoId}/arquivo/download`, {
+        const response = await fetch(`${baseUrl}tarefas/${tarefaId}/anexos/${anexoId}/arquivo/download`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,

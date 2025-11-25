@@ -1,10 +1,5 @@
 import { createContext, useContext, useState, type ReactNode } from "react"
-
-interface Team {
-  nome: string,
-  membros: string[],
-  admins: string[]
-}
+import type Team  from "../Interface/TeamInterface"
 
 interface TeamModalType {
   isTeamModalOpen: boolean,

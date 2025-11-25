@@ -3,7 +3,7 @@ import TaskList from "../components/TaskList/TaskList";
 import type Tarefa from "../Interface/TarefaInterface";
 import { useCallback, useEffect, useState } from "react";
 import TarefaService from "../Service/TarefaService";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams, Link } from "react-router-dom";
 import type { RootLayoutContext } from "./RootLayout";
 
 type AllTasksContext = RootLayoutContext
@@ -12,6 +12,7 @@ export default function TodasTarefas() {
   const [tarefas, setTarefas] = useState<Tarefa[]>([]);
   const [loading, setLoading] = useState(true);
   const [userRoles, setUserRoles] = useState<null | String[]>(null)
+  const {teamId} = useParams();
   
   const {setCallbackRecarregarTarefas} = useOutletContext<AllTasksContext>();
   const navigate = useNavigate();
@@ -38,6 +39,15 @@ export default function TodasTarefas() {
       setLoading(false);
     }
   }, [navigate]);
+
+  if (!teamId) {
+    return (
+      <div className="w-full h-full flex flex-col items-center justify-center">
+        <p className="text-gray-700 text-xl mb-4">Você não selecionou nenhuma equipe!</p>
+        <Link to="/home" className="bg-gray-800 p-2 rounded text-xl hover:bg-gray-950">Voltar</Link>
+      </div>
+    );
+  }
 
   useEffect(() => {
     carregarTarefas();

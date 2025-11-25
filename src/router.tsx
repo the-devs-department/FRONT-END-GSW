@@ -9,6 +9,7 @@ import CalendarioPage from "./pages/CalendarioPage";
 import Teams from "./pages/Teams";
 import SolicitarEmailRecuperacao from "./pages/recuperacao-senha/SolicitarEmailRecuperacaoPage";
 import ResetarSenhaPage from "./pages/recuperacao-senha/ResetarSenha";
+import Teams from "./pages/Teams";
 
 const router = createBrowserRouter([
   {
@@ -33,18 +34,28 @@ const router = createBrowserRouter([
   }
   ,
   {
-    path: '/home',
+    path: '/tarefas/:teamId',
     element: <RootLayout />,
     children: [
       {
         index: true,
         element: <Home />
       }, {
-        path: "todas-tarefas",
+        path: "todas",
         element: <TodasTarefas />
       }, {
         path: "log-auditoria",
-        element: <Log/>
+
+        element: <Log />
+      }
+    ]
+  }, {
+    path: '/home',
+    element: <RootLayout />,
+    children: [
+      {
+        index: true,
+        element: <Teams />
       }, {
         path: "equipes",
         element: <Teams/> 
@@ -52,7 +63,7 @@ const router = createBrowserRouter([
         path: "calendario",
         element: <CalendarioPage />
       }
-      ]
+    ]
   }
 ])
 
