@@ -8,10 +8,11 @@ O objetivo deste projeto é desenvolver uma plataforma web para a GSW focada no 
 ---
 ## 👥 Membros da Equipe
 
+
 | Foto | Função | Nome | Links |
 | :---: | :---: | :---: | :---: |
 | <a target="_blank" rel="noopener noreferrer" href="https://github.com/IssamiU.png?size=50"><img src="https://github.com/IssamiU.png?size=50" width="50px" style="max-width: 100%;"></a> | **Product Owner** | Issami Umeoka | <a href="https://www.linkedin.com/in/issami-umeoka-786716226/" rel="nofollow"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a> <a href="https://github.com/IssamiU"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /></a> |
-| <a target="_blank" rel="noopener noreferrer" href="https://github.com/tiagow2.png?size=50"><img src="https://github.com/tiagow2.png?size=50" width="50px" style="max-width: 100%;"></a> | **Scrum Master** | Tiago Freitas | <a href="https://www.linkedin.com/in/tiago-freitas-74730b2a9/" rel="nofollow"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a> <a href="https://github.com/tiagow2"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /></a> |
+| <a target="_blank" rel="noopener noreferrer" href="https://github.com/tiagow2.png?size=50"><img src="https://github.com/tiagow2.png?size=50" width="50px" style="max-width: 100%;"></a> | **Scrum Master** | Tiago Freitas | <a href="https://www.linkedin.com/in/tiago-freitas-74730b2a9/" rel="nofollow"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a> <a href="https://github.com/tiagow2"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /></a>
 | <a target="_blank" rel="noopener noreferrer" href="https://github.com/AlmdGuilherme.png?size=50"><img src="https://github.com/AlmdGuilherme.png?size=50" width="50px" style="max-width: 100%;"></a> | **Dev Team** | Guilherme Almeida | <a href="https://www.linkedin.com/in/guilherme-almeida-profile/" rel="nofollow"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a> <a href="https://github.com/AlmdGuilherme"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /></a> |
 | <a target="_blank" rel="noopener noreferrer" href="https://github.com/pedro-h-martins.png?size=50"><img src="https://github.com/pedro-h-martins.png?size=50" width="50px" style="max-width: 100%;"></a> | **Dev Team** | Pedro Martins | <a href="https://www.linkedin.com/in/pedro-henrique-martins-55a0752a4/" rel="nofollow"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a> <a href="https://github.com/pedro-h-martins"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /></a> |
 | <a target="_blank" rel="noopener noreferrer" href="https://github.com/tuzzooz.png?size=50"><img src="https://github.com/tuzzooz.png?size=50" width="50px" style="max-width: 100%;"></a> | **Dev Team** | Otávio Vianna | <a href="https://www.linkedin.com/in/ot%C3%A1vio-vianna-lima-1b26a932a/" rel="nofollow"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a> <a href="https://github.com/tuzzooz"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /></a> |
@@ -72,337 +73,261 @@ O objetivo deste projeto é desenvolver uma plataforma web para a GSW focada no 
   - **Vídeo de Incremento:** [🎥 Vídeo de Incremento](LINK_DO_VIDEO_DO_YOUTUBE)
 
 ------
-# 🚀 Guia de Execução do Projeto - Frontend GSW
+# 🚀 Como Executar o Projeto - Back-end
 
-Este documento contém todas as informações necessárias para executar o projeto frontend do sistema de Gerenciamento de Tarefas Colaborativas GSW.
-
----
+Este documento descreve todos os passos necessários para executar a arquitetura de microserviços do projeto GSW.
 
 ## 📋 Pré-requisitos
 
-Antes de começar, certifique-se de ter instalado em sua máquina:
+Antes de executar o projeto, certifique-se de ter instalado:
 
-### Obrigatórios:
-- **Node.js** (versão 18.x ou superior) - [Download](https://nodejs.org/)
-- **npm** (geralmente vem com o Node.js) ou **yarn**
-- **Git** - [Download](https://git-scm.com/)
+- **Java 21** ou superior
+- **Maven 3.6+** (ou use o Maven Wrapper incluído no projeto)
+- **MongoDB** (acesso ao cluster configurado)
+- **Redis** (para cache e sessões)
+- **Git** (para clonar o repositório)
 
-### Verificar instalação:
-```powershell
-node --version
-npm --version
-git --version
+## 🔧 Configuração Inicial
+
+### 1. Variáveis de Ambiente
+
+Crie um arquivo `.env` na raiz de cada microserviço e do API Gateway com as seguintes variáveis:
+
+```properties
+# Configurações de autenticação
+JWT_SECRET=sua_chave_secreta_aqui
+REDIS_URL=redis://localhost:6379
+
+# Configurações do MongoDB
+MONGO_PASS=sua_senha_do_mongodb
 ```
 
----
+> ⚠️ **Importante:** Nunca commite o arquivo `.env` no repositório. Ele já está no `.gitignore`.
 
-## 📦 Instalação
+### 2. Ordem de Execução
 
-### 1. Clone o repositório
+Os microserviços devem ser executados na seguinte ordem para garantir que todas as dependências estejam disponíveis:
 
-```powershell
-git clone https://github.com/the-devs-department/FRONT-END-GSW.git
-cd FRONT-END-GSW
-```
+1. **service-usuario** (porta 8080)
+2. **service-tarefa** (porta 8081)
+3. **service-anexo** (porta 8082)
+4. **service-log** (porta 8083)
+5. **service-notificacao** (porta 8084)
+6. **service-equipe** (porta 8085)
+7. **api-gateway** (porta 8086)
 
-### 2. Instale as dependências
+## 🏃 Executando os Microserviços
 
-```powershell
-npm install
-```
+### Opção 1: Usando Maven Wrapper (Recomendado)
 
-Este comando irá instalar todas as dependências necessárias listadas no `package.json`, incluindo:
-- **React 19.1.1** - Biblioteca principal
-- **React Router DOM 7.8.2** - Roteamento
-- **React Toastify 11.0.5** - Notificações
-- **React Icons 5.5.0** - Ícones
-- **JWT Decode 4.0.0** - Decodificação de tokens
-- **SockJS Client e StompJS** - WebSocket para notificações em tempo real
-- **Tailwind CSS 3.4.17** - Framework CSS
-- **TypeScript 5.8.3** - Superset JavaScript com tipagem
-- **Vite 7.1.2** - Build tool e dev server
-
----
-
-## ⚙️ Configuração
-
-### Backend API
-
-O frontend está configurado para se comunicar com o backend em `http://localhost:8080`. 
-
-**IMPORTANTE:** Certifique-se de que o backend esteja rodando antes de iniciar o frontend.
-
-Os endpoints utilizados são:
-- `http://localhost:8080/auth/login` - Autenticação
-- `http://localhost:8080/usuarios` - Gerenciamento de usuários
-- `http://localhost:8080/tarefas` - Gerenciamento de tarefas
-- `http://localhost:8080/anexos` - Upload e download de anexos
-- `http://localhost:8080/auditoria` - Logs de auditoria
-
-### WebSocket (Notificações em Tempo Real)
-
-O sistema utiliza WebSocket para notificações em tempo real. Certifique-se de que o backend tenha o endpoint WebSocket configurado em:
-- `http://localhost:8080/ws`
-
----
-
-## 🏃‍♂️ Executando o Projeto
-
-### Modo Desenvolvimento
-
-Para iniciar o servidor de desenvolvimento:
+#### Windows (PowerShell):
 
 ```powershell
-npm run dev
+# 1. Service Usuário (porta 8080)
+cd service-usuario
+.\mvnw.cmd spring-boot:run
+
+# Em outro terminal - 2. Service Tarefa (porta 8081)
+cd service-tarefa
+.\mvnw.cmd spring-boot:run
+
+# Em outro terminal - 3. Service Anexo (porta 8082)
+cd service-anexo
+.\mvnw.cmd spring-boot:run
+
+# Em outro terminal - 4. Service Log (porta 8083)
+cd service-log
+.\mvnw.cmd spring-boot:run
+
+# Em outro terminal - 5. Service Notificação (porta 8084)
+cd service-notificacao
+.\mvnw.cmd spring-boot:run
+
+# Em outro terminal - 6. Service Equipe (porta 8085)
+cd service-equipe
+.\mvnw.cmd spring-boot:run
+
+# Em outro terminal - 7. API Gateway (porta 8086)
+cd api-gateway
+.\mvnw.cmd spring-boot:run
 ```
 
-O servidor irá iniciar e a aplicação estará disponível em:
-- **URL:** `http://localhost:5173`
-- **Porta padrão do Vite:** 5173
+#### Linux/macOS:
 
-A aplicação será recarregada automaticamente quando você fizer alterações nos arquivos.
+```bash
+# 1. Service Usuário (porta 8080)
+cd service-usuario
+./mvnw spring-boot:run
 
-### Modo Produção
+# Em outro terminal - 2. Service Tarefa (porta 8081)
+cd service-tarefa
+./mvnw spring-boot:run
 
-#### Build para produção:
+# Em outro terminal - 3. Service Anexo (porta 8082)
+cd service-anexo
+./mvnw spring-boot:run
+
+# Em outro terminal - 4. Service Log (porta 8083)
+cd service-log
+./mvnw spring-boot:run
+
+# Em outro terminal - 5. Service Notificação (porta 8084)
+cd service-notificacao
+./mvnw spring-boot:run
+
+# Em outro terminal - 6. Service Equipe (porta 8085)
+cd service-equipe
+./mvnw spring-boot:run
+
+# Em outro terminal - 7. API Gateway (porta 8086)
+cd api-gateway
+./mvnw spring-boot:run
+```
+
+### Opção 2: Usando Maven Instalado
+
+Se você tem o Maven instalado globalmente:
 
 ```powershell
-npm run build
+# Substitua .\mvnw.cmd por mvn em cada comando acima
+cd service-usuario
+mvn spring-boot:run
 ```
 
-Este comando irá:
-1. Compilar o TypeScript (`tsc -b`)
-2. Criar o build otimizado do Vite
-3. Gerar os arquivos estáticos na pasta `dist/`
+## 📊 Portas dos Serviços
 
-#### Preview do build de produção:
+| Serviço | Porta | Descrição |
+|---------|-------|-----------|
+| service-usuario | 8080 | Gerenciamento de usuários e autenticação |
+| service-tarefa | 8081 | Gerenciamento de tarefas |
+| service-anexo | 8082 | Gerenciamento de anexos de arquivos |
+| service-log | 8083 | Auditoria e logs de atividades |
+| service-notificacao | 8084 | Sistema de notificações e WebSocket |
+| service-equipe | 8085 | Gerenciamento de equipes e membros |
+| api-gateway | 8086 | Gateway principal (ponto de entrada) |
 
+## 🔍 Verificando se os Serviços Estão Rodando
+
+Após iniciar cada serviço, você pode verificar se estão funcionando acessando:
+
+### Health Check (APIs individuais)
+- Service Usuário: http://localhost:8080/actuator/health (se configurado)
+- Service Tarefa: http://localhost:8081/actuator/health (se configurado)
+- Service Anexo: http://localhost:8082/actuator/health (se configurado)
+- Service Log: http://localhost:8083/actuator/health (se configurado)
+- Service Notificação: http://localhost:8084/actuator/health (se configurado)
+- Service Equipe: http://localhost:8085/actuator/health (se configurado)
+
+### Swagger UI (Documentação da API)
+- API Gateway: http://localhost:8086/swagger-ui.html
+- Service Usuário: http://localhost:8080/swagger-ui.html
+- Service Tarefa: http://localhost:8081/swagger-ui.html
+- Service Anexo: http://localhost:8082/swagger-ui.html
+- Service Log: http://localhost:8083/swagger-ui.html
+- Service Notificação: http://localhost:8084/swagger-ui.html
+- Service Equipe: http://localhost:8085/swagger-ui.html
+
+## 🌐 Acessando a Aplicação
+
+Após todos os serviços estarem rodando, acesse a aplicação através do API Gateway:
+
+**URL Principal:** http://localhost:8086
+
+### Rotas Configuradas no Gateway:
+
+- `/usuarios/**` → Service Usuário (8080)
+- `/tarefas/**` → Service Tarefa (8081)
+- `/equipes/**` → Service Equipe (8085)
+- `/anexos/**` → Service Anexo (8082)
+- `/logs/**` → Service Log (8083)
+- `/notificacoes/**` → Service Notificação (8084)
+- `/ws/**` → WebSocket do Service Notificação (8084)
+
+## 🛠️ Troubleshooting
+
+### Erro: "Port already in use"
+Se alguma porta já estiver em uso, você pode:
+1. Identificar o processo usando a porta:
+   ```powershell
+   netstat -ano | findstr :8080
+   ```
+2. Encerrar o processo ou alterar a porta no `application.properties`
+
+### Erro: "Unable to connect to MongoDB"
+- Verifique se a senha do MongoDB está correta no arquivo `.env`
+- Confirme que você tem acesso à internet (MongoDB Atlas)
+- Verifique as credenciais de acesso ao cluster
+
+### Erro: "Unable to connect to Redis"
+- Verifique se o Redis está rodando localmente:
+  ```powershell
+  redis-cli ping
+  ```
+- Ou inicie o Redis se necessário
+
+### Erro ao compilar
+Se houver erros de compilação, tente limpar e compilar novamente:
 ```powershell
-npm run preview
+.\mvnw.cmd clean install
 ```
 
-Isso iniciará um servidor local para visualizar o build de produção em `http://localhost:4173`
+## 🧪 Testando a Aplicação
+
+Após todos os serviços estarem rodando:
+
+1. Acesse o Swagger UI do API Gateway: http://localhost:8086/swagger-ui.html
+2. Teste os endpoints disponíveis
+3. Crie um usuário através do endpoint `/usuarios`
+4. Faça login para obter o token JWT
+5. Use o token nas requisições autenticadas
+
+## 📝 Logs
+
+Para acompanhar os logs de cada serviço:
+- Os logs aparecem no terminal onde o serviço foi iniciado
+- Nível de log padrão: INFO
+- Para mais detalhes, você pode alterar o nível em `application.properties`:
+  ```properties
+  logging.level.com.gsw=DEBUG
+  ```
+
+## ⏹️ Encerrando os Serviços
+
+Para parar cada serviço:
+- Pressione `Ctrl + C` no terminal onde o serviço está rodando
+- Ou feche o terminal
+
+## 🔄 Reiniciando Após Mudanças no Código
+
+Após fazer alterações no código:
+
+1. Pare o serviço afetado (`Ctrl + C`)
+2. Recompile e reinicie:
+   ```powershell
+   .\mvnw.cmd clean spring-boot:run
+   ```
+
+## 💡 Dicas
+
+- Use o **Spring Boot DevTools** (já incluído) para reload automático durante o desenvolvimento
+- Mantenha todos os terminais visíveis para monitorar logs em tempo real
+- Execute os serviços em ordem para evitar erros de dependência
+- Sempre inicie o API Gateway por último
+
+## 📚 Documentação Adicional
+
+- [Rotas Swagger](docs/Rotas%20Swagger.md)
+- [Documentação das Sprints](docs/sprints/)
+- [Product Backlog](docs/Backlog%20do%20Produto.md)
 
 ---
 
-## 🔍 Comandos Disponíveis
+✅ **Pronto!** Agora você tem todo o ambiente back-end rodando localmente.
 
-| Comando | Descrição |
-|---------|-----------|
-| `npm run dev` | Inicia o servidor de desenvolvimento |
-| `npm run build` | Cria o build de produção |
-| `npm run preview` | Visualiza o build de produção localmente |
-| `npm run lint` | Executa o ESLint para verificar qualidade do código |
-
----
-
-## 📁 Estrutura do Projeto
-
-```
-FRONT-END-GSW/
-├── public/              # Arquivos públicos estáticos
-├── src/
-│   ├── assets/          # Imagens, fontes, etc.
-│   ├── components/      # Componentes React reutilizáveis
-│   │   ├── Cards/
-│   │   ├── FeedbackModal/
-│   │   ├── FormHeader/
-│   │   ├── Header/
-│   │   ├── Modal/
-│   │   ├── ModalDelete/
-│   │   ├── ModalOpc/
-│   │   ├── Navbar/
-│   │   ├── NavbarButton/
-│   │   ├── NotAllowed/
-│   │   ├── NotificationBell/
-│   │   └── TaskList/
-│   ├── context/         # Contextos React (Estados globais)
-│   │   ├── DeleteModalContext.tsx
-│   │   ├── FeedbackModalContext.tsx
-│   │   ├── NotificationContext.tsx
-│   │   └── TaskModalContext.tsx
-│   ├── hooks/           # Custom hooks
-│   │   └── ScreenWidth.ts
-│   ├── Interface/       # Interfaces TypeScript
-│   │   ├── AnexoInterface.ts
-│   │   ├── AuditoriaInterface.ts
-│   │   ├── TarefaInterface.ts
-│   │   └── dto/
-│   ├── pages/           # Páginas da aplicação
-│   │   ├── Cadastro.tsx
-│   │   ├── Home.tsx
-│   │   ├── Log.tsx
-│   │   ├── Login.tsx
-│   │   ├── RootLayout.tsx
-│   │   ├── TodasTarefas.tsx
-│   │   └── recuperacao-senha/
-│   ├── Service/         # Serviços para comunicação com API
-│   │   ├── AnexoService.ts
-│   │   ├── AuditoriaService.ts
-│   │   ├── TarefaService.ts
-│   │   └── UserService.ts
-│   ├── App.tsx          # Componente principal
-│   ├── main.tsx         # Ponto de entrada da aplicação
-│   ├── router.tsx       # Configuração de rotas
-│   └── index.css        # Estilos globais (Tailwind)
-├── index.html           # HTML principal
-├── package.json         # Dependências e scripts
-├── tsconfig.json        # Configuração TypeScript
-├── tailwind.config.js   # Configuração Tailwind CSS
-├── vite.config.ts       # Configuração Vite
-└── eslint.config.js     # Configuração ESLint
-```
-
----
-
-## 🌐 Rotas da Aplicação
-
-| Rota | Componente | Descrição |
-|------|-----------|-----------|
-| `/` | Redirect to `/login` | Redireciona para login |
-| `/login` | Login | Página de autenticação |
-| `/cadastro` | Cadastro | Página de registro de usuário |
-| `/auth/resetar-senha/:token` | ResetarSenha | Redefinição de senha |
-| `/recuperar-senha` | SolicitarEmailRecuperacao | Solicitação de recuperação |
-| `/home` | Home | Dashboard principal (protegida) |
-| `/tarefas` | TodasTarefas | Lista de todas as tarefas (protegida) |
-| `/log` | Log | Histórico de auditoria (protegida) |
-
-**Rotas protegidas:** Requerem autenticação via token JWT armazenado no `localStorage`.
-
----
-
-## 🔐 Autenticação
-
-O sistema utiliza **JWT (JSON Web Token)** para autenticação:
-
-1. Após o login bem-sucedido, o token é armazenado no `localStorage` com a chave `authData`
-2. O token é decodificado usando a biblioteca `jwt-decode` para obter informações do usuário
-3. O token é enviado no header `Authorization` em todas as requisições protegidas
-4. As informações armazenadas incluem:
-   - `token` - Token JWT
-   - `id` - ID do usuário
-   - `name` - Nome do usuário
-   - `email` - Email do usuário
-   - `createdAt` - Data de criação
-
----
-
-## 🎨 Tecnologias e Ferramentas
-
-### Frontend Framework:
-- **React 19.1.1** - Biblioteca JavaScript para construção de interfaces
-- **TypeScript 5.8.3** - JavaScript com tipagem estática
-
-### Estilização:
-- **Tailwind CSS 3.4.17** - Framework CSS utility-first
-- **PostCSS 8.5.6** - Processador CSS
-- **Autoprefixer 10.4.21** - Plugin PostCSS para prefixos CSS
-
-### Roteamento:
-- **React Router DOM 7.8.2** - Roteamento declarativo
-
-### Notificações:
-- **React Toastify 11.0.5** - Notificações toast elegantes
-- **SockJS Client 1.6.1** - WebSocket client
-- **StompJS 2.3.3** - Protocolo de mensagens sobre WebSocket
-
-### Ícones:
-- **React Icons 5.5.0** - Biblioteca de ícones
-
-### Build Tool:
-- **Vite 7.1.2** - Build tool extremamente rápido
-- **@vitejs/plugin-react 5.0.0** - Plugin React para Vite
-
-### Qualidade de Código:
-- **ESLint 9.33.0** - Linter JavaScript/TypeScript
-- **eslint-plugin-react-hooks** - Regras ESLint para React Hooks
-- **eslint-plugin-react-refresh** - Regras para React Refresh
-
----
-
-## 🔧 Solução de Problemas
-
-### Problema: Erro ao instalar dependências
-```powershell
-# Limpe o cache do npm e reinstale
-npm cache clean --force
-Remove-Item -Recurse -Force node_modules
-Remove-Item package-lock.json
-npm install
-```
-
-### Problema: Porta 5173 já em uso
-```powershell
-# Mude a porta no vite.config.ts ou mate o processo:
-netstat -ano | findstr :5173
-# Anote o PID e execute:
-taskkill /PID <PID> /F
-```
-
-### Problema: Backend não responde
-- Verifique se o backend está rodando em `http://localhost:8080`
-- Verifique se não há problemas de CORS
-- Verifique os logs do backend
-
-### Problema: WebSocket não conecta
-- Certifique-se de que o endpoint WebSocket está ativo no backend
-- Verifique se a URL está correta: `http://localhost:8080/ws`
-- Verifique as configurações de firewall
-
-### Problema: Erros de TypeScript
-```powershell
-# Reconstrua os tipos
-npm run build
-```
-
-### Problema: Tailwind CSS não funciona
-```powershell
-# Verifique se as configurações estão corretas
-# Reinicie o servidor de desenvolvimento
-npm run dev
-```
-
----
-
-## 📝 Observações Importantes
-
-1. **Backend obrigatório:** O frontend depende do backend estar rodando em `http://localhost:8080`
-
-2. **LocalStorage:** O sistema utiliza `localStorage` para armazenar:
-   - Dados de autenticação (`authData`)
-   - Token JWT
-   - Informações do usuário
-
-3. **Notificações em Tempo Real:** As notificações funcionam via WebSocket. Certifique-se de que:
-   - O backend suporta WebSocket
-   - O endpoint `/ws` está acessível
-   - O SockJS e STOMP estão configurados no backend
-
-4. **Upload de Arquivos:** O sistema permite anexar arquivos às tarefas. Os arquivos são enviados para:
-   - Endpoint: `http://localhost:8080/anexos/upload`
-
-5. **Responsividade:** A aplicação é totalmente responsiva e funciona em:
-   - Desktop
-   - Tablet
-   - Mobile
-
----
-
-## 🤝 Suporte
-
-Em caso de dúvidas ou problemas:
-
-1. Verifique a documentação completa em `/docs`
-2. Consulte os logs do console do navegador (F12)
-3. Verifique os logs do servidor de desenvolvimento
-4. Entre em contato com a equipe de desenvolvimento
-
----
 
 ## 📄 Documentação e Manuais <a name="documentacao"></a>
 
 - [**Documentação do Projeto**](/docs)
-- [**Manual do Usuário**]()
+- [**Manual do Usuário**](/docs/Manual%20de%20Usuário.md)
 
 ---
