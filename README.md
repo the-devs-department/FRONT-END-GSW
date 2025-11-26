@@ -12,8 +12,6 @@ O objetivo deste projeto é desenvolver uma plataforma web para a GSW focada no 
 | :---: | :---: | :---: | :---: |
 | <a target="_blank" rel="noopener noreferrer" href="https://github.com/IssamiU.png?size=50"><img src="https://github.com/IssamiU.png?size=50" width="50px" style="max-width: 100%;"></a> | **Product Owner** | Issami Umeoka | <a href="https://www.linkedin.com/in/issami-umeoka-786716226/" rel="nofollow"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a> <a href="https://github.com/IssamiU"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /></a> |
 | <a target="_blank" rel="noopener noreferrer" href="https://github.com/tiagow2.png?size=50"><img src="https://github.com/tiagow2.png?size=50" width="50px" style="max-width: 100%;"></a> | **Scrum Master** | Tiago Freitas | <a href="https://www.linkedin.com/in/tiago-freitas-74730b2a9/" rel="nofollow"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a> <a href="https://github.com/tiagow2"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /></a> |
-| <a target="_blank" rel="noopener noreferrer" href="https://github.com/pphvaz.png?size=50"><img src="https://github.com/pphvaz.png?size=50" width="50px" style="max-width: 100%;"></a> | **Dev Team** | Pedro Alves | <a href="https://www.linkedin.com/in/pedro-alves-579a93140/" rel="nofollow"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a> <a href="https://github.com/pphvaz"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /></a> |
-| <a target="_blank" rel="noopener noreferrer" href="https://github.com/nicolygz.png?size=50"><img src="https://github.com/nicolygz.png?size=50" width="50px" style="max-width: 100%;"></a> | **Dev Team** | Nicoly Guedes | <a href="https://www.linkedin.com/in/nicoly-guedes-dev/" rel="nofollow"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a> <a href="https://github.com/nicolygz"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /></a> |
 | <a target="_blank" rel="noopener noreferrer" href="https://github.com/AlmdGuilherme.png?size=50"><img src="https://github.com/AlmdGuilherme.png?size=50" width="50px" style="max-width: 100%;"></a> | **Dev Team** | Guilherme Almeida | <a href="https://www.linkedin.com/in/guilherme-almeida-profile/" rel="nofollow"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a> <a href="https://github.com/AlmdGuilherme"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /></a> |
 | <a target="_blank" rel="noopener noreferrer" href="https://github.com/pedro-h-martins.png?size=50"><img src="https://github.com/pedro-h-martins.png?size=50" width="50px" style="max-width: 100%;"></a> | **Dev Team** | Pedro Martins | <a href="https://www.linkedin.com/in/pedro-henrique-martins-55a0752a4/" rel="nofollow"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a> <a href="https://github.com/pedro-h-martins"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /></a> |
 | <a target="_blank" rel="noopener noreferrer" href="https://github.com/tuzzooz.png?size=50"><img src="https://github.com/tuzzooz.png?size=50" width="50px" style="max-width: 100%;"></a> | **Dev Team** | Otávio Vianna | <a href="https://www.linkedin.com/in/ot%C3%A1vio-vianna-lima-1b26a932a/" rel="nofollow"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a> <a href="https://github.com/tuzzooz"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub" /></a> |
@@ -59,72 +57,348 @@ O objetivo deste projeto é desenvolver uma plataforma web para a GSW focada no 
 ## 🗓️ Sprints <a name="sprints"></a>
 
 - **Sprint 1**
-  - **Status:** ⌛ Em andamento
+  - **Status:** ✅ Concluído.
   - **Documentação:** [Link para a pasta de documentos da Sprint 1](/docs/sprints/sprint-01/Documento-sprint01.md)
-  - **Vídeo de Incremento:** [🎥 Vídeo de Incremento](LINK_DO_VIDEO_DO_YOUTUBE)
+  - **Vídeo de Incremento:** [🎥 Vídeo de Incremento](https://www.youtube.com/watch?v=EUEnL0IP2Kg)
 
 - **Sprint 2**
-  - **Status:** ⛔ Não iniciado
-  - **Documentação:** [Link para a pasta de documentos da Sprint 2](PASTA_DE_DOCUMENTACAO_SPRINT_2/DoD_DoR)
-  - **Vídeo de Incremento:** [🎥 Vídeo de Incremento](LINK_DO_VIDEO_DO_YOUTUBE)
+  - **Status:** ✅ Concluído.
+  - **Documentação:** [Link para a pasta de documentos da Sprint 2](/docs/sprints/sprint-01/Documento-sprint02.md)
+  - **Vídeo de Incremento:** [🎥 Vídeo de Incremento](https://www.youtube.com/watch?v=zkHs3_X137I)
 
 - **Sprint 3**
-  - **Status:** ⛔ Não iniciado
-  - **Documentação:** [Link para a pasta de documentos da Sprint 3](PASTA_DE_DOCUMENTACAO_SPRINT_3/DoD_DoR)
+  - **Status:** ✅ Concluído.
+  - **Documentação:** [Link para a pasta de documentos da Sprint 3](/docs/sprints/sprint-01/Documento-sprint03.md)
   - **Vídeo de Incremento:** [🎥 Vídeo de Incremento](LINK_DO_VIDEO_DO_YOUTUBE)
 
 ------
-## 🚀 Como Executar o Projeto
+# 🚀 Guia de Execução do Projeto - Frontend GSW
 
-1.  **Clone o repositório e seus submódulos:**
+Este documento contém todas as informações necessárias para executar o projeto frontend do sistema de Gerenciamento de Tarefas Colaborativas GSW.
 
-    Para garantir que você baixe tanto o projeto principal quanto os submódulos (os repositórios de `frontend` e `backend`), use o comando `git clone` com a flag `--recurse-submodules`.
+---
 
-    ```bash
-    git clone --recurse-submodules [https://github.com/the-devs-department/GSW-2025.2-3Sem.git]
-    ```
+## 📋 Pré-requisitos
 
-    *Se você já clonou o projeto sem os submódulos, pode rodar o seguinte comando para baixá-los:*
-    ```bash
-    git submodule update --init --recursive
-    ```
+Antes de começar, certifique-se de ter instalado em sua máquina:
 
-2.  **Navegue até o diretório do projeto:**
+### Obrigatórios:
+- **Node.js** (versão 18.x ou superior) - [Download](https://nodejs.org/)
+- **npm** (geralmente vem com o Node.js) ou **yarn**
+- **Git** - [Download](https://git-scm.com/)
 
-    ```bash
-    cd GSW-2025.2-3Sem
-    ```
+### Verificar instalação:
+```powershell
+node --version
+npm --version
+git --version
+```
 
-3.  **Instale as dependências:**
+---
 
-    Agora, entre nas pastas dos submódulos para instalar as dependências de cada parte do projeto.
+## 📦 Instalação
 
-    ```bash
-    # Instale as dependências do frontend
-    cd FRONT-END-GSW/
-    npm install
-    # Volte para a pasta principal
-    cd ../
-    # Instale as dependências do backend
-    cd BACK-END-GSW/
-    npm install
-    ```
+### 1. Clone o repositório
 
-4.  **Inicie a aplicação:**
+```powershell
+git clone https://github.com/the-devs-department/FRONT-END-GSW.git
+cd FRONT-END-GSW
+```
 
-    Inicie o frontend e o backend em terminais separados para que ambos possam rodar ao mesmo tempo.
+### 2. Instale as dependências
 
-    ```bash
-    # No primeiro terminal, inicie o frontend:
-    cd FRONT-END-GSW/
-    npm start
-    ```
+```powershell
+npm install
+```
 
-    ```bash
-    # No segundo terminal, inicie o backend:
-    cd BACK-END-GSW/
-    npm start
-    ```
+Este comando irá instalar todas as dependências necessárias listadas no `package.json`, incluindo:
+- **React 19.1.1** - Biblioteca principal
+- **React Router DOM 7.8.2** - Roteamento
+- **React Toastify 11.0.5** - Notificações
+- **React Icons 5.5.0** - Ícones
+- **JWT Decode 4.0.0** - Decodificação de tokens
+- **SockJS Client e StompJS** - WebSocket para notificações em tempo real
+- **Tailwind CSS 3.4.17** - Framework CSS
+- **TypeScript 5.8.3** - Superset JavaScript com tipagem
+- **Vite 7.1.2** - Build tool e dev server
+
+---
+
+## ⚙️ Configuração
+
+### Backend API
+
+O frontend está configurado para se comunicar com o backend em `http://localhost:8080`. 
+
+**IMPORTANTE:** Certifique-se de que o backend esteja rodando antes de iniciar o frontend.
+
+Os endpoints utilizados são:
+- `http://localhost:8080/auth/login` - Autenticação
+- `http://localhost:8080/usuarios` - Gerenciamento de usuários
+- `http://localhost:8080/tarefas` - Gerenciamento de tarefas
+- `http://localhost:8080/anexos` - Upload e download de anexos
+- `http://localhost:8080/auditoria` - Logs de auditoria
+
+### WebSocket (Notificações em Tempo Real)
+
+O sistema utiliza WebSocket para notificações em tempo real. Certifique-se de que o backend tenha o endpoint WebSocket configurado em:
+- `http://localhost:8080/ws`
+
+---
+
+## 🏃‍♂️ Executando o Projeto
+
+### Modo Desenvolvimento
+
+Para iniciar o servidor de desenvolvimento:
+
+```powershell
+npm run dev
+```
+
+O servidor irá iniciar e a aplicação estará disponível em:
+- **URL:** `http://localhost:5173`
+- **Porta padrão do Vite:** 5173
+
+A aplicação será recarregada automaticamente quando você fizer alterações nos arquivos.
+
+### Modo Produção
+
+#### Build para produção:
+
+```powershell
+npm run build
+```
+
+Este comando irá:
+1. Compilar o TypeScript (`tsc -b`)
+2. Criar o build otimizado do Vite
+3. Gerar os arquivos estáticos na pasta `dist/`
+
+#### Preview do build de produção:
+
+```powershell
+npm run preview
+```
+
+Isso iniciará um servidor local para visualizar o build de produção em `http://localhost:4173`
+
+---
+
+## 🔍 Comandos Disponíveis
+
+| Comando | Descrição |
+|---------|-----------|
+| `npm run dev` | Inicia o servidor de desenvolvimento |
+| `npm run build` | Cria o build de produção |
+| `npm run preview` | Visualiza o build de produção localmente |
+| `npm run lint` | Executa o ESLint para verificar qualidade do código |
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+FRONT-END-GSW/
+├── public/              # Arquivos públicos estáticos
+├── src/
+│   ├── assets/          # Imagens, fontes, etc.
+│   ├── components/      # Componentes React reutilizáveis
+│   │   ├── Cards/
+│   │   ├── FeedbackModal/
+│   │   ├── FormHeader/
+│   │   ├── Header/
+│   │   ├── Modal/
+│   │   ├── ModalDelete/
+│   │   ├── ModalOpc/
+│   │   ├── Navbar/
+│   │   ├── NavbarButton/
+│   │   ├── NotAllowed/
+│   │   ├── NotificationBell/
+│   │   └── TaskList/
+│   ├── context/         # Contextos React (Estados globais)
+│   │   ├── DeleteModalContext.tsx
+│   │   ├── FeedbackModalContext.tsx
+│   │   ├── NotificationContext.tsx
+│   │   └── TaskModalContext.tsx
+│   ├── hooks/           # Custom hooks
+│   │   └── ScreenWidth.ts
+│   ├── Interface/       # Interfaces TypeScript
+│   │   ├── AnexoInterface.ts
+│   │   ├── AuditoriaInterface.ts
+│   │   ├── TarefaInterface.ts
+│   │   └── dto/
+│   ├── pages/           # Páginas da aplicação
+│   │   ├── Cadastro.tsx
+│   │   ├── Home.tsx
+│   │   ├── Log.tsx
+│   │   ├── Login.tsx
+│   │   ├── RootLayout.tsx
+│   │   ├── TodasTarefas.tsx
+│   │   └── recuperacao-senha/
+│   ├── Service/         # Serviços para comunicação com API
+│   │   ├── AnexoService.ts
+│   │   ├── AuditoriaService.ts
+│   │   ├── TarefaService.ts
+│   │   └── UserService.ts
+│   ├── App.tsx          # Componente principal
+│   ├── main.tsx         # Ponto de entrada da aplicação
+│   ├── router.tsx       # Configuração de rotas
+│   └── index.css        # Estilos globais (Tailwind)
+├── index.html           # HTML principal
+├── package.json         # Dependências e scripts
+├── tsconfig.json        # Configuração TypeScript
+├── tailwind.config.js   # Configuração Tailwind CSS
+├── vite.config.ts       # Configuração Vite
+└── eslint.config.js     # Configuração ESLint
+```
+
+---
+
+## 🌐 Rotas da Aplicação
+
+| Rota | Componente | Descrição |
+|------|-----------|-----------|
+| `/` | Redirect to `/login` | Redireciona para login |
+| `/login` | Login | Página de autenticação |
+| `/cadastro` | Cadastro | Página de registro de usuário |
+| `/auth/resetar-senha/:token` | ResetarSenha | Redefinição de senha |
+| `/recuperar-senha` | SolicitarEmailRecuperacao | Solicitação de recuperação |
+| `/home` | Home | Dashboard principal (protegida) |
+| `/tarefas` | TodasTarefas | Lista de todas as tarefas (protegida) |
+| `/log` | Log | Histórico de auditoria (protegida) |
+
+**Rotas protegidas:** Requerem autenticação via token JWT armazenado no `localStorage`.
+
+---
+
+## 🔐 Autenticação
+
+O sistema utiliza **JWT (JSON Web Token)** para autenticação:
+
+1. Após o login bem-sucedido, o token é armazenado no `localStorage` com a chave `authData`
+2. O token é decodificado usando a biblioteca `jwt-decode` para obter informações do usuário
+3. O token é enviado no header `Authorization` em todas as requisições protegidas
+4. As informações armazenadas incluem:
+   - `token` - Token JWT
+   - `id` - ID do usuário
+   - `name` - Nome do usuário
+   - `email` - Email do usuário
+   - `createdAt` - Data de criação
+
+---
+
+## 🎨 Tecnologias e Ferramentas
+
+### Frontend Framework:
+- **React 19.1.1** - Biblioteca JavaScript para construção de interfaces
+- **TypeScript 5.8.3** - JavaScript com tipagem estática
+
+### Estilização:
+- **Tailwind CSS 3.4.17** - Framework CSS utility-first
+- **PostCSS 8.5.6** - Processador CSS
+- **Autoprefixer 10.4.21** - Plugin PostCSS para prefixos CSS
+
+### Roteamento:
+- **React Router DOM 7.8.2** - Roteamento declarativo
+
+### Notificações:
+- **React Toastify 11.0.5** - Notificações toast elegantes
+- **SockJS Client 1.6.1** - WebSocket client
+- **StompJS 2.3.3** - Protocolo de mensagens sobre WebSocket
+
+### Ícones:
+- **React Icons 5.5.0** - Biblioteca de ícones
+
+### Build Tool:
+- **Vite 7.1.2** - Build tool extremamente rápido
+- **@vitejs/plugin-react 5.0.0** - Plugin React para Vite
+
+### Qualidade de Código:
+- **ESLint 9.33.0** - Linter JavaScript/TypeScript
+- **eslint-plugin-react-hooks** - Regras ESLint para React Hooks
+- **eslint-plugin-react-refresh** - Regras para React Refresh
+
+---
+
+## 🔧 Solução de Problemas
+
+### Problema: Erro ao instalar dependências
+```powershell
+# Limpe o cache do npm e reinstale
+npm cache clean --force
+Remove-Item -Recurse -Force node_modules
+Remove-Item package-lock.json
+npm install
+```
+
+### Problema: Porta 5173 já em uso
+```powershell
+# Mude a porta no vite.config.ts ou mate o processo:
+netstat -ano | findstr :5173
+# Anote o PID e execute:
+taskkill /PID <PID> /F
+```
+
+### Problema: Backend não responde
+- Verifique se o backend está rodando em `http://localhost:8080`
+- Verifique se não há problemas de CORS
+- Verifique os logs do backend
+
+### Problema: WebSocket não conecta
+- Certifique-se de que o endpoint WebSocket está ativo no backend
+- Verifique se a URL está correta: `http://localhost:8080/ws`
+- Verifique as configurações de firewall
+
+### Problema: Erros de TypeScript
+```powershell
+# Reconstrua os tipos
+npm run build
+```
+
+### Problema: Tailwind CSS não funciona
+```powershell
+# Verifique se as configurações estão corretas
+# Reinicie o servidor de desenvolvimento
+npm run dev
+```
+
+---
+
+## 📝 Observações Importantes
+
+1. **Backend obrigatório:** O frontend depende do backend estar rodando em `http://localhost:8080`
+
+2. **LocalStorage:** O sistema utiliza `localStorage` para armazenar:
+   - Dados de autenticação (`authData`)
+   - Token JWT
+   - Informações do usuário
+
+3. **Notificações em Tempo Real:** As notificações funcionam via WebSocket. Certifique-se de que:
+   - O backend suporta WebSocket
+   - O endpoint `/ws` está acessível
+   - O SockJS e STOMP estão configurados no backend
+
+4. **Upload de Arquivos:** O sistema permite anexar arquivos às tarefas. Os arquivos são enviados para:
+   - Endpoint: `http://localhost:8080/anexos/upload`
+
+5. **Responsividade:** A aplicação é totalmente responsiva e funciona em:
+   - Desktop
+   - Tablet
+   - Mobile
+
+---
+
+## 🤝 Suporte
+
+Em caso de dúvidas ou problemas:
+
+1. Verifique a documentação completa em `/docs`
+2. Consulte os logs do console do navegador (F12)
+3. Verifique os logs do servidor de desenvolvimento
+4. Entre em contato com a equipe de desenvolvimento
+
+---
 
 ## 📄 Documentação e Manuais <a name="documentacao"></a>
 
