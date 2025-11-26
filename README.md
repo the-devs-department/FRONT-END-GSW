@@ -314,12 +314,6 @@ Após fazer alterações no código:
 - Execute os serviços em ordem para evitar erros de dependência
 - Sempre inicie o API Gateway por último
 
-## 📚 Documentação Adicional
-
-- [Rotas Swagger](docs/Rotas%20Swagger.md)
-- [Documentação das Sprints](docs/sprints/)
-- [Product Backlog](docs/Backlog%20do%20Produto.md)
-
 ---
 
 ✅ **Pronto!** Agora você tem todo o ambiente back-end rodando localmente.
@@ -394,6 +388,14 @@ Após iniciar o front-end:
 ---
 
 ✅ **Pronto!** Agora você tem todo o ambiente (front-end + back-end) rodando localmente.
+
+---
+
+## 📚 Documentação Adicional
+
+- [Rotas Swagger](docs/Rotas%20Swagger.md)
+- [Documentação das Sprints](docs/sprints/)
+- [Product Backlog](docs/Backlog%20do%20Produto.md)
 
 ---
 
